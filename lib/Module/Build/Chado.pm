@@ -260,4 +260,4 @@ sub ACTION_drop_schema {
 
 1;
 
-# ABSTRACT: Module::Build extension for Chado database
+# ABSTRACT: Module::Build extension for Chado database based perl modules
