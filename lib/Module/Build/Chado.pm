@@ -6,7 +6,7 @@ use File::Temp;
 use Class::MOP;
 use DBI;
 use Carp;
-use parent qw/Module::Build/;
+use base qw/Module::Build/;
 
 __PACKAGE__->add_property(
     'dsn',
@@ -17,8 +17,8 @@ __PACKAGE__->add_property(
 );
 
 __PACKAGE__->add_property(
-    '_config_keys',
-    [   qw/is_db_created is_schema_loaded setup_done
+    '_config_keys' => [
+        qw/is_db_created is_schema_loaded setup_done
             is_fixture_loaded is_fixture_unloaded/
     ]
 );
@@ -44,19 +44,19 @@ __PACKAGE__->add_property(
     }
 );
 
-__PACKAGE__->add_property( 'preprend_namespace',
-    default => 'Module-Build-Chado-' );
+__PACKAGE__->add_property( 'prepend_namespace' => 'Module-Build-Chado-' );
 
-__PACKAGE__->add_property( '_conf_class',
-    default => 'Module::Build::Chado::ConfigData' );
+__PACKAGE__->add_property(
+    '_conf_class' => 'Module::Build::Chado::ConfigData' );
 
+__PACKAGE__->add_property( 'loader' => 'bcs' );
+__PACKAGE__->add_property( 'attr',
+    default => sub { return { AutoCommit => 1 } } );
 __PACKAGE__->add_property('ddl');
 __PACKAGE__->add_property('user');
 __PACKAGE__->add_property('password');
 __PACKAGE__->add_property('superuser');
-__PACKAGE__->add_property( 'attr', default => sub { AutoCommit => 1 } );
 __PACKAGE__->add_property('superpassword');
-__PACKAGE__->add_property( 'loader', default => 'bcs' );
 __PACKAGE__->add_property('_handler');
 
 sub connect_hash {
@@ -68,13 +68,13 @@ sub connect_hash {
     return %hash;
 }
 
-sub connect_str {
+sub connect_info {
     my $self = shift;
     my @array;
     for my $prop (qw/dsn user password attr/) {
-        push @array, $self->$prop if $self->$prop;
+        push @array, $self->$prop ? $self->$prop : undef;
     }
-    return join( ',', @array );
+    return @array;
 }
 
 sub ACTION_setup {
@@ -99,7 +99,8 @@ sub ACTION_setup {
     else {
         my ( $scheme, $driver ) = DBI->parse_dsn( $self->dsn )
             or croak "cannot parse dbi dsn";
-        my $ddl = catfile( module_dir('Module::Build::Chado'), 'chado.' . lc $driver );
+        my $ddl = catfile( module_dir('Module::Build::Chado'),
+            'chado.' . lc $driver );
         $chado->ddl($ddl) if -e $ddl;
     }
 

@@ -287,7 +287,7 @@ sub _build_ontology_namespace {
     #which namespace to use incase it is not present for a particular node
     my $twig = XML::Twig::XPath->new->parsefile( $self->obo_xml );
     my ($node) = $twig->findnodes('/obo/header/default-namespace');
-    $namespace = $node->getValue;
+    my $namespace = $node->getValue;
     $twig->purge;
     confess "no default namespace being set for this ontology" if !$namespace;
     return $namespace;
@@ -681,7 +681,7 @@ sub load_typedef {
     my $name        = $node->first_child_text('name');
     my $id          = $node->first_child_text('id');
     my $is_obsolete = $node->first_child_text('is_obsolete');
-    $namespace = $self->current_cv;
+    my $namespace = $self->current_cv;
 
     my $def_elem = $node->first_child('def');
     my $definition;
@@ -727,7 +727,7 @@ sub load_term {
     my $name        = $node->first_child_text('name');
     my $id          = $node->first_child_text('id');
     my $is_obsolete = $node->first_child_text('is_obsolete');
-    $namespace = $self->current_cv;
+    my $namespace = $self->current_cv;
 
     my $def_elem = $node->first_child('def');
     my $definition;
