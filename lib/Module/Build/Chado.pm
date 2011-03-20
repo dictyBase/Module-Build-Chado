@@ -45,13 +45,8 @@ __PACKAGE__->add_property(
 );
 
 __PACKAGE__->add_property( 'prepend_namespace' => 'Module-Build-Chado-' );
-
-__PACKAGE__->add_property(
-    '_conf_class' => 'Module::Build::Chado::ConfigData' );
-
 __PACKAGE__->add_property( 'loader' => 'bcs' );
-__PACKAGE__->add_property( 'attr',
-    default => sub { return { AutoCommit => 1 } } );
+__PACKAGE__->add_property('driver_dsn');
 __PACKAGE__->add_property('ddl');
 __PACKAGE__->add_property('user');
 __PACKAGE__->add_property('password');
@@ -60,21 +55,20 @@ __PACKAGE__->add_property('superpassword');
 __PACKAGE__->add_property('_handler');
 
 sub connect_hash {
-    my $self = shift;
+    my ($self) = @_;
+    $self->depends_on('setup');
     my %hash;
-    for my $prop (qw/dsn user password attr/) {
+    for my $prop (qw/dsn user password/) {
         $hash{$prop} = $self->$prop if $self->$prop;
     }
+    $hash{dbi_attributes} = $self->_handler->dbi_attributes;
     return %hash;
 }
 
 sub connect_info {
-    my $self = shift;
-    my @array;
-    for my $prop (qw/dsn user password attr/) {
-        push @array, $self->$prop ? $self->$prop : undef;
-    }
-    return @array;
+    my ($self) = @_;
+    $self->depends_on('setup');
+    return $self->_handler->connection_info;
 }
 
 sub ACTION_setup {
@@ -82,39 +76,30 @@ sub ACTION_setup {
     $self->depends_on('build');
     print "running setup\n" if $self->args('test_debug');
 
-    Class::MOP::load_class('Module::Build::Chado::ConfigData');
-    Class::MOP::load_class('Module::Build::Chado::Handler');
+    return if $self->config('setup_done');
 
-    return if $self->_conf_class->config('setup_done');
-
-    my $chado = Module::Build::Chado::Handler->new;
-    $chado->module_builder($self);
-    for my $prop (qw/dsn user password superuser superpassword attr loader/) {
-        $chado->$prop( $self->$prop ) if $self->$prop;
-    }
-
-    if ( $self->ddl ) {
-        $chado->ddl( $self->ddl );
-    }
-    else {
-        my ( $scheme, $driver ) = DBI->parse_dsn( $self->dsn )
-            or croak "cannot parse dbi dsn";
+    my ( $scheme, $driver ) = DBI->parse_dsn( $self->dsn )
+        or croak "cannot parse dbi dsn";
+    if ( !$self->ddl ) {
         my $ddl = catfile( module_dir('Module::Build::Chado'),
             'chado.' . lc $driver );
-        $chado->ddl($ddl) if -e $ddl;
+        $self->ddl($ddl);
     }
 
+    my $db_class = 'Module::Build::Chado::' . ucfirst lc $driver;
+    Class::MOP::load_class($db_class);
+    my $chado = $db_class->new( module_builder => $self );
     $self->_handler($chado);
-    $self->config_data( 'setup_done' => 1 );
+    $self->config( 'setup_done', 1 );
     print "done with setup\n" if $self->args('test_debug');
 }
 
 sub ACTION_create {
     my ($self) = @_;
     $self->depends_on('setup');
-    if ( !$self->_conf_class->config('is_db_created') ) {
+    if ( !$self->config('is_db_created') ) {
         $self->_handler->create_db;
-        $self->config_data( 'is_db_created' => 1 );
+        $self->config( 'is_db_created', 1 );
         print "created database\n" if $self->args('test_debug');
     }
 }
@@ -122,9 +107,9 @@ sub ACTION_create {
 sub ACTION_deploy {
     my ($self) = @_;
     $self->depends_on('create');
-    if ( !$self->_conf_class->config('is_schema_loaded') ) {
+    if ( !$self->config('is_schema_loaded') ) {
         $self->_handler->deploy_schema;
-        $self->config_data( 'is_schema_loaded' => 1 );
+        $self->config( 'is_schema_loaded', 1 );
         print "loaded schema\n" if $self->args('test_debug');
     }
 }
@@ -132,10 +117,10 @@ sub ACTION_deploy {
 sub ACTION_deploy_schema {
     my ($self) = @_;
     $self->depends_on('setup');
-    $self->config_data( 'is_db_created' => 1 );
-    if ( !$self->_conf_class->config('is_schema_loaded') ) {
+    $self->config( 'is_db_created', 1 );
+    if ( !$self->config('is_schema_loaded') ) {
         $self->_handler->deploy_schema;
-        $self->config_data( 'is_schema_loaded' => 1 );
+        $self->config( 'is_schema_loaded', 1 );
         print "loaded schema\n" if $self->args('test_debug');
     }
 }
@@ -173,11 +158,11 @@ sub ACTION_load_publication {
 sub ACTION_load_fixture {
     my ($self) = @_;
     $self->depends_on('deploy_schema');
-    if ( !$self->conf_class->config('is_fixture_loaded') ) {
+    if ( !$self->config('is_fixture_loaded') ) {
         $self->_handler->load_organism;
         $self->_handler->load_rel;
         $self->_handler->load_so;
-        $self->config_data( 'is_fixture_loaded' => 1 );
+        $self->config( 'is_fixture_loaded', 1 );
         print "loaded fixture\n" if $self->args('test_debug');
     }
 }
@@ -208,9 +193,9 @@ sub ACTION_unload_organism {
 
 sub ACTION_unload_fixture {
     my ($self) = @_;
-    if ( $self->_conf_class->config('is_fixture_loaded') ) {
+    if ( $self->config('is_fixture_loaded') ) {
         $self->depends_on($_) for qw/unload_rel unload_so unload_organism/;
-        $self->config_data( 'is_fixture_loaded'   => 0 );
+        $self->config( 'is_fixture_loaded', 0 );
         $self->config_data( 'is_fixture_unloaded' => 1 );
     }
 }
@@ -219,8 +204,8 @@ sub ACTION_prune_fixture {
     my ($self) = @_;
     $self->depends_on('setup');
     $self->_handler->prune_fixture;
-    $self->config_data( 'is_fixture_loaded'   => 0 );
-    $self->config_data( 'is_fixture_unloaded' => 1 );
+    $self->config( 'is_fixture_loaded',   0 );
+    $self->config( 'is_fixture_unloaded', 1 );
 }
 
 sub ACTION_test {

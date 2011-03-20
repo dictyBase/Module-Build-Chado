@@ -17,7 +17,7 @@ use namespace::autoclean;
 
 # Module implementation
 #
-requires 'dbh';
+requires 'dbh_withcommit';
 
 has 'schema' => (
     is         => 'rw',
@@ -268,7 +268,7 @@ sub lookup_db_id {
 
 sub _build_schema {
     my ($self) = @_;
-    Bio::Chado::Schema->connect( sub { $self->dbh } );
+    Bio::Chado::Schema->connect( sub { $self->dbh_withcommit } );
 }
 
 sub _build_obo_xml_loader {

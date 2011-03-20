@@ -1,193 +1,77 @@
-package Module::Build::Chado::Role::Handler::Sqlite;
+package Module::Build::Chado::Mysql;
 
 
 # Other modules:
-use Moose::Role;
-use Carp;
-use File::Basename;
-use File::Path;
-use Try::Tiny;
-use IPC::Cmd qw/can_run run/;
-use Path::Class;
 use namespace::autoclean;
+use Moose::Role;
 
 # Module implementation
 #
-requires 'driver';
-requires 'dsn';
-requires 'database';
-
-has 'client' => (
-    is        => 'rw',
-    isa       => 'Maybe[Str]',
-    predicate => 'has_client',
-    default   => sub {
-        can_run 'sqlite3';
-    }
-);
-
-has 'attr_hash' => (
-    is      => 'rw',
-    isa     => 'HashRef',
-    traits  => ['Hash'],
-    default => sub { { AutoCommit => 1 } },
-    handles => { add_dbh_attribute => 'set' }
-);
 
 after 'driver_dsn' => sub {
     my ( $self, $value ) = @_;
-    if ( $value =~ /(dbname|(.+)?)=(\S+)/ ) {
-        $self->database( Path::Class::File->new($3)->absolute->stringify );
+    if ( $value =~ /database=(\w+)\;/ ) {
+        $self->database($1);
     }
 };
 
 sub create_db {
-    my ($self) = @_;
-
-    #create the parent folder if it does not exist
-    my $folder = dirname $self->database;
-    if ( !-e $folder ) {
-        try {
-            mkpath $folder;
-        }
-        catch {
-            confess $_;
-        };
+    my ($self)   = @_;
+    my $user     = $self->superuser;
+    my $password = $self->superpass;
+    my $dbname   = $self->database;
+    try {
+        $self->super_dbh->do("CREATE DATABASE $dbname");
     }
-
-	#nothing to do if the client exist
-	#the database will be created in the deployment call
-    return if $self->has_client ;
-    $self->dbh;
+    catch {
+        confess "cannot create database $dbname\n";
+    };
 }
 
 sub drop_db {
-    my ($self) = @_;
-    $self->dbh->disconnect if $self->has_db;
-    unlink $self->database if -e $self->database;
-}
-
-has 'dbh' => (
-    is        => 'ro',
-    isa       => 'DBI::db',
-    predicate => 'has_db',
-    lazy      => 1,
-    default   => sub {
-        my ($self) = @_;
-        my $dbh = DBI->connect( $self->connection_info )
-            or confess $DBI::errstr;
-        $dbh->do("PRAGMA foreign_keys = ON");
-        $dbh;
+    my ($self)   = @_;
+    my $user     = $self->superuser;
+    my $password = $self->superpass;
+    my $dbname   = $self->database;
+    try {
+        $self->super_dbh->do("DROP DATABASE IF EXISTS $dbname");
     }
-);
-
-has 'connection_info' => (
-    is         => 'ro',
-    isa        => 'ArrayRef',
-    lazy       => 1,
-    auto_deref => 1,
-    default    => sub {
-        my ($self) = @_;
-        [ $self->dsn, '', '', $self->attr_hash ];
-    }
-);
-
-sub deploy_schema {
-    my $self = shift;
-    $self->deploy_by_dbi if !$self->deploy_by_client;
-    $self->dbh; #making sure the pragma is run
-}
-
-sub deploy_post_schema {
-	return;
-}
-
-sub deploy_by_client {
-    my $self = shift;
-    return if !$self->has_client;
-    my $cmd = [
-        $self->client,   '-noheader',
-        $self->database, '<',
-        $self->ddl
-    ];
-    my ( $success, $error_code, $full_buf,, $stdout_buf, $stderr_buf )
-        = run( command => $cmd, verbose => 1 );
-    return $success if $success;
-    carp "unable to run command : ", $error_code, " ", $stderr_buf;
-}
-
-sub deploy_by_dbi {
-    my ($self) = @_;
-    my $dbh    = $self->dbh;
-    my $fh     = Path::Class::File->new($self->ddl)->openr;
-    my $data = do { local ($/); <$fh> };
-    $fh->close();
-LINE:
-    foreach my $line ( split( /\n{2,}/, $data ) ) {
-
-        #next LINE if $line =~ /^\-\-/;
-        if ( $line =~ /^\-\-/ ) {
-            my @separated = grep { !/^\-\-/ } split( /\n/, $line );
-            $line = join( "\n", @separated );
-        }
-        next LINE if $line !~ /\S+/;
-        $line =~ s{;$}{};
-        $line =~ s{/}{};
-        try {
-            $dbh->do($line);
-            $dbh->commit;
-        }
-        catch {
-            $dbh->rollback;
-            confess $_, "\n";
-        };
-    }
-}
-
-sub run_fixture_hooks {
-    my ($self) = @_;
-    $self->dbh->do("PRAGMA foreign_keys = ON");
-}
-
-sub prune_fixture {
-    my ($self) = @_;
-    my $dbh = $self->dbh;
-
-    my $sth = $dbh->prepare(
-        qq{SELECT name FROM sqlite_master where type = 'table' });
-    $sth->execute() or croak $sth->errstr;
-    while ( my ($table) = $sth->fetchrow_array() ) {
-        try {
-            $dbh->do(qq{ DELETE FROM $table });
-        }
-        catch {
-            $dbh->rollback;
-            croak "Unable to clean table $table: $_\n";
-        };
-    }
-    $dbh->commit;
+    catch {
+        confess "cannot drop database $dbname\n";
+    };
 }
 
 sub drop_schema {
-	my ($self) = @_;
-    my $dbh = $self->dbh;
+    my ($self) = @_;
+    my $tables = $self->super_dbh->selectcol_arrayref(
+        "SHOW FULL TABLES WHERE Table_type = 'BASE TABLE'" );
 
-    my $sth = $dbh->prepare(
-        qq{SELECT name FROM sqlite_master where type = 'table' });
-    $sth->execute() or croak $sth->errstr;
-    while ( my ($table) = $sth->fetchrow_array() ) {
-        try {
-            $dbh->do(qq{ DROP TABLE $table });
-        }
-        catch {
-            $dbh->rollback;
-            croak "Unable to clean table $table: $_\n";
-        };
+    try {
+        $self->super_dbh->do("DROP TABLE $_") for @$tables;
+        $self->super_dbh->commit;
     }
-    $dbh->commit;
-
+    catch {
+        $self->super_dbh->rollback;
+        confess "unable to drop schema $_\n";
+    };
 }
 
+has 'dbh' => (
+    is      => 'ro',
+    isa     => 'DBI',
+    default => sub {
+        DBI->connect( $self->connection_info ) or confess $DBI::errstr;
+    }
+);
+
+has 'super_dbh' => (
+    is      => 'ro',
+    isa     => 'DBI',
+    default => sub {
+        DBI->connect( $self->dsn, $self->superuser, $self->superpass )
+            or confess $DBI::errstr;
+    }
+);
 
 1;    # Magic true value required at end of module
 
@@ -277,7 +161,7 @@ classes provided by the module.
 
 =for author to fill in:
 List every single error and warning message that the module can
-generate (even the ones that will "never happen"), with a full
+generate (even the ones that will " never happen "), with a full
 explanation of each problem, one or more likely causes, and any
 suggested remedies.
 
@@ -380,7 +264,7 @@ A list of all the other modules that this module relies upon,
   BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
   FOR THE SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN
   OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES
-  PROVIDE THE SOFTWARE "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
+  PROVIDE THE SOFTWARE " AS IS " WITHOUT WARRANTY OF ANY KIND, EITHER
   EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
   WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE
   ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE SOFTWARE IS WITH

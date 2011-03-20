@@ -25,7 +25,7 @@ subtest 'attributes of Module::Build::Chado' => sub {
     can_ok(
         $mb_chado,
         qw/dsn _config_keys organism_fixture so_fixture rel_fixture
-            prepend_namespace _conf_class ddl user password superuser superpassword attr
+            prepend_namespace ddl user password superuser superpassword
             loader _handler/
     );
 
@@ -44,12 +44,7 @@ subtest 'attributes of Module::Build::Chado' => sub {
         is( $mb_chado->prepend_namespace,
             'Module-Build-Chado-',
             'prepend_namespace should return Module-Build-Chado-' );
-        is( $mb_chado->_conf_class,
-            'Module::Build::Chado::ConfigData',
-            '_conf_class should return Module::Build::Chado::ConfigData'
-        );
-        is( $mb_chado->loader,       'bcs', 'loader should return bcs' );
-        is( reftype $mb_chado->attr, HASH,  'attr should return a HASH' );
+        is( $mb_chado->loader, 'bcs', 'loader should return bcs' );
     };
 };
 
@@ -62,31 +57,4 @@ subtest 'Module::Build::Chado has' => sub {
             ACTION_unload_fixture ACTION_prune_fixture/
     );
 
-    subtest 'connect_hash method' => sub {
-        my %connect_hash = $mb_chado->connect_hash;
-        is( defined $connect_hash{dsn},  1, 'should have a dsn key' );
-        is( defined $connect_hash{attr}, 1, 'should have a attr key' );
-        isnt( exists $connect_hash{user}, 1, 'should not have a user key' );
-        isnt( exists $connect_hash{password},
-            1, 'should not have a password key' );
-        like( $connect_hash{dsn}, qr/dbi:SQLite/,
-            'dsn key should match SQLite' );
-        is_deeply(
-            $connect_hash{attr},
-            { AutoCommit => 1 },
-            'attr key should return hash'
-        );
-    };
-
-    subtest 'connect_info method' => sub {
-        my @info = $mb_chado->connect_info;
-        like( $info[0], qr/dbi:SQLite:dbname=\S+/,
-            'first element should match the dsn' );
-        is_deeply(
-            $info[-1],
-            { AutoCommit => 1 },
-            'last element should contain the extra attribute'
-        );
-
-    };
 };

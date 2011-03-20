@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-Module::Build::Chado - Module::Build extension for Chado database
+Module::Build::Chado - Module::Build extension for Chado database based perl modules
 
 =head1 VERSION
 
