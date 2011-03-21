@@ -45,7 +45,7 @@ __PACKAGE__->add_property(
 );
 
 __PACKAGE__->add_property( 'prepend_namespace' => 'Module-Build-Chado-' );
-__PACKAGE__->add_property( 'loader' => 'bcs' );
+__PACKAGE__->add_property( 'loader'            => 'bcs' );
 __PACKAGE__->add_property('driver_dsn');
 __PACKAGE__->add_property('ddl');
 __PACKAGE__->add_property('user');
@@ -78,8 +78,9 @@ sub ACTION_setup {
 
     return if $self->config('setup_done');
 
-    my ( $scheme, $driver ) = DBI->parse_dsn( $self->dsn )
-        or croak "cannot parse dbi dsn";
+    my ( $scheme, $driver, $attr_str, $attr_hash, $driver_dsn )
+        = DBI->parse_dsn( $self->dsn ) or croak "cannot parse dbi dsn";
+    $self->driver_dsn($driver_dsn);
     if ( !$self->ddl ) {
         my $ddl = catfile( module_dir('Module::Build::Chado'),
             'chado.' . lc $driver );
@@ -127,13 +128,13 @@ sub ACTION_deploy_schema {
 
 sub ACTION_load_organism {
     my ($self) = @_;
-    $self->depends_on('deploy');
+    $self->depends_on('deploy_schema');
     $self->_handler->load_organism;
 }
 
 sub ACTION_load_rel {
     my ($self) = @_;
-    $self->depends_on('deploy');
+    $self->depends_on('deploy_schema');
     $self->_handler->load_rel;
 }
 

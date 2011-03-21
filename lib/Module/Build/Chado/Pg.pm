@@ -68,6 +68,7 @@ has 'dbh_withcommit' => (
     default => sub {
         my ($self) = @_;
         $self->add_dbi_attribute( 'AutoCommit', 1 );
+        $self->add_dbi_attribute( 'RaiseError', 1 );
         my $dbh = DBI->connect( $self->connection_info )
             or confess $DBI::errstr;
         $dbh->do(qq{SET client_min_messages=WARNING});

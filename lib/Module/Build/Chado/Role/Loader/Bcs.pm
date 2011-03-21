@@ -323,7 +323,7 @@ sub reset_all {
 
 sub load_organism {
     my $self     = shift;
-    my $organism = LoadFile( $self->module_build->organism_fixture );
+    my $organism = LoadFile( $self->module_builder->organism_fixture );
     unshift @$organism, [qw/abbreviation genus species common_name/];
 
     my $schema = $self->schema;
