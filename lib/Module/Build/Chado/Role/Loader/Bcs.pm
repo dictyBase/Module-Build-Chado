@@ -359,7 +359,7 @@ sub unload_organism {
 
 sub load_pub {
     my ($self) = @_;
-    $self->_clear_ontology_namespace;
+    $self->clear_ontology_namespace;
     $self->obo_xml( $self->module_builder->pub_fixture );
     $self->load_ontology;
 
@@ -367,14 +367,14 @@ sub load_pub {
 
 sub load_rel {
     my ($self) = @_;
-    $self->_clear_ontology_namespace;
+    $self->clear_ontology_namespace;
     $self->obo_xml( $self->module_builder->rel_fixture );
     $self->load_ontology;
 }
 
 sub load_so {
     my ($self) = @_;
-    $self->_clear_ontology_namespace;
+    $self->clear_ontology_namespace;
     $self->obo_xml( $self->module_builder->so_fixture );
     $self->load_ontology;
 
@@ -382,7 +382,7 @@ sub load_so {
 
 sub load_dicty_keywords {
     my ($self) = @_;
-    $self->_clear_ontology_namespace;
+    $self->clear_ontology_namespace;
     $self->obo_xml( $self->module_builder->dicty_keywords_fixture );
     $self->load_ontology;
 
@@ -540,28 +540,28 @@ sub load_fixture {
 
 sub unload_pub {
     my ($self) = @_;
-    $self->_clear_ontology_namespace;
+    $self->clear_ontology_namespace;
     $self->obo_xml( $self->module_builder->pub_fixture );
     $self->unload_ontology( $self->current_cv );
 }
 
 sub unload_rel {
     my ($self) = @_;
-    $self->_clear_ontology_namespace;
+    $self->clear_ontology_namespace;
     $self->obo_xml( $self->module_builder->rel_fixture );
     $self->unload_ontology( $self->current_cv );
 }
 
 sub unload_so {
     my ($self) = @_;
-    $self->_clear_ontology_namespace;
+    $self->clear_ontology_namespace;
     $self->obo_xml( $self->module_builder->so_fixture );
     $self->unload_ontology( $self->current_cv );
 }
 
 sub unload_dicty_keywords {
     my ($self) = @_;
-    $self->_clear_ontology_namespace;
+    $self->clear_ontology_namespace;
     $self->obo_xml( $self->module_builder->dicty_keywords_fixture );
     $self->unload_ontology( $self->current_cv );
 }
