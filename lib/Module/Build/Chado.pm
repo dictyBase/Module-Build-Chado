@@ -33,7 +33,7 @@ __PACKAGE__->add_property(
 __PACKAGE__->add_property(
     'so_fixture',
     default => sub {
-        catfile( module_dir('Module::Build::Chado'), 'sequence.obo_xml' );
+        catfile( module_dir('Module::Build::Chado'), 'sofa.obo_xml' );
     }
 );
 
@@ -140,7 +140,7 @@ sub ACTION_load_rel {
 
 sub ACTION_load_so {
     my ($self) = @_;
-    $self->depends_on('rel');
+    $self->depends_on('load_rel');
     $self->_handler->load_so;
 }
 

@@ -37,8 +37,8 @@ subtest 'attributes of Module::Build::Chado' => sub {
         );
         like( $mb_chado->organism_fixture, qr/organism/,
             'organism_fixture should match organism' );
-        like( $mb_chado->so_fixture, qr/sequence/,
-            'so_fixture should match sequence' );
+        like( $mb_chado->so_fixture, qr/sofa/,
+            'so_fixture should match sofa' );
         like( $mb_chado->rel_fixture, qr/relationship/,
             'rel_fixture should match relationship' );
         is( $mb_chado->prepend_namespace,

@@ -87,16 +87,10 @@ subtest 'Module::Build::Chado action deploy' => sub {
             $ary_ref = $dbh->selectcol_arrayref( $sth, { Columns => [3] } );
         }
         'should retrieve tables';
-        is( scalar @$ary_ref, 30, 'should have 32 table names');
+        is( scalar @$ary_ref, 30, 'should have 30 table names');
         is ((all {/feature/i} @$ary_ref),  1,  'should match table names with feature');
 
     };
 };
 
-subtest 'Module::Build::Chado action load_organsim' => sub {
-    my $mb_chado = Module::Build::Chado->new(%opt);
-    lives_ok { $mb_chado->ACTION_load_organism } 'should run';
-    my $count = $mb_chado->_handler->schema->resultset('Organism::Organism')->count;
-    cmp_ok($count,  '>',  0,  'should populate organism table');
-    cmp_ok($count,  '==', 12,  'should have 12 organisms');
-};
+
