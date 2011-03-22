@@ -103,6 +103,9 @@ sub ACTION_setup {
         $self->ddl($ddl);
     }
 
+    $self->superuser($self->user) if !$self->superuser;
+    $self->superpassword($self->password) if !$self->superpassword;
+
     my $db_class = 'Module::Build::Chado::' . ucfirst lc $driver;
     Class::MOP::load_class($db_class);
     my $chado = $db_class->new( module_builder => $self );
