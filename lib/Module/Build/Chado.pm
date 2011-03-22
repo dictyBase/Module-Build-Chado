@@ -246,4 +246,4 @@ sub ACTION_drop_schema {
 
 1;
 
-# ABSTRACT: Module::Build extension for Chado database based perl modules
+# ABSTRACT: Build,configure and test chado database backed modules and applications
