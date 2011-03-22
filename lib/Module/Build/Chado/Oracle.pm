@@ -11,7 +11,6 @@ use Path::Class::File;
 
 # Module implementation
 #
-with 'Module::Build::Chado::Role::HasDB';
 
 has 'dbi_attributes' => (
     is      => 'rw',
@@ -24,7 +23,7 @@ has 'dbi_attributes' => (
 sub create_db {
     my ($self) = @_;
     ## -- still not sure how to connect as the user before creating them ... so ...
-    warn "not implemented for oracle: you need to create the database with appropiate permissions\n"
+    warn "not implemented for oracle: you need to create the database with appropiate permissions\n";
     return 1;
 }
 
@@ -32,7 +31,7 @@ sub drop_db {
     my ($self) = @_;
     ## -- still not sure how to drop a schema by connecting as same user
     ## -- so this action actually drop the database structure
-    warn "not implemented for oracle: you need to drop the schema manually\n"
+    warn "not implemented for oracle: you need to drop the schema manually\n";
     return 1;
 }
 
@@ -245,6 +244,8 @@ LINE:
 sub run_fixture_hooks {
     return;
 }
+
+with 'Module::Build::Chado::Role::HasDB';
 
 __PACKAGE__->meta->make_immutable;
 
