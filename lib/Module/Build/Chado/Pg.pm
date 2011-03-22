@@ -28,21 +28,14 @@ sub database {
 
 sub create_db {
     my ($self) = @_;
+    carp "not implemented for postgresql: use **createdb** instead\n";
     return 1;
-    my $user     = $self->superuser;
-    my $password = $self->superpass;
-    my $dbname   = $self->database;
-    try {
-        $self->super_dbh->do("CREATE DATABASE $dbname");
-    }
-    catch {
-        confess "cannot create database $dbname\n";
-    };
 }
 
 sub drop_db {
     my ($self) = @_;
-    $self->drop_schema;
+    carp "not implemented for postgresql: use **dropdb** instead\n";
+    return 1;
 }
 
 has 'dbh' => (
@@ -190,3 +183,5 @@ __PACKAGE__->meta->make_immutable;
 
 1;    # Magic true value required at end of module
 
+
+# ABSTRACT: Postgresql specific class for Module::Build::Chado

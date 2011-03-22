@@ -24,6 +24,7 @@ has 'dbi_attributes' => (
 sub create_db {
     my ($self) = @_;
     ## -- still not sure how to connect as the user before creating them ... so ...
+    warn "not implemented for oracle: you need to create the database with appropiate permissions\n"
     return 1;
 }
 
@@ -31,8 +32,8 @@ sub drop_db {
     my ($self) = @_;
     ## -- still not sure how to drop a schema by connecting as same user
     ## -- so this action actually drop the database structure
-    $self->drop_schema;
-
+    warn "not implemented for oracle: you need to drop the schema manually\n"
+    return 1;
 }
 
 sub prune_fixture {
@@ -249,3 +250,4 @@ __PACKAGE__->meta->make_immutable;
 
 1;    # Magic true value required at end of module
 
+# ABSTRACT: Oracle specific class for Module::Build::Chado

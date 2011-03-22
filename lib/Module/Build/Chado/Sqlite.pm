@@ -42,7 +42,11 @@ sub create_db {
 }
 
 sub drop_db {
-    return 1;
+	my ($self) = @_;
+	$self->dbh->disconnect;
+	$self->dbh_withcommit->disconnect;
+	my $dbname = $self->database;
+	unlink $dbname or die "unable to remove $dbanem sqlite database\n";
 }
 
 has 'dbh' => (
@@ -175,3 +179,5 @@ __PACKAGE__->meta->make_immutable;
 
 1;    # Magic true value required at end of module
 
+
+# ABSTRACT: SQLite specific class for Module::Build::Chado
