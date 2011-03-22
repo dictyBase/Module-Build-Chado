@@ -71,7 +71,6 @@ sub connect_info {
     return $self->_handler->connection_info;
 }
 
-
 =head2 Actions
 
 =head3 setup
@@ -112,7 +111,6 @@ sub ACTION_setup {
     print "done with setup\n" if $self->args('test_debug');
 }
 
-
 =head3 create
 
 =begin comment
@@ -126,7 +124,6 @@ Oracle backends. For that,  you need to use database specific client tools. For 
 backend the database is created when the schema is loaded.
 
 =cut
-
 
 sub ACTION_create {
     my ($self) = @_;
@@ -532,87 +529,64 @@ Support SQLite, Postgresql and Oracle backends.
 
 =back
 
-=class_attribute dsn
+
+=attr dsn
 
 Database connect string,  defaults to a temporary SQLite database.
 
-=class_attribute user
+=attr user
 
 Database user,  not needed for SQLite backend.
 
-=class_attribute password
+=attr password
 
 Database password,  not needed for SQLite backend.
 
-=class_attribute superuser
+=attr superuser
 
 Database super user, in case the regular use do not have enough permissions for
 manipulating the database schema. It defaults to the user attribute.
 
-=class_attribute superpassword
+=attr superpassword
 
 Similar concept as superuser
 
-=class_attribute ddl
+=attr ddl
 
 DDL file for particular backend,  by default comes for SQLite,  Postgresql and Oracle.
 
-=class_attribute organism_fixuture
+=attr organism_fixuture
 
 Fixture for loading organisms,  by default the distribution comes with a organism.yaml
 file.
 
-=class_attribute rel_fixuture
+=attr rel_fixuture
 
 Relation ontology file in obo_xml format. The distribution includes a relationship.obo_xml
 file.
 
-=class_attribute so_fixuture
+=attr so_fixuture
 
 Sequence ontology file in obo_xml format. By default,  it includes sofa.obo_xml file.
 
 
-=head1 Build Actions
-
-Extra or overridden Build actions in addition to the default list provided by Module::Build.
-By default run ./Build <action_name> for its documentation. The list is included here for
-a quick reference.
-
-=over
-
-=item create
-
-=item drop
-
-=item deploy
-
-=item deploy_schema
-
-=item drop_schema
-
-=item load_fixture
-
-=item unload_fixture
-
-=item prune_fixture
-
-=item load_organism
-
-=item load_rel
-
-=item load_so
-
-=item unload_organism
-
-=item unload_rel
-
-=item unload_so
-
-=item test
-
-=back
-
 
 =method connect_hash
 
+Returns a hash with the following connection specific keys ...
+
+=over
+
+=item dsn
+
+=item user
+
+=item password
+
+=item dbi_attributes
+
+
 =method connect_info
+
+Returns an 4 elements array with connection arguments identical to L<DBI>'s B<connect>
+method.
