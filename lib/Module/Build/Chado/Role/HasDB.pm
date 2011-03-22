@@ -42,3 +42,10 @@ sub _setup_loader {
 
 1;    # Magic true value required at end of module
 
+# ABSTRACT: Moose role provides an interface and to be consumed by database specific classes
+
+
+=attr module_builder
+
+Get/Set a L<Module::Build::Chado> object.
+
