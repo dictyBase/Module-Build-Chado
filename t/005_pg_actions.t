@@ -44,14 +44,14 @@ SKIP: {
                 my $dbh = $mb_chado->_handler->dbh;
                 my ( $sth, $ary_ref );
                 lives_ok {
-                    $sth = $dbh->table_info( undef, undef, '%cvterm%',
+                    $sth = $dbh->table_info( undef, undef, '%feature%',
                         'TABLE' );
                     $ary_ref = $dbh->selectcol_arrayref( $sth,
                         { Columns => [3] } );
                 }
                 'should retrieve tables';
-                is( scalar @$ary_ref, 28, 'should have 28 table names' );
-                is( ( all {/cvterm/i} @$ary_ref ),
+                is( scalar @$ary_ref, 32, 'should have 32 table names' );
+                is( ( all {/feature/i} @$ary_ref ),
                     1, 'should match table names with feature' );
             };
         };
@@ -116,7 +116,7 @@ SKIP: {
                     = $dbh->selectcol_arrayref( $sth, { Columns => [3] } );
             }
             'should retrieve tables';
-            is( scalar @$ary_ref, 30, 'should have 30 table names' );
+            is( scalar @$ary_ref, 32, 'should have 32 table names' );
         };
 
     };

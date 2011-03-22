@@ -81,7 +81,7 @@ subtest 'Module::Build::Chado action unload_fixture' => sub {
 subtest 'Module::Build::Chado action prune_fixture' => sub {
     my $mb_chado = Module::Build::Chado->new(%opt);
     lives_ok { $mb_chado->ACTION_load_fixture } 'should run';
-    lives_ok { $mb_chado->ACTION_unload_fixture } 'should run';
+    lives_ok { $mb_chado->ACTION_prune_fixture } 'should run';
 
     my $bcs       = $mb_chado->_handler->schema;
     my $org_count = $bcs->resultset('Organism::Organism')->count;

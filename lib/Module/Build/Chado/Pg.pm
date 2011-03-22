@@ -103,7 +103,8 @@ sub super_connection_info {
 sub deploy_schema {
     my ($self) = @_;
     my $schema = $self->schema;
-    $schema->deploy;
+    my $allowed_sources = [ grep { !/Composite/i } $schema->sources ];
+    $schema->deploy( { parser_args => { sources => $allowed_sources } } );
 }
 
 sub prune_fixture {
@@ -129,7 +130,13 @@ sub prune_fixture {
 
 sub drop_schema {
     my ($self) = @_;
-    my $dbh    = $self->dbh_nocommit;
+    my $dbh    = $self->dbh;
+	my $tsth   = $dbh->prepare(
+        "SELECT relname FROM pg_class WHERE relnamespace IN
+          (SELECT oid FROM pg_namespace WHERE nspname='public')
+          AND relkind='r';"
+    );
+
     my $vsth   = $dbh->prepare(
         "SELECT viewname FROM pg_views WHERE schemaname NOT IN ('pg_catalog',
 			 'information_schema') AND viewname !~ '^pg_'"
