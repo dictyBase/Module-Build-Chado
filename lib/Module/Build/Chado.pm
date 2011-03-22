@@ -135,7 +135,6 @@ sub ACTION_create {
     }
 }
 
-
 =head3 deploy
 
 =begin comment
@@ -148,8 +147,6 @@ Deploy a chado database to the specified backend. Create action is implied.
 
 =cut
 
-
-
 sub ACTION_deploy {
     my ($self) = @_;
     $self->depends_on('create');
@@ -159,7 +156,6 @@ sub ACTION_deploy {
         print "loaded schema\n" if $self->args('test_debug');
     }
 }
-
 
 =head3 deploy_schema
 
@@ -175,8 +171,6 @@ be created already.
 
 =cut
 
-
-
 sub ACTION_deploy_schema {
     my ($self) = @_;
     $self->depends_on('setup');
@@ -187,8 +181,6 @@ sub ACTION_deploy_schema {
         print "loaded schema\n" if $self->args('test_debug');
     }
 }
-
-
 
 =head3 load_organism
 
@@ -203,13 +195,11 @@ implied.
 
 =cut
 
-
 sub ACTION_load_organism {
     my ($self) = @_;
     $self->depends_on('deploy_schema');
     $self->_handler->load_organism;
 }
-
 
 =head3 load_rel
 
@@ -229,8 +219,6 @@ sub ACTION_load_rel {
     $self->_handler->load_rel;
 }
 
-
-
 =head3 load_so
 
 =begin comment
@@ -248,7 +236,6 @@ sub ACTION_load_so {
     $self->depends_on('load_rel');
     $self->_handler->load_so;
 }
-
 
 =head3 load_fixture
 
@@ -286,7 +273,6 @@ sub ACTION_load_fixture {
     }
 }
 
-
 =head3 unload_rel
 
 =begin comment
@@ -304,7 +290,6 @@ sub ACTION_unload_rel {
     $self->depends_on('setup');
     $self->_handler->unload_rel;
 }
-
 
 =head3 unload_so
 
@@ -324,7 +309,6 @@ sub ACTION_unload_so {
     $self->_handler->unload_so;
 }
 
-
 =head3 unload_organism
 
 =begin comment
@@ -343,8 +327,6 @@ sub ACTION_unload_organism {
     $self->_handler->unload_organism;
 }
 
-
-
 =head3 unload_fixture
 
 =begin comment
@@ -358,7 +340,6 @@ Currently implies running of B<unload_rel>,  B<unload_so> and B<unload_organism>
 
 =cut
 
-
 sub ACTION_unload_fixture {
     my ($self) = @_;
     if ( $self->config('is_fixture_loaded') ) {
@@ -367,7 +348,6 @@ sub ACTION_unload_fixture {
         $self->config_data( 'is_fixture_unloaded' => 1 );
     }
 }
-
 
 =head3 prune_fixture
 
@@ -383,7 +363,6 @@ B<unload_fixture>.
 
 =cut
 
-
 sub ACTION_prune_fixture {
     my ($self) = @_;
     $self->depends_on('setup');
@@ -391,8 +370,6 @@ sub ACTION_prune_fixture {
     $self->config( 'is_fixture_loaded',   0 );
     $self->config( 'is_fixture_unloaded', 1 );
 }
-
-
 
 =head3 test
 
@@ -408,7 +385,6 @@ schema.
 
 =cut
 
-
 sub ACTION_test {
     my ($self) = @_;
 
@@ -423,7 +399,6 @@ sub ACTION_test {
     $self->SUPER::ACTION_test(@_);
     $self->depends_on('drop_schema');
 }
-
 
 =head3 drop
 
@@ -451,7 +426,6 @@ sub ACTION_drop {
     print "dropped the database\n" if $self->args('test_debug');
 }
 
-
 =head3 drop_schema
 
 =begin comment
@@ -463,7 +437,6 @@ sub ACTION_drop {
 Drops the database schema.
 
 =cut
-
 
 sub ACTION_drop_schema {
     my ($self) = @_;
@@ -585,6 +558,7 @@ Returns a hash with the following connection specific keys ...
 
 =item dbi_attributes
 
+=back
 
 =method connect_info
 
