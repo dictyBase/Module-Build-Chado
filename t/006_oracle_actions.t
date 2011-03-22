@@ -19,21 +19,23 @@ my %opt = (
     dist_author        => 'Pataka'
 );
 
-
 SKIP: {
-	my ($pg, $mb_chado);
-    try {
-        Class::MOP::load_class('Test::postgresql');
+    my $mb_chado;
+    if (    ( not defined $ENV{ORACLE_DSN} )
+        and ( not defined $ENV{ORACLE_USERID} ) )
+    {
+        skip "ORACLE_DSN and ORACLE_USERID env variables are not set";
     }
-    catch {
-        skip 'Test::postgresql is not installed';
-    };
 
-    subtest 'Module::Build::Chado with postgresql backend' => sub {
+    subtest 'Module::Build::Chado with oracle backend' => sub {
+        my ( $user, $pass ) = split /\//, $ENV{ORACLE_USERID};
+
         use_ok('Module::Build::Chado');
-        $pg       = Test::postgresql->new;
+
         $mb_chado = Module::Build::Chado->new(%opt);
-        $mb_chado->dsn( $pg->dsn );
+        $mb_chado->dsn( $ENV{ORACLE_DSN} );
+        $mb_chado->user($user);
+        $mb_chado->password($pass);
 
         subtest 'action deploy_schema' => sub {
             lives_ok { $mb_chado->ACTION_deploy_schema } 'should run';
@@ -121,7 +123,7 @@ SKIP: {
 
     };
 
-	subtest 'action drop_schema' => sub {
+    subtest 'action drop_schema' => sub {
         lives_ok { $mb_chado->ACTION_drop_schema } 'should run';
         my $dbh = $mb_chado->_handler->dbh;
         my ( $sth, $ary_ref );
@@ -130,16 +132,12 @@ SKIP: {
             $ary_ref = $dbh->selectcol_arrayref( $sth, { Columns => [3] } );
         }
         'should not retrieve tables';
-        is(scalar @$ary_ref, 0, 'should not have any table name' );
+        is( scalar @$ary_ref, 0, 'should not have any table name' );
     };
 
-
-    if (my $handler = $mb_chado->_handler)  {
-    	$handler->dbh->disconnect;
-    	$handler->dbh_withcommit->disconnect;
-    	$handler->super_dbh->disconnect;
+    if ( my $handler = $mb_chado->_handler ) {
+        $handler->dbh->disconnect;
+        $handler->dbh_withcommit->disconnect;
     }
-    undef $pg;
 }
-
 

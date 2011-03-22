@@ -46,7 +46,7 @@ sub drop_db {
 	$self->dbh->disconnect;
 	$self->dbh_withcommit->disconnect;
 	my $dbname = $self->database;
-	unlink $dbname or die "unable to remove $dbanem sqlite database\n";
+	unlink $dbname or die "unable to remove $dbname sqlite database\n";
 }
 
 has 'dbh' => (
