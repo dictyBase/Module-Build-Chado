@@ -71,6 +71,23 @@ sub connect_info {
     return $self->_handler->connection_info;
 }
 
+
+=head2 Actions
+
+=head3 setup
+
+=begin comment
+
+=head3 ACTION_setup
+
+=end comment
+
+Sets up the basic parameters for the build object and loads the specific backend class. It
+is called by every other action. Override of calling it separately absolutely not
+recommended.
+
+=cut
+
 sub ACTION_setup {
     my $self = shift;
     $self->depends_on('build');
@@ -95,6 +112,22 @@ sub ACTION_setup {
     print "done with setup\n" if $self->args('test_debug');
 }
 
+
+=head3 create
+
+=begin comment
+
+=head3 ACTION_create
+
+=end comment
+
+Creates a database. However,  at this point it is not implemented for Postgresql and
+Oracle backends. For that,  you need to use database specific client tools. For SQLite
+backend the database is created when the schema is loaded.
+
+=cut
+
+
 sub ACTION_create {
     my ($self) = @_;
     $self->depends_on('setup');
@@ -105,6 +138,21 @@ sub ACTION_create {
     }
 }
 
+
+=head3 deploy
+
+=begin comment
+
+=head3 ACTION_deploy
+
+=end comment
+
+Deploy a chado database to the specified backend. Create action is implied.
+
+=cut
+
+
+
 sub ACTION_deploy {
     my ($self) = @_;
     $self->depends_on('create');
@@ -114,6 +162,23 @@ sub ACTION_deploy {
         print "loaded schema\n" if $self->args('test_debug');
     }
 }
+
+
+=head3 deploy_schema
+
+=begin comment
+
+=head3 ACTION_deploy_schema
+
+=end comment
+
+Deploy a chado database to the specified backend. Unlike the B<deploy> action,  create
+action is not implied here. So,  except SQLite backend,  this action expects a database to
+be created already.
+
+=cut
+
+
 
 sub ACTION_deploy_schema {
     my ($self) = @_;
@@ -126,11 +191,40 @@ sub ACTION_deploy_schema {
     }
 }
 
+
+
+=head3 load_organism
+
+=begin comment
+
+=head3 ACTION_load_organism
+
+=end comment
+
+Loads the organism fixture to the deployed chado schema. B<deploy_schema> action is
+implied.
+
+=cut
+
+
 sub ACTION_load_organism {
     my ($self) = @_;
     $self->depends_on('deploy_schema');
     $self->_handler->load_organism;
 }
+
+
+=head3 load_rel
+
+=begin comment
+
+=head3 ACTION_load_rel
+
+=end comment
+
+Load the relationship ontology. B<deploy_schema> action is implied.
+
+=cut
 
 sub ACTION_load_rel {
     my ($self) = @_;
@@ -138,23 +232,50 @@ sub ACTION_load_rel {
     $self->_handler->load_rel;
 }
 
+
+
+=head3 load_so
+
+=begin comment
+
+=head3 ACTION_load_so
+
+=end comment
+
+Load the sequence ontology. B<load_rel> action is implied.
+
+=cut
+
 sub ACTION_load_so {
     my ($self) = @_;
     $self->depends_on('load_rel');
     $self->_handler->load_so;
 }
 
-sub ACTION_load_pub {
-    my ($self) = @_;
-    $self->depends_on('load_rel');
-    $self->handler->load_pub;
-}
 
-sub ACTION_load_publication {
-    my ($self) = @_;
-    $self->depends_on('load_pub');
-    $self->handler->load_journal_data;
-}
+=head3 load_fixture
+
+=begin comment
+
+=head3 ACTION_load_fixture
+
+=end comment
+
+Load all fixtures in the given order.
+
+=over
+
+=item organism
+
+=item relationship ontology
+
+=item sequence ontology
+
+=back
+
+B<deploy_schema> is implied.
+
+=cut
 
 sub ACTION_load_fixture {
     my ($self) = @_;
@@ -168,17 +289,37 @@ sub ACTION_load_fixture {
     }
 }
 
+
+=head3 unload_rel
+
+=begin comment
+
+=head3 ACTION_unload_rel
+
+=end comment
+
+Deletes the relationship ontology.
+
+=cut
+
 sub ACTION_unload_rel {
     my ($self) = @_;
     $self->depends_on('setup');
     $self->_handler->unload_rel;
 }
 
-sub ACTION_unload_pub {
-    my ($self) = @_;
-    $self->depends_on('setup');
-    $self->_handler->unload_pub;
-}
+
+=head3 unload_so
+
+=begin comment
+
+=head3 ACTION_unload_so
+
+=end comment
+
+Deletes the sequence ontology.
+
+=cut
 
 sub ACTION_unload_so {
     my ($self) = @_;
@@ -186,11 +327,40 @@ sub ACTION_unload_so {
     $self->_handler->unload_so;
 }
 
+
+=head3 unload_organism
+
+=begin comment
+
+=head3 ACTION_unload_organism
+
+=end comment
+
+Deletes the organisms.
+
+=cut
+
 sub ACTION_unload_organism {
     my ($self) = @_;
     $self->depends_on('setup');
     $self->_handler->unload_organism;
 }
+
+
+
+=head3 unload_fixture
+
+=begin comment
+
+=head3 ACTION_unload_fixture
+
+=end comment
+
+Delete all fixtures including organism,  relationship and sequence ontologies.
+Currently implies running of B<unload_rel>,  B<unload_so> and B<unload_organism> actions. 
+
+=cut
+
 
 sub ACTION_unload_fixture {
     my ($self) = @_;
@@ -201,6 +371,22 @@ sub ACTION_unload_fixture {
     }
 }
 
+
+=head3 prune_fixture
+
+=begin comment
+
+=head3 ACTION_prune_fixture
+
+=end comment
+
+Delete all fixtures. However,  unlike running all the dependent unload_actions similar to
+B<unload_fixture> it empties all the database tables. It runs a little bit faster than
+B<unload_fixture>.
+
+=cut
+
+
 sub ACTION_prune_fixture {
     my ($self) = @_;
     $self->depends_on('setup');
@@ -209,13 +395,30 @@ sub ACTION_prune_fixture {
     $self->config( 'is_fixture_unloaded', 1 );
 }
 
+
+
+=head3 test
+
+=begin comment
+
+=head3 ACTION_test
+
+=end comment
+
+Overrides the default B<Action_test> of L<Module::Build>. This action drop any existing
+schema,  loads the fixture along with the schema,  runs all the tests and then drops the
+schema.
+
+=cut
+
+
 sub ACTION_test {
     my ($self) = @_;
 
     #cleanup all the setup values if any
     for my $name ( @{ $self->_config_keys } ) {
         print "cleaning $name\n" if $self->args('test_debug');
-        $self->config_data( $name => 0 );
+        $self->config( $name ,  0 );
     }
     $self->depends_on('drop_schema');
     $self->depends_on('load_fixture');
@@ -223,6 +426,20 @@ sub ACTION_test {
     $self->SUPER::ACTION_test(@_);
     $self->depends_on('drop_schema');
 }
+
+
+=head3 drop
+
+=begin comment
+
+=head3 ACTION_drop
+
+=end comment
+
+Drops the database. However,  except SQLite it is not implemented for Oracle and
+Postgresql.
+
+=cut
 
 sub ACTION_drop {
     my ($self) = @_;
@@ -232,10 +449,24 @@ sub ACTION_drop {
     #cleanup all the setup values if any
     for my $name ( @{ $self->_config_keys } ) {
         print "cleaning $name\n" if $self->args('test_debug');
-        $self->config_data( $name => 0 );
+        $self->config( $name , 0 );
     }
     print "dropped the database\n" if $self->args('test_debug');
 }
+
+
+=head3 drop_schema
+
+=begin comment
+
+=head3 ACTION_drop_schema
+
+=end comment
+
+Drops the database schema.
+
+=cut
+
 
 sub ACTION_drop_schema {
     my ($self) = @_;
@@ -247,3 +478,141 @@ sub ACTION_drop_schema {
 1;
 
 # ABSTRACT: Build,configure and test chado database backed modules and applications
+
+=head1 SYNOPSIS
+
+In Build.PL:
+
+use Module::Build::Chado;
+
+my $build = Module::Build::Chado->new(
+                 module_name => 'MyChadoApp', 
+                 license => 'perl', 
+                 dist_abstract => 'My chado module'
+                 dist_version => '1.0'
+
+);
+
+$build->create_build_script;
+
+On the command line:
+
+perl Build.PL (default is a temporary SQLite database)
+
+./Build test (deploy chado schema and load fixtures)
+
+./Build test --dsn "dbi:Pg:dbname=mychado" --user tucker --password booze
+
+./Build test --dsn "dbi:Oracle:sid=myoracle" --user tucker --password hammer
+
+./Build deploy_schema (deploy a chado schema)
+
+./Build load_fixture (load some standard fixtures)
+
+./Build drop_schema
+
+
+=head1 DESCRIPTION
+
+This is subclass of L<Module::Build> to configure,  build and test
+L<chado|http://gmod.org/wiki/Chado> database backed
+perl modules and applications. It is based on L<Bio::Chado::Schema> and provides the
+following additional features ...
+
+=over
+
+=item * 
+
+Extra Module::Build properties and actions to deploy, load fixtures and run tests on a
+chado database schema.
+
+=item *
+
+Support SQLite, Postgresql and Oracle backends.
+
+=back
+
+=class_attribute dsn
+
+Database connect string,  defaults to a temporary SQLite database.
+
+=class_attribute user
+
+Database user,  not needed for SQLite backend.
+
+=class_attribute password
+
+Database password,  not needed for SQLite backend.
+
+=class_attribute superuser
+
+Database super user, in case the regular use do not have enough permissions for
+manipulating the database schema. It defaults to the user attribute.
+
+=class_attribute superpassword
+
+Similar concept as superuser
+
+=class_attribute ddl
+
+DDL file for particular backend,  by default comes for SQLite,  Postgresql and Oracle.
+
+=class_attribute organism_fixuture
+
+Fixture for loading organisms,  by default the distribution comes with a organism.yaml
+file.
+
+=class_attribute rel_fixuture
+
+Relation ontology file in obo_xml format. The distribution includes a relationship.obo_xml
+file.
+
+=class_attribute so_fixuture
+
+Sequence ontology file in obo_xml format. By default,  it includes sofa.obo_xml file.
+
+
+=head1 Build Actions
+
+Extra or overridden Build actions in addition to the default list provided by Module::Build.
+By default run ./Build <action_name> for its documentation. The list is included here for
+a quick reference.
+
+=over
+
+=item create
+
+=item drop
+
+=item deploy
+
+=item deploy_schema
+
+=item drop_schema
+
+=item load_fixture
+
+=item unload_fixture
+
+=item prune_fixture
+
+=item load_organism
+
+=item load_rel
+
+=item load_so
+
+=item unload_organism
+
+=item unload_rel
+
+=item unload_so
+
+=item test
+
+=back
+
+
+=method connect_hash
+
+=method connect_info
