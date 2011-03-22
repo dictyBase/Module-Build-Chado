@@ -120,6 +120,20 @@ SKIP: {
         };
 
     };
+
+	subtest 'action drop_schema' => sub {
+        lives_ok { $mb_chado->ACTION_drop_schema } 'should run';
+        my $dbh = $mb_chado->_handler->dbh;
+        my ( $sth, $ary_ref );
+        lives_ok {
+            $sth = $dbh->table_info( undef, undef, '%feature%', 'TABLE' );
+            $ary_ref = $dbh->selectcol_arrayref( $sth, { Columns => [3] } );
+        }
+        'should not retrieve tables';
+        is( scalar @$ary_ref, 0, 'should not have any table name' );
+    };
+
+
     if (my $handler = $mb_chado->_handler)  {
     	$handler->dbh->disconnect;
     	$handler->dbh_withcommit->disconnect;
