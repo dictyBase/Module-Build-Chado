@@ -23,7 +23,8 @@ has 'dbi_attributes' => (
 sub create_db {
     my ($self) = @_;
     ## -- still not sure how to connect as the user before creating them ... so ...
-    warn "not implemented for oracle: you need to create the database with appropiate permissions\n";
+    warn
+        "not implemented for oracle: you need to create the database with appropiate permissions\n";
     return 1;
 }
 
@@ -39,18 +40,64 @@ sub prune_fixture {
     my ($self) = @_;
     my $dbh = $self->super_dbh;
 
-    my $tsth = $dbh->prepare(qq{ select table_name FROM user_tables });
-    $tsth->execute() or croak $tsth->errstr();
-    while ( my ($table) = $tsth->fetchrow_array() ) {
-        try { 
-        	$dbh->do(qq{ TRUNCATE TABLE $table });
-            $dbh->commit;
+    my $tsth  = $dbh->prepare(qq{ select table_name FROM user_tables });
+    my $trsth = $dbh->prepare(qq{ truncate table ? });
+    my $cth
+        = $dbh->prepare(
+        "select constraint_name from user_constraints where constraint_type = 'R' and table_name = ?"
+        );
+    my $eth = $dbh->prepare("alter table ? enable constraint ?");
+    my $dth = $dbh->prepare("alter table ? disable constraint ?");
+
+    # -- list of tables
+    my @tables = @{ $dbh->selectcol_arrayref( $tsth, { Columns => [1] } ) };
+
+    # -- list of constraints
+    my $table_cons;
+    for my $t (@tables) {
+        push @{ $table_cons->{$t} },
+            @{ $dbh->selectcol_arrayref( $cth, { Columns => [1] }, ($t) ) };
+    }
+
+    # -- first disable all the foreign key constraints
+    for my $t ( keys %$table_cons ) {
+        for my $name ( @{ $table_cons->{$t} } ) {
+            try {
+                $dth->execute( $t, $name );
+            }
+            catch {
+                $dbh->rollback;
+                croak $_;
+            };
+        }
+    }
+    $dbh->commit;
+
+    # -- now truncate all tables
+    for my $t (@tables) {
+        try {
+            $trsth->execute($t);
         }
         catch {
             $dbh->rollback();
             croak "$_\n";
         };
     }
+    $dbh->commit;
+
+    # -- now activate all constraints
+    for my $t ( keys %$table_cons ) {
+        for my $name ( @{ $table_cons->{$t} } ) {
+            try {
+                $eth->execute( $t, $name );
+            }
+            catch {
+                $dbh->rollback;
+                croak $_;
+            };
+        }
+    }
+    $dbh->commit;
 }
 
 sub drop_schema {
@@ -154,7 +201,7 @@ has 'dbh' => (
     lazy    => 1,
     default => sub {
         my $self = shift;
-        $self->add_dbi_attribute( 'AutoCommit',  0 );
+        $self->add_dbi_attribute( 'AutoCommit', 0 );
         my $dbh = DBI->connect( $self->connection_info )
             or confess $DBI::errstr;
         return $dbh;
@@ -167,7 +214,7 @@ has 'super_dbh' => (
     lazy    => 1,
     default => sub {
         my $self = shift;
-        $self->add_dbi_attribute( 'AutoCommit',  0 );
+        $self->add_dbi_attribute( 'AutoCommit', 0 );
         DBI->connect( $self->super_connection_info ) or confess $DBI::errstr;
     }
 );
@@ -178,8 +225,8 @@ has 'dbh_withcommit' => (
     lazy    => 1,
     default => sub {
         my ($self) = @_;
-        $self->add_dbi_attribute( 'AutoCommit',  1 );
-        $self->add_dbi_attribute( 'RaiseError',  1 );
+        $self->add_dbi_attribute( 'AutoCommit', 1 );
+        $self->add_dbi_attribute( 'RaiseError', 1 );
         my $dbh = DBI->connect( $self->connection_info )
             or confess $DBI::errstr;
         return $dbh;
@@ -188,15 +235,14 @@ has 'dbh_withcommit' => (
 
 sub connection_info {
     my ($self) = @_;
-    return ( $self->dsn, $self->user, $self->password, $self->dbi_attributes );
+    return ( $self->dsn, $self->user, $self->password,
+        $self->dbi_attributes );
 }
 
 sub super_connection_info {
     my ($self) = @_;
-    return (
-        $self->dsn,           $self->superuser,
-        $self->superpassword, $self->dbi_attributes
-    );
+    return ( $self->dsn, $self->superuser, $self->superpassword,
+        $self->dbi_attributes );
 }
 
 sub deploy_schema {
