@@ -125,12 +125,11 @@ SKIP: {
 
     subtest 'action drop_schema' => sub {
         lives_ok { $mb_chado->ACTION_drop_schema } 'should run';
-        my $dbh = $mb_chado->_handler->dbh;
+        my $dbh = $mb_chado->_handler->super_dbh;
         my ( $sth, @ary );
         lives_ok {
-            $sth = $dbh->table_info( undef, undef, 'FEATURE%', 'TABLE' );
             @ary
-                = uniq @{ $dbh->selectcol_arrayref( $sth, { Columns => [3] } )
+                = uniq @{ $dbh->selectcol_arrayref( 'select table_name from user_tables', { Columns => [1] } )
                 };
         }
         'should not retrieve tables';
@@ -139,6 +138,7 @@ SKIP: {
 
     if ( my $handler = $mb_chado->_handler ) {
         $handler->dbh->disconnect;
+        $handler->super_dbh->disconnect;
         $handler->dbh_withcommit->disconnect;
     }
 }

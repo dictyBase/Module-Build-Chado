@@ -1,5 +1,9 @@
 package Module::Build::Chado::Oracle;
 
+BEGIN {
+    $Module::Build::Chado::Oracle::VERSION = '0.0011';
+}
+
 # Other modules:
 use namespace::autoclean;
 use Moose;
@@ -41,13 +45,10 @@ sub prune_fixture {
     my $dbh = $self->super_dbh;
 
     my $tsth  = $dbh->prepare(qq{ select table_name FROM user_tables });
-    my $trsth = $dbh->prepare(qq{ truncate table ? });
     my $cth
         = $dbh->prepare(
         "select constraint_name from user_constraints where constraint_type = 'R' and table_name = ?"
         );
-    my $eth = $dbh->prepare("alter table ? enable constraint ?");
-    my $dth = $dbh->prepare("alter table ? disable constraint ?");
 
     # -- list of tables
     my @tables = @{ $dbh->selectcol_arrayref( $tsth, { Columns => [1] } ) };
@@ -63,7 +64,7 @@ sub prune_fixture {
     for my $t ( keys %$table_cons ) {
         for my $name ( @{ $table_cons->{$t} } ) {
             try {
-                $dth->execute( $t, $name );
+                $dbh->do(qq{alter table $t disable constraint $name});
             }
             catch {
                 $dbh->rollback;
@@ -76,7 +77,7 @@ sub prune_fixture {
     # -- now truncate all tables
     for my $t (@tables) {
         try {
-            $trsth->execute($t);
+            $dbh->do(qq{truncate table $t});
         }
         catch {
             $dbh->rollback();
@@ -89,7 +90,7 @@ sub prune_fixture {
     for my $t ( keys %$table_cons ) {
         for my $name ( @{ $table_cons->{$t} } ) {
             try {
-                $eth->execute( $t, $name );
+                $dbh->do(qq{alter table  $t enable constraint $name});
             }
             catch {
                 $dbh->rollback;
@@ -119,7 +120,10 @@ sub drop_schema {
 TABLE:
     while ( my ($table) = $tsth->fetchrow_array() ) {
         next TABLE if $table =~ /CTX/;
-        try { $dbh->do(qq{ drop table $table cascade constraints purge }) }
+        try {
+            $dbh->do(qq{ drop table $table cascade constraints purge });
+            $dbh->commit;
+        }
         catch {
             $dbh->rollback();
             confess "$_\n";
@@ -129,15 +133,14 @@ TABLE:
     $isth->execute() or croak $isth->errstr();
 LINE:
     while ( my ($seq) = $isth->fetchrow_array() ) {
-        if ( $seq =~ /^SQ/ ) {
-            try {
-                $dbh->do(qq{ drop sequence $seq });
-            }
-            catch {
-                $dbh->rollback();
-                confess "$_\n";
-            };
+        try {
+            $dbh->do(qq{ drop sequence $seq });
         }
+        catch {
+            $dbh->rollback();
+            confess "$_\n";
+        };
+
     }
 
     $sidx->execute() or croak $dbh->errstr();
@@ -300,3 +303,28 @@ __PACKAGE__->meta->make_immutable;
 1;    # Magic true value required at end of module
 
 # ABSTRACT: Oracle specific class for Module::Build::Chado
+
+__END__
+
+=pod
+
+=head1 NAME
+
+Module::Build::Chado::Oracle - Oracle specific class for Module::Build::Chado
+
+=head1 VERSION
+
+version 0.0011
+
+=head1 AUTHOR
+
+Siddhartha Basu <biosidd@gmail.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Siddhartha Basu.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
