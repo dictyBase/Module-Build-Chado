@@ -42,13 +42,15 @@ sub prune_fixture {
     my $tsth = $dbh->prepare(qq{ select table_name FROM user_tables });
     $tsth->execute() or croak $tsth->errstr();
     while ( my ($table) = $tsth->fetchrow_array() ) {
-        try { $dbh->do(qq{ TRUNCATE TABLE $table }) }
+        try { 
+        	$dbh->do(qq{ TRUNCATE TABLE $table });
+            $dbh->commit;
+        }
         catch {
             $dbh->rollback();
             croak "$_\n";
         };
     }
-    $dbh->commit;
 }
 
 sub drop_schema {
