@@ -4,7 +4,7 @@ use File::Spec::Functions;
 use Module::Build;
 use Class::MOP;
 use Try::Tiny;
-use List::MoreUtils qw/all/;
+use List::MoreUtils qw/all uniq/;
 
 my $build = Module::Build->current;
 my $dir = catdir( $build->base_dir, 't', 'lib', 'mydb' );
@@ -44,16 +44,16 @@ SKIP: {
 
             subtest 'instantiate a database schema' => sub {
                 my $dbh = $mb_chado->_handler->dbh;
-                my ( $sth, $ary_ref );
+                my ( $sth, @ary );
                 lives_ok {
-                    $sth = $dbh->table_info( undef, undef, '%feature%',
+                    $sth = $dbh->table_info( undef, undef, 'FEATURE%',
                         'TABLE' );
-                    $ary_ref = $dbh->selectcol_arrayref( $sth,
-                        { Columns => [3] } );
+                    @ary = uniq @{ $dbh->selectcol_arrayref( $sth,
+                            { Columns => [3] } ) };
                 }
                 'should retrieve tables';
-                is( scalar @$ary_ref, 32, 'should have 32 table names' );
-                is( ( all {/feature/i} @$ary_ref ),
+                is( scalar @ary, 26, 'should have 26 table names' );
+                is( ( all {/feature/i} @ary ),
                     1, 'should match table names with feature' );
             };
         };
@@ -111,14 +111,14 @@ SKIP: {
 
         subtest 'sustains the database schema' => sub {
             my $dbh = $mb_chado->_handler->dbh;
-            my ( $sth, $ary_ref );
+            my ( $sth, @ary );
             lives_ok {
-                $sth = $dbh->table_info( undef, undef, '%feature%', 'TABLE' );
-                $ary_ref
-                    = $dbh->selectcol_arrayref( $sth, { Columns => [3] } );
+                $sth = $dbh->table_info( undef, undef, 'FEATURE%', 'TABLE' );
+                @ary = uniq @{ $dbh->selectcol_arrayref( $sth,
+                        { Columns => [3] } ) };
             }
             'should retrieve tables';
-            is( scalar @$ary_ref, 32, 'should have 32 table names' );
+            is( scalar @ary, 26, 'should have 26 table names' );
         };
 
     };
@@ -126,13 +126,15 @@ SKIP: {
     subtest 'action drop_schema' => sub {
         lives_ok { $mb_chado->ACTION_drop_schema } 'should run';
         my $dbh = $mb_chado->_handler->dbh;
-        my ( $sth, $ary_ref );
+        my ( $sth, @ary );
         lives_ok {
-            $sth = $dbh->table_info( undef, undef, 'feature%', 'TABLE' );
-            $ary_ref = $dbh->selectcol_arrayref( $sth, { Columns => [3] } );
+            $sth = $dbh->table_info( undef, undef, 'FEATURE%', 'TABLE' );
+            @ary
+                = uniq @{ $dbh->selectcol_arrayref( $sth, { Columns => [3] } )
+                };
         }
         'should not retrieve tables';
-        is( scalar @$ary_ref, 0, 'should not have any table name' );
+        is( scalar @ary, 0, 'should not have any table name' );
     };
 
     if ( my $handler = $mb_chado->_handler ) {
@@ -140,4 +142,3 @@ SKIP: {
         $handler->dbh_withcommit->disconnect;
     }
 }
-
