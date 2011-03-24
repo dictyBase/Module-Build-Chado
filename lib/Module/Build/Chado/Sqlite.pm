@@ -30,16 +30,6 @@ has 'client' => (
     }
 );
 
-sub database {
-    my ($self) = @_;
-    if ( $self->module_builder->driver_dsn =~ /(dbname|(.+)?)=(\S+)/ ) {
-        return $3;
-    }
-}
-
-sub create_db {
-    return 1;
-}
 
 sub drop_db {
 	my ($self) = @_;
@@ -79,7 +69,16 @@ has 'dbh_withcommit' => (
     }
 );
 
+sub database {
+    my ($self) = @_;
+    if ( $self->module_builder->driver_dsn =~ /(dbname|(.+)?)=(\S+)/ ) {
+        return $3;
+    }
+}
 
+sub create_db {
+    return 1;
+}
 
 sub connection_info {
     my ($self) = @_;
@@ -88,8 +87,7 @@ sub connection_info {
 
 sub deploy_schema {
     my $self = shift;
-    $self->deploy_by_dbi if !$self->deploy_by_client;
-    $self->dbh;    #making sure the pragma is run
+    $self->has_client ? $self->deploy_by_client : $self->deploy_by_dbi;
 }
 
 sub deploy_post_schema {
@@ -98,7 +96,6 @@ sub deploy_post_schema {
 
 sub deploy_by_client {
     my $self = shift;
-    return if !$self->has_client;
     my $cmd
         = [ $self->client, '-noheader', $self->database, '<', $self->ddl ];
     my ( $success, $error_code, $full_buf,, $stdout_buf, $stderr_buf )
