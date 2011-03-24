@@ -3,9 +3,6 @@
 -- Created on Thu Mar 24 15:40:00 2011
 -- 
 
-
-BEGIN TRANSACTION;
-
 --
 -- Table: acquisition
 --
@@ -3416,5 +3413,3 @@ CREATE INDEX featureprop_idx_type_id ON featureprop (type_id);
 CREATE INDEX featureprop_idx_feature_id ON featureprop (feature_id);
 
 CREATE UNIQUE INDEX featureprop_c1 ON featureprop (feature_id, type_id, rank);
-
-COMMIT;
