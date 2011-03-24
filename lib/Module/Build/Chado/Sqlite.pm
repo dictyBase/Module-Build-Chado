@@ -21,24 +21,6 @@ has 'dbi_attributes' => (
     handles => { add_dbi_attribute => 'set' }
 );
 
-has 'client' => (
-    is        => 'rw',
-    isa       => 'Maybe[Str]',
-    predicate => 'has_client',
-    default   => sub {
-        can_run 'sqlite3';
-    }
-);
-
-
-sub drop_db {
-	my ($self) = @_;
-	$self->dbh->disconnect;
-	$self->dbh_withcommit->disconnect;
-	my $dbname = $self->database;
-	unlink $dbname or die "unable to remove $dbname sqlite database\n";
-}
-
 has 'dbh' => (
     is        => 'ro',
     isa       => 'DBI::db',
@@ -69,6 +51,14 @@ has 'dbh_withcommit' => (
     }
 );
 
+sub drop_db {
+    my ($self) = @_;
+    $self->dbh->disconnect;
+    $self->dbh_withcommit->disconnect;
+    my $dbname = $self->database;
+    unlink $dbname or die "unable to remove $dbname sqlite database\n";
+}
+
 sub database {
     my ($self) = @_;
     if ( $self->module_builder->driver_dsn =~ /(dbname|(.+)?)=(\S+)/ ) {
@@ -87,7 +77,12 @@ sub connection_info {
 
 sub deploy_schema {
     my $self = shift;
-    $self->has_client ? $self->deploy_by_client : $self->deploy_by_dbi;
+    if ( my $cmd = can_run 'sqlite3' ) {
+        $self->deploy_by_client($cmd);
+    }
+    else {
+        $self->deploy_by_dbi;
+    }
 }
 
 sub deploy_post_schema {
@@ -95,9 +90,9 @@ sub deploy_post_schema {
 }
 
 sub deploy_by_client {
-    my $self = shift;
+    my ($self, $cmd_path) = @_;
     my $cmd
-        = [ $self->client, '-noheader', $self->database, '<', $self->ddl ];
+        = [ $cmd_path, '-noheader', $self->database, '<', $self->ddl ];
     my ( $success, $error_code, $full_buf,, $stdout_buf, $stderr_buf )
         = run( command => $cmd, verbose => 1 );
     return $success if $success;
@@ -175,6 +170,5 @@ with 'Module::Build::Chado::Role::HasDB';
 __PACKAGE__->meta->make_immutable;
 
 1;    # Magic true value required at end of module
-
 
 # ABSTRACT: SQLite specific class for Module::Build::Chado
