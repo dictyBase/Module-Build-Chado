@@ -21,7 +21,7 @@ has 'dbi_attributes' => (
 
 sub database {
     my ($self) = @_;
-    if ( $self->module_builder->driver_dsn =~ /d(atabase|b|bname)=(\w+)\;/ ) {
+    if ( $self->driver_dsn =~ /d(atabase|b|bname)=(\w+)\;/ ) {
         return $2;
     }
 }

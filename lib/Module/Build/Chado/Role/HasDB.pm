@@ -17,16 +17,6 @@ has 'module_builder' => (
     isa       => 'Module::Build',
     predicate => 'has_module_builder',
     trigger   => \&_setup_loader,
-    handles   => {
-        dsn           => 'dsn',
-        user          => 'user',
-        password      => 'password',
-        ddl           => 'ddl',
-        superuser     => 'superuser',
-        superpassword => 'superpassword',
-        loader        => 'loader'
-
-    }
 );
 
 sub _setup_loader {
@@ -37,13 +27,22 @@ sub _setup_loader {
         'Module::Build::Chado::Role::Loader::'
             . ucfirst lc( $builder->loader ) );
     $self->meta->make_immutable;
+    for my $attr (
+        qw/dsn user password ddl superuser
+        superpassword loader driver_dsn/
+        )
+    {
+        $self->$attr( $builder->$attr ) if $builder->$attr;
+    }
+
 }
 
+has $_ => ( is => 'rw', isa => 'Str' ) for qw/dsn user password ddl superuser
+    superpassword loader driver_dsn/;
 
 1;    # Magic true value required at end of module
 
 # ABSTRACT: Moose role provides an interface and to be consumed by database specific classes
-
 
 =attr module_builder
 

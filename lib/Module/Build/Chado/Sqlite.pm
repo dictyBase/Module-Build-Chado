@@ -61,7 +61,7 @@ sub drop_db {
 
 sub database {
     my ($self) = @_;
-    if ( $self->module_builder->driver_dsn =~ /(dbname|(.+)?)=(\S+)/ ) {
+    if ( $self->driver_dsn =~ /(dbname|(.+)?)=(\S+)/ ) {
         return $3;
     }
 }
