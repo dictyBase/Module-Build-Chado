@@ -12,6 +12,12 @@ requires 'create_db', 'drop_db', 'dbh', 'connection_info';
 requires 'deploy_schema', 'prune_fixture', 'drop_schema';
 requires 'dbi_attributes';
 
+has 'role_namespace' => (
+    is      => 'rw',
+    isa     => 'Str',
+    default => 'Module::Build::Chado::Role::Loader'
+);
+
 has 'module_builder' => (
     is        => 'rw',
     isa       => 'Module::Build',
@@ -24,22 +30,25 @@ sub _setup_loader {
     return if !$builder;
     $self->meta->make_mutable;
     apply_all_roles( $self,
-        'Module::Build::Chado::Role::Loader::'
-            . ucfirst lc( $builder->loader ) );
+        $self->role_namespace . '::' . ucfirst lc( $builder->loader ) );
     $self->meta->make_immutable;
-    for my $attr (
-        qw/dsn user password ddl superuser
-        superpassword loader driver_dsn/
-        )
-    {
-        $self->$attr( $builder->$attr ) if $builder->$attr;
-    }
-
 }
 
-has $_ => ( is => 'rw', isa => 'Str' ) for qw/dsn user password ddl superuser
-    superpassword loader driver_dsn/;
-
+for my $name (
+    qw/dsn user password ddl superuser
+    superpassword loader driver_dsn/
+    )
+{
+    has $name => (
+        is      => 'rw',
+        isa     => 'Maybe[Str]',
+        default => sub {
+            my $self = shift;
+            $self->module_builder->$name;
+        },
+        lazy => 1
+    );
+}
 1;    # Magic true value required at end of module
 
 # ABSTRACT: Moose role provides an interface and to be consumed by database specific classes
