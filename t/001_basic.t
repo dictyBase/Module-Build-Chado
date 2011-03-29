@@ -26,7 +26,7 @@ subtest 'attributes of Module::Build::Chado' => sub {
         $mb_chado,
         qw/dsn _config_keys organism_fixture so_fixture rel_fixture
             prepend_namespace ddl user password superuser superpassword
-            loader _handler/
+            _handler/
     );
 
     subtest 'default value of attributes' => sub {
@@ -44,7 +44,6 @@ subtest 'attributes of Module::Build::Chado' => sub {
         is( $mb_chado->prepend_namespace,
             'Module-Build-Chado-',
             'prepend_namespace should return Module-Build-Chado-' );
-        is( $mb_chado->loader, 'bcs', 'loader should return bcs' );
     };
 };
 

@@ -12,10 +12,25 @@ requires 'create_db', 'drop_db', 'dbh', 'connection_info';
 requires 'deploy_schema', 'prune_fixture', 'drop_schema';
 requires 'dbi_attributes';
 
-has 'role_namespace' => (
+has 'loader_namespace' => (
     is      => 'rw',
     isa     => 'Str',
     default => 'Module::Build::Chado::Role::Loader'
+);
+
+has 'loader_module' => (
+    is      => 'rw',
+    isa     => 'Str',
+    default => 'Bcs'
+);
+
+has 'loader' => (
+    is      => 'rw',
+    isa     => 'Str',
+    default => sub {
+        my ($self) = @_;
+        return $self->loader_namespace . '::' . $self->loader_module;
+    }
 );
 
 has 'module_builder' => (
@@ -29,14 +44,13 @@ sub _setup_loader {
     my ( $self, $builder ) = @_;
     return if !$builder;
     $self->meta->make_mutable;
-    apply_all_roles( $self,
-        $self->role_namespace . '::' . ucfirst lc( $builder->loader ) );
+    apply_all_roles( $self, $self->loader );
     $self->meta->make_immutable;
 }
 
 for my $name (
     qw/dsn user password ddl superuser
-    superpassword loader driver_dsn/
+    superpassword driver_dsn/
     )
 {
     has $name => (

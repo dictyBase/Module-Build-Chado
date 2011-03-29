@@ -62,14 +62,14 @@ SKIP: {
             my $org_count = $bcs->resultset('Organism::Organism')->count;
             my $rel_count = $bcs->resultset('Cv::Cvterm')->count(
                 {         'cv.name' => $mb_chado->prepend_namespace
-                        . $mb_chado->loader
+                        . $mb_chado->_handler->loader_tag
                         . '-relationship'
                 },
                 { join => 'cv' }
             );
             my $so_count = $bcs->resultset('Cv::Cvterm')->count(
                 {         'cv.name' => $mb_chado->prepend_namespace
-                        . $mb_chado->loader
+                        . $mb_chado->_handler->loader_tag
                         . '-sequence'
                 },
                 { join => 'cv' }
@@ -89,14 +89,14 @@ SKIP: {
         my $org_count = $bcs->resultset('Organism::Organism')->count;
         my $rel_count = $bcs->resultset('Cv::Cvterm')->count(
             {         'cv.name' => $mb_chado->prepend_namespace
-                    . $mb_chado->loader
+                    . $mb_chado->_handler->loader_tag
                     . '-relationship'
             },
             { join => 'cv' }
         );
         my $so_count = $bcs->resultset('Cv::Cvterm')->count(
             {         'cv.name' => $mb_chado->prepend_namespace
-                    . $mb_chado->loader
+                    . $mb_chado->_handler->loader_tag
                     . '-sequence'
             },
             { join => 'cv' }

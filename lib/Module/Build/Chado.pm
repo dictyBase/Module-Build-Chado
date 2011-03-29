@@ -45,7 +45,6 @@ __PACKAGE__->add_property(
 );
 
 __PACKAGE__->add_property( 'prepend_namespace' => 'Module-Build-Chado-' );
-__PACKAGE__->add_property( 'loader'            => 'bcs' );
 __PACKAGE__->add_property('driver_dsn');
 __PACKAGE__->add_property('ddl');
 __PACKAGE__->add_property('user');

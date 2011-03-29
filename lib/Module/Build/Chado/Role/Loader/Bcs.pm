@@ -80,8 +80,10 @@ has 'ontology_namespace' => (
 );
 
 has 'loader_tag' => (
-    is  => 'rw',
-    isa => 'Str'
+    is      => 'rw',
+    isa     => 'Str',
+    default => sub { return lc $_[0]->loader_module },
+    lazy    => 1
 );
 
 has 'cvrow' => (
@@ -165,7 +167,7 @@ sub current_cv {
     my ($self) = @_;
     return
           $self->module_builder->prepend_namespace
-        . $self->loader . '-'
+        . $self->loader_tag . '-'
         . $self->ontology_namespace;
 }
 
@@ -222,7 +224,7 @@ sub lookup_cv_id {
     try {
         $cvrow = $schema->txn_do(
             sub {
-                my $name  = 'Modware-' . $self->loader_tag . '-' . $namespace;
+                my $name  = $self->module_builder->prepend_namespace . $self->loader_tag . '-' . $namespace;
                 my $cvrow = $schema->resultset('Cv::Cv')->create(
                     {   name       => $name,
                         definition => "Ontology namespace for modwarex module"
@@ -285,8 +287,8 @@ sub _build_ontology_namespace {
     my $self = shift;
 
     #which namespace to use incase it is not present for a particular node
-    my $twig = XML::Twig::XPath->new->parsefile( $self->obo_xml );
-    my ($node) = $twig->findnodes('/obo/header/default-namespace');
+    my $twig      = XML::Twig::XPath->new->parsefile( $self->obo_xml );
+    my ($node)    = $twig->findnodes('/obo/header/default-namespace');
     my $namespace = $node->getValue;
     $twig->purge;
     confess "no default namespace being set for this ontology" if !$namespace;
@@ -681,7 +683,7 @@ sub load_typedef {
     my $name        = $node->first_child_text('name');
     my $id          = $node->first_child_text('id');
     my $is_obsolete = $node->first_child_text('is_obsolete');
-    my $namespace = $self->current_cv;
+    my $namespace   = $self->current_cv;
 
     my $def_elem = $node->first_child('def');
     my $definition;
@@ -727,7 +729,7 @@ sub load_term {
     my $name        = $node->first_child_text('name');
     my $id          = $node->first_child_text('id');
     my $is_obsolete = $node->first_child_text('is_obsolete');
-    my $namespace = $self->current_cv;
+    my $namespace   = $self->current_cv;
 
     my $def_elem = $node->first_child('def');
     my $definition;
@@ -824,7 +826,6 @@ sub create_more_dbxref {
 1;    # Magic true value required at end of module
 
 # ABSTRACT: L<Bio::Chado::Schema> base Moose role to load and unload fixtures in chado  database
-
 
 =attr schema
 
