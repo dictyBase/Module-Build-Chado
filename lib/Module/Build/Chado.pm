@@ -92,10 +92,11 @@ sub ACTION_setup {
     $self->depends_on('build');
     print "running setup\n" if $self->test_debug;
 
-    return if $self->feature('setup_done');
+    return if $self->config('is_setup_done');
 
     my ( $scheme, $driver, $attr_str, $attr_hash, $driver_dsn )
-        = DBI->parse_dsn( $self->dsn ) or croak "cannot parse dbi dsn";
+        = DBI->parse_dsn( $self->dsn )
+        or croak "cannot parse dbi dsn";
     $self->driver_dsn($driver_dsn);
     if ( !$self->ddl ) {
         my $ddl = catfile( module_dir('Module::Build::Chado'),
@@ -103,14 +104,15 @@ sub ACTION_setup {
         $self->ddl($ddl);
     }
 
-    $self->superuser($self->user) if !$self->superuser;
-    $self->superpassword($self->password) if !$self->superpassword;
+    $self->superuser( $self->user )         if !$self->superuser;
+    $self->superpassword( $self->password ) if !$self->superpassword;
 
     my $db_class = 'Module::Build::Chado::' . ucfirst lc $driver;
     Class::MOP::load_class($db_class);
     my $chado = $db_class->new( module_builder => $self );
     $self->_handler($chado);
-    $self->feature( 'setup_done' => 1 );
+    $self->config( 'is_setup_done', 1 );
+
     print "done with setup\n" if $self->test_debug;
 }
 
@@ -339,15 +341,15 @@ sub ACTION_unload_organism {
 =end comment
 
 Delete all fixtures including organism,  relationship and sequence ontologies.
-Currently implies running of B<unload_rel>,  B<unload_so> and B<unload_organism> actions. 
 
 =cut
 
 sub ACTION_unload_fixture {
     my ($self) = @_;
     if ( $self->feature('is_fixture_loaded') ) {
-        $self->depends_on($_) for qw/unload_rel unload_so unload_organism/;
-        $self->feature( 'is_fixture_loaded' => 0 );
+        $self->depends_on('setup');
+        $self->_handler->$_ for qw/unload_rel unload_so unload_organism/;
+        $self->feature( 'is_fixture_loaded'   => 0 );
         $self->feature( 'is_fixture_unloaded' => 1 );
     }
 }
@@ -370,7 +372,7 @@ sub ACTION_prune_fixture {
     my ($self) = @_;
     $self->depends_on('setup');
     $self->_handler->prune_fixture;
-    $self->feature( 'is_fixture_loaded' =>   0 );
+    $self->feature( 'is_fixture_loaded'   => 0 );
     $self->feature( 'is_fixture_unloaded' => 1 );
 }
 
@@ -394,7 +396,7 @@ sub ACTION_test {
     #cleanup all the setup values if any
     for my $name ( @{ $self->_config_keys } ) {
         print "cleaning $name\n" if $self->test_debug;
-        $self->feature( $name =>  0 );
+        $self->feature( $name => 0 );
     }
     $self->depends_on('drop_schema');
     $self->depends_on('load_fixture');

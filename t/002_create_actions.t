@@ -28,7 +28,7 @@ subtest 'Module::Build::Chado action setup' => sub {
     does_ok( $mb_chado->_handler, 'Module::Build::Chado::Role::HasDB',
         'handler object should do the Module::Build::Chado::Role::HasDB role'
     );
-    is( $mb_chado->feature('setup_done'), 1, 'should be completed' );
+    is( $mb_chado->config('setup_done'), 1, 'should be completed' );
     isa_ok( $mb_chado->_handler->dbh, 'DBI::db' );
     isa_ok( $mb_chado->_handler->schema, 'Bio::Chado::Schema' );
 };
@@ -64,7 +64,7 @@ subtest 'Module::Build::Chado has' => sub {
 subtest 'Module::Build::Chado action create' => sub {
     my $mb_chado = Module::Build::Chado->new(%opt);
     lives_ok { $mb_chado->ACTION_create } 'should run';
-    is( $mb_chado->feature('setup_done'), 1,
+    is( $mb_chado->config('setup_done'), 1,
         'should have set the setup flag' );
     is( $mb_chado->feature('is_db_created'),
         1, 'should have set the created flag' );
@@ -73,7 +73,7 @@ subtest 'Module::Build::Chado action create' => sub {
 subtest 'Module::Build::Chado action deploy' => sub {
     my $mb_chado = Module::Build::Chado->new(%opt);
     lives_ok { $mb_chado->ACTION_deploy } 'should run';
-    is( $mb_chado->feature('setup_done'), 1,
+    is( $mb_chado->config('setup_done'), 1,
         'should have set the setup flag' );
     is( $mb_chado->feature('is_db_created'),
         1, 'should have set the created flag' );

@@ -264,7 +264,6 @@ Deletes the organisms.
 =end comment
 
 Delete all fixtures including organism,  relationship and sequence ontologies.
-Currently implies running of B<unload_rel>,  B<unload_so> and B<unload_organism> actions. 
 
 =head3 prune_fixture
 
