@@ -92,7 +92,7 @@ sub ACTION_setup {
     $self->depends_on('build');
     print "running setup\n" if $self->test_debug;
 
-    return if $self->config('is_setup_done');
+    return if $self->config('setup_done');
 
     my ( $scheme, $driver, $attr_str, $attr_hash, $driver_dsn )
         = DBI->parse_dsn( $self->dsn )
@@ -111,7 +111,7 @@ sub ACTION_setup {
     Class::MOP::load_class($db_class);
     my $chado = $db_class->new( module_builder => $self );
     $self->_handler($chado);
-    $self->config( 'is_setup_done', 1 );
+    $self->config( 'setup_done', 1 );
 
     print "done with setup\n" if $self->test_debug;
 }

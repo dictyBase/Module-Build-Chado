@@ -3,7 +3,7 @@ package Module::Build::Chado::Role::HasDB;
 # Other modules:
 use namespace::autoclean;
 use Moose::Role;
-use Moose::Util qw/apply_all_roles/;
+use Moose::Util qw/ensure_all_roles/;
 
 # Module implementation
 #
@@ -33,6 +33,20 @@ has 'loader' => (
     }
 );
 
+has '_loader_stack' => (
+    is      => 'rw',
+    isa     => 'ArrayRef',
+    traits  => [qw/Array/],
+    handles => {
+        extra_loaders        => 'elements',
+        add_extra_loader     => 'push',
+        _clear_extra_loaders => 'clear',
+        extra_loader_count   => 'count'
+    },
+    lazy    => 1,
+    default => sub { [] }
+);
+
 has 'module_builder' => (
     is        => 'rw',
     isa       => 'Module::Build',
@@ -44,8 +58,20 @@ sub _setup_loader {
     my ( $self, $builder ) = @_;
     return if !$builder;
     $self->meta->make_mutable;
-    apply_all_roles( $self, $self->loader );
+    ensure_all_roles( $self,
+        $self->extra_loader_count
+        ? ( $self->loader, $self->all_loaders )
+        : $self->loader );
     $self->meta->make_immutable;
+}
+
+sub inject_loader {
+    my ( $self, $loader ) = @_;
+    if ($loader) {
+        $self->meta->make_mutable;
+        ensure_all_roles( $self, $loader );
+        $self->meta->make_immutable;
+    }
 }
 
 for my $name (
