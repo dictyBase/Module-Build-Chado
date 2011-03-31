@@ -52,6 +52,7 @@ __PACKAGE__->add_property('password');
 __PACKAGE__->add_property('superuser');
 __PACKAGE__->add_property('superpassword');
 __PACKAGE__->add_property('_handler');
+__PACKAGE__->add_property('test_debug');
 
 sub connect_hash {
     my ($self) = @_;
@@ -89,9 +90,9 @@ recommended.
 sub ACTION_setup {
     my $self = shift;
     $self->depends_on('build');
-    print "running setup\n" if $self->args('test_debug');
+    print "running setup\n" if $self->test_debug;
 
-    return if $self->config('setup_done');
+    return if $self->feature('setup_done');
 
     my ( $scheme, $driver, $attr_str, $attr_hash, $driver_dsn )
         = DBI->parse_dsn( $self->dsn ) or croak "cannot parse dbi dsn";
@@ -109,8 +110,8 @@ sub ACTION_setup {
     Class::MOP::load_class($db_class);
     my $chado = $db_class->new( module_builder => $self );
     $self->_handler($chado);
-    $self->config( 'setup_done', 1 );
-    print "done with setup\n" if $self->args('test_debug');
+    $self->feature( 'setup_done' => 1 );
+    print "done with setup\n" if $self->test_debug;
 }
 
 =head3 create
@@ -130,10 +131,10 @@ backend the database is created when the schema is loaded.
 sub ACTION_create {
     my ($self) = @_;
     $self->depends_on('setup');
-    if ( !$self->config('is_db_created') ) {
+    if ( !$self->feature('is_db_created') ) {
         $self->_handler->create_db;
-        $self->config( 'is_db_created', 1 );
-        print "created database\n" if $self->args('test_debug');
+        $self->feature( 'is_db_created' => 1 );
+        print "created database\n" if $self->test_debug;
     }
 }
 
@@ -152,10 +153,10 @@ Deploy a chado database to the specified backend. Create action is implied.
 sub ACTION_deploy {
     my ($self) = @_;
     $self->depends_on('create');
-    if ( !$self->config('is_schema_loaded') ) {
+    if ( !$self->feature('is_schema_loaded') ) {
         $self->_handler->deploy_schema;
-        $self->config( 'is_schema_loaded', 1 );
-        print "loaded schema\n" if $self->args('test_debug');
+        $self->feature( 'is_schema_loaded' => 1 );
+        print "loaded schema\n" if $self->test_debug;
     }
 }
 
@@ -176,11 +177,11 @@ be created already.
 sub ACTION_deploy_schema {
     my ($self) = @_;
     $self->depends_on('setup');
-    $self->config( 'is_db_created', 1 );
-    if ( !$self->config('is_schema_loaded') ) {
+    $self->feature( 'is_db_created' => 1 );
+    if ( !$self->feature('is_schema_loaded') ) {
         $self->_handler->deploy_schema;
-        $self->config( 'is_schema_loaded', 1 );
-        print "loaded schema\n" if $self->args('test_debug');
+        $self->feature( 'is_schema_loaded' => 1 );
+        print "loaded schema\n" if $self->test_debug;
     }
 }
 
@@ -266,12 +267,12 @@ B<deploy_schema> is implied.
 sub ACTION_load_fixture {
     my ($self) = @_;
     $self->depends_on('deploy_schema');
-    if ( !$self->config('is_fixture_loaded') ) {
+    if ( !$self->feature('is_fixture_loaded') ) {
         $self->_handler->load_organism;
         $self->_handler->load_rel;
         $self->_handler->load_so;
-        $self->config( 'is_fixture_loaded', 1 );
-        print "loaded fixture\n" if $self->args('test_debug');
+        $self->feature( 'is_fixture_loaded' => 1 );
+        print "loaded fixture\n" if $self->test_debug;
     }
 }
 
@@ -344,10 +345,10 @@ Currently implies running of B<unload_rel>,  B<unload_so> and B<unload_organism>
 
 sub ACTION_unload_fixture {
     my ($self) = @_;
-    if ( $self->config('is_fixture_loaded') ) {
+    if ( $self->feature('is_fixture_loaded') ) {
         $self->depends_on($_) for qw/unload_rel unload_so unload_organism/;
-        $self->config( 'is_fixture_loaded', 0 );
-        $self->config_data( 'is_fixture_unloaded' => 1 );
+        $self->feature( 'is_fixture_loaded' => 0 );
+        $self->feature( 'is_fixture_unloaded' => 1 );
     }
 }
 
@@ -369,8 +370,8 @@ sub ACTION_prune_fixture {
     my ($self) = @_;
     $self->depends_on('setup');
     $self->_handler->prune_fixture;
-    $self->config( 'is_fixture_loaded',   0 );
-    $self->config( 'is_fixture_unloaded', 1 );
+    $self->feature( 'is_fixture_loaded' =>   0 );
+    $self->feature( 'is_fixture_unloaded' => 1 );
 }
 
 =head3 test
@@ -392,8 +393,8 @@ sub ACTION_test {
 
     #cleanup all the setup values if any
     for my $name ( @{ $self->_config_keys } ) {
-        print "cleaning $name\n" if $self->args('test_debug');
-        $self->config( $name ,  0 );
+        print "cleaning $name\n" if $self->test_debug;
+        $self->feature( $name =>  0 );
     }
     $self->depends_on('drop_schema');
     $self->depends_on('load_fixture');
@@ -422,10 +423,10 @@ sub ACTION_drop {
 
     #cleanup all the setup values if any
     for my $name ( @{ $self->_config_keys } ) {
-        print "cleaning $name\n" if $self->args('test_debug');
-        $self->config( $name , 0 );
+        print "cleaning $name\n" if $self->test_debug;
+        $self->feature( $name => 0 );
     }
-    print "dropped the database\n" if $self->args('test_debug');
+    print "dropped the database\n" if $self->test_debug;
 }
 
 =head3 drop_schema
@@ -444,7 +445,7 @@ sub ACTION_drop_schema {
     my ($self) = @_;
     $self->depends_on('setup');
     $self->_handler->drop_schema;
-    $self->config_data( 'is_schema_loaded' => 0 );
+    $self->feature( 'is_schema_loaded' => 0 );
 }
 
 1;

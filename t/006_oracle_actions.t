@@ -39,7 +39,7 @@ SKIP: {
 
         subtest 'action deploy_schema' => sub {
             lives_ok { $mb_chado->ACTION_deploy_schema } 'should run';
-            is( $mb_chado->config('is_schema_loaded'),
+            is( $mb_chado->feature('is_schema_loaded'),
                 1, 'should have set the schema loaded flag' );
 
             subtest 'instantiate a database schema' => sub {
