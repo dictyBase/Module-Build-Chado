@@ -17,6 +17,8 @@ use namespace::autoclean;
 
 # Module implementation
 #
+with 'Module::Build::Chado::Role::HelperWithBcs';
+
 requires 'dbh_withcommit';
 
 has 'schema' => (
@@ -53,26 +55,6 @@ has 'traverse_graph' => (
     handles    => { store_relationship => 'bfs' }
 );
 
-before 'dbrow' => sub {
-    $_[0]->cvrow if !$_[0]->has_cvrow;
-};
-
-before 'get_db_id' => sub {
-    $_[0]->dbrow if !$_[0]->has_dbrow;
-};
-
-has 'dbrow' => (
-    is         => 'rw',
-    isa        => 'HashRef[Bio::Chado::Schema::General::Db]',
-    traits     => ['Hash'],
-    lazy_build => 1,
-    handles    => {
-        get_dbrow => 'get',
-        set_db_id => 'set',
-        has_db_id => 'defined'
-    }
-);
-
 has 'ontology_namespace' => (
     is         => 'rw',
     isa        => 'Str',
@@ -86,82 +68,10 @@ has 'loader_tag' => (
     lazy    => 1
 );
 
-has 'cvrow' => (
-    is         => 'rw',
-    isa        => 'HashRef[Bio::Chado::Schema::Cv::Cv]',
-    traits     => ['Hash'],
-    lazy_build => 1,
-    handles    => {
-        get_cvrow => 'get',
-        set_cv_id => 'set',
-        has_cv_id => 'defined'
-    }
-);
-
 has 'obo_xml' => (
     is  => 'rw',
     isa => 'Str'
 );
-
-has 'cvterm_row' => (
-    is        => 'rw',
-    isa       => 'HashRef[Bio::Chado::Schema::Cv::Cvterm]',
-    traits    => ['Hash'],
-    predicate => 'has_cvterm_row',
-    default   => sub { {} },
-    lazy      => 1,
-    handles   => {
-        get_cvterm_row   => 'get',
-        set_cvterm_row   => 'set',
-        exist_cvterm_row => 'defined'
-    }
-);
-
-sub cvterm_id_by_name {
-    my ( $self, $name ) = @_;
-
-    #check if it is already been cached
-    if ( $self->exist_cvterm_row($name) ) {
-        return $self->get_cvterm_row($name)->cvterm_id;
-    }
-
-    #otherwise try to retrieve from database
-    my $rs
-        = $self->schema->resultset('Cv::Cvterm')->search( { name => $name } );
-    if ( $rs->count > 0 ) {
-        $self->set_cvterm_row( $name => $rs->first );
-        return $rs->first->cvterm_id;
-    }
-
-    #otherwise create one using the default cv namespace
-    my $row = $self->schema->resultset('Cv::Cvterm')->create_with(
-        {   name   => $name,
-            cv     => $self->current_cv,
-            db     => $self->current_db,
-            dbxref => $self->current_cv . ':' . $name
-        }
-    );
-    $self->set_cvterm_row( $name, $row );
-    $row->cvterm_id;
-}
-
-sub cvterm_ids_by_namespace {
-    my ( $self, $name ) = @_;
-
-    if ( $self->exist_cvrow($name) ) {
-        my $ids = [ map { $_->cvterm_id } $self->get_cvrow($name)->cvterms ];
-        return $ids;
-    }
-
-    my $rs = $self->chado->resultset('Cv::Cv')->search( { name => $name } );
-    if ( $rs->count > 0 ) {
-        my $row = $rs->first;
-        $self->set_cvrow( $name, $row );
-        my $ids = [ map { $_->cvterm_id } $row->cvterms ];
-        return $ids;
-    }
-    croak "the given cv namespace $name does not exist : create one \n";
-}
 
 sub current_cv {
     my ($self) = @_;
@@ -174,98 +84,6 @@ sub current_cv {
 sub current_db {
     my ($self) = @_;
     return $self->current_cv;
-}
-
-sub _build_cvrow {
-    my ($self)    = @_;
-    my $namespace = $self->current_cv;
-    my $cvrow     = $self->schema->resultset('Cv::Cv')
-        ->find_or_create( { name => $namespace } );
-    $cvrow->definition('Ontology namespace for modwareX module');
-    $cvrow->update;
-    return { $namespace => $cvrow, default => $cvrow };
-}
-
-sub _build_dbrow {
-    my ($self) = @_;
-    my $name   = $self->current_db;
-    my $row    = $self->schema->resultset('General::Db')
-        ->find_or_create( { name => $name } );
-    $row->description('Test database for module modwareX');
-    $row->update;
-    return { default => $row, $name => $row };
-
-}
-
-sub default_cv_id {
-    $_[0]->get_cv_id('default');
-}
-
-sub get_cv_id {
-    $_[0]->get_cvrow( $_[1] )->cv_id;
-}
-
-sub default_db_id {
-    $_[0]->get_db_id('default');
-
-}
-
-sub get_db_id {
-    $_[0]->get_dbrow( $_[1] )->db_id;
-}
-
-sub lookup_cv_id {
-    my ( $self, $namespace ) = @_;
-    my $schema = $self->schema;
-    if ( $self->has_cv_id($namespace) ) {
-        return $self->get_cv_id($namespace);
-    }
-    my $cvrow;
-    try {
-        $cvrow = $schema->txn_do(
-            sub {
-                my $name  = $self->module_builder->prepend_namespace . $self->loader_tag . '-' . $namespace;
-                my $cvrow = $schema->resultset('Cv::Cv')->create(
-                    {   name       => $name,
-                        definition => "Ontology namespace for modwarex module"
-                    }
-                );
-                $cvrow;
-            }
-        );
-    }
-    catch {
-        confess "unable to create cv row: $_";
-    };
-    $self->set_cv_id( $namespace, $cvrow );
-    $cvrow->cv_id;
-}
-
-sub lookup_db_id {
-    my ( $self, $dbname ) = @_;
-    my $schema = $self->schema;
-    if ( $self->has_db_id($dbname) ) {
-        return $self->get_db_id($dbname);
-    }
-    my $dbrow;
-    try {
-        $dbrow = $schema->txn_do(
-            sub {
-                my $name  = $self->current_db . '-' . $dbname;
-                my $dbrow = $schema->resultset('General::Db')->create(
-                    {   name        => $name,
-                        description => "Ontology dbname for modwarex module"
-                    }
-                );
-                $dbrow;
-            }
-        );
-    }
-    catch {
-        confess "unable to create db row: $_";
-    };
-    $self->set_db_id( $dbname, $dbrow );
-    $dbrow->db_id;
 }
 
 sub _build_schema {
@@ -422,7 +240,9 @@ sub load_journal_data {
             sub {
                 my $row = $self->schema->resultset('Pub::Pub')->create(
                     {   uniquename => 'PUB' . int( rand(9999999) ),
-                        type_id    => $self->cvterm_id_by_name($type),
+                        type_id    => $self->find_or_create_cvterm_id(cvterm => $type,  cv
+                        => $self->current_cv)
+                        ,
                         pubplace   => $source,
                         title      => $citation->title,
                         pyear      => $citation->date,
@@ -433,16 +253,19 @@ sub load_journal_data {
                         volume      => $citation->volume,
                         pubauthors  => $authors,
                         pubprops    => [
-                            {   type_id => $self->cvterm_id_by_name('status'),
+                            {   type_id => $self->find_or_create_cvterm_id(cvterm =>
+                            'status',  cv => $self->current_cv),
                                 value   => $citation->status,
 
                             },
                             {   type_id =>
-                                    $self->cvterm_id_by_name('abstract'),
+                                    $self->find_or_create_cvterm_id( cvterm => 'abstract',
+                                    cv => $self->current_cv),
                                 value => $citation->abstract
                             },
-                            {   type_id => $self->cvterm_id_by_name(
-                                    'journal_abbreviation'),
+                            {   type_id => $self->find_or_create_cvterm_id(
+                                    cvterm => 'journal_abbreviation',  cv =>
+                                    $self->current_cv),
                                 value => $citation->journal->abbreviation
                             }
                         ]
@@ -451,7 +274,7 @@ sub load_journal_data {
                 $row->add_to_pub_dbxrefs(
                     {   dbxref => {
                             accession => $citation->journal->issn,
-                            db_id     => $self->lookup_db_id('issn')
+                            db_id     => $self->find_or_create_db_id('issn')
                         }
                     }
                 );
@@ -486,7 +309,8 @@ sub load_journal_data {
             sub {
                 my $row = $self->schema->resultset('Pub::Pub')->create(
                     {   uniquename  => $citation->pmid,
-                        type_id     => $self->cvterm_id_by_name($type),
+                        type_id     => $self->find_or_create_cvterm_id(cvterm => $type,
+                        cv => $self->current_cv),
                         pubplace    => $source,
                         title       => $citation->title,
                         pyear       => $citation->date,
@@ -495,16 +319,19 @@ sub load_journal_data {
                         volume      => $citation->volume,
                         pubauthors  => $authors,
                         pubprops    => [
-                            {   type_id => $self->cvterm_id_by_name('status'),
+                            {   type_id => $self->find_or_create_cvterm_id(cvterm =>
+                            'status',  cv => $self->current_cv),
                                 value   => $citation->status,
 
                             },
                             {   type_id =>
-                                    $self->cvterm_id_by_name('abstract'),
+                                    $self->find_or_create_cvterm_id(cvterm => 'abstract',
+                                    cv => $self->current_cv),
                                 value => $citation->abstract
                             },
-                            {   type_id => $self->cvterm_id_by_name(
-                                    'journal_abbreviation'),
+                            {   type_id => $self->find_or_create_cvterm_id(
+                                    cvterm => 'journal_abbreviation',  cv =>
+                                    $self->current_cv),
                                 value => $citation->journal->abbreviation
                                     || $citation->journal->name
                             }
@@ -514,7 +341,7 @@ sub load_journal_data {
                 $row->add_to_pub_dbxrefs(
                     {   dbxref => {
                             accession => $citation->journal->issn,
-                            db_id     => $self->lookup_db_id('issn')
+                            db_id     => $self->find_or_create_db_id('issn')
                         }
                     }
                 );
@@ -695,13 +522,13 @@ sub load_typedef {
         $cvterm_row = $schema->txn_do(
             sub {
                 my $cvterm_row = $schema->resultset('Cv::Cvterm')->create(
-                    {   cv_id => $self->lookup_cv_id($namespace),
+                    {   cv_id => $self->find_or_create_cv_id($namespace),
                         is_relationshiptype => 1,
                         name                => $self->normalize_name($name),
                         definition          => $definition || '',
                         is_obsolete         => $is_obsolete || 0,
                         dbxref              => {
-                            db_id     => $self->lookup_db_id($namespace),
+                            db_id     => $self->find_or_create_db_id($namespace),
                             accession => $id,
                         }
                     }
@@ -741,12 +568,12 @@ sub load_term {
         $cvterm_row = $schema->txn_do(
             sub {
                 my $cvterm_row = $schema->resultset('Cv::Cvterm')->create(
-                    {   cv_id       => $self->lookup_cv_id($namespace),
+                    {   cv_id       => $self->find_or_create_cv_id($namespace),
                         name        => $self->normalize_name($name),
                         definition  => $definition || '',
                         is_obsolete => $is_obsolete || 0,
                         dbxref      => {
-                            db_id     => $self->lookup_db_id($namespace),
+                            db_id     => $self->find_or_create_db_id($namespace),
                             accession => $id,
                         }
                     }
@@ -789,7 +616,7 @@ sub create_more_dbxref {
                         'cvterm_dbxrefs',
                         {   dbxref => {
                                 accession => $alt_id,
-                                db_id     => $self->lookup_db_id($namespace)
+                                db_id     => $self->find_or_create_db_id($namespace)
                             }
                         }
                     );
@@ -813,7 +640,7 @@ sub create_more_dbxref {
                     'cvterm_dbxrefs',
                     {   dbxref => {
                             accession => $def_dbx->first_child_text('acc'),
-                            db_id     => $self->lookup_db_id($dbname)
+                            db_id     => $self->find_or_create_db_id($dbname)
                         }
                     }
                 );
