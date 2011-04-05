@@ -57,7 +57,7 @@ sub find_db_id {
 sub find_or_create_db_id {
     my ( $self, $dbname ) = @_;
     my $schema = $self->schema;
-    if ( $self->has_dbrow($dbname) ) {
+    if ( $self->exist_dbrow($dbname) ) {
         return $self->get_dbrow($dbname)->db_id;
     }
     my $dbrow = $schema->txn_do(
@@ -103,7 +103,7 @@ sub _build_cvrow {
     while ( my $row = $cv_rs->next ) {
         $hash->{ $row->name } = $row;
     }
-    return $cvrow;
+    return $hash;
 }
 
 sub default_cv_id {
@@ -170,7 +170,7 @@ sub find_or_create_cvterm_id {
         ->search( { 'me.name' => $cvterm, 'cv.name' => $cv },
         { join => 'cv' } );
     if ( $rs->count > 0 ) {
-        $self->set_cvterm_row( $cvterm => $rs->first );
+        $self->set_cvterm_row( $cvterm , $rs->first );
         return $rs->first->cvterm_id;
     }
 
