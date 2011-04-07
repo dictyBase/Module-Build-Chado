@@ -96,4 +96,22 @@ for my $name (
 =attr module_builder
 
 Get/Set a L<Module::Build::Chado> object.
+B<Remember:> Setting this will trigger whatever L<moose roles|Moose::Role> are specified
+by L<loader> and L<add_extra_loader> attributes. Adding additional roles should be done by
+L<inject loader> method.
+
+=attr loader
+
+Name of L<moose role|Moose::Role> to be used as default loader. The default role is
+L<Module::Build::Chado::Loader::BCS>
+
+=attr add_extra_loader
+
+Name of a addtional L<moose role|Moose::Role> to be used for loading fixture,  however use
+this if before setting the L<module builder|module_builder> attribute.
+
+=method inject_loader
+
+Name of additonal L<moose role|Moose::Role> for loading fixuture,  however use this if the
+L<module builder|module_builder> attribute is already set.
 
