@@ -158,13 +158,13 @@ sub find_or_create_cvterm_id {
         dbxref => { isa => 'Str', optional => 1 }
     );
 
-    $cv ||= $self->default_cv;
     if ( $self->exist_cvterm_row($cvterm) ) {
         my $row = $self->get_cvterm_row($cvterm);
         return $row->cvterm_id if $row->cv->name eq $cv;
     }
 
     #otherwise try to retrieve from database
+    $cv ||= $self->get_cvrow('default')->name;
     my $rs
         = $self->schema->resultset('Cv::Cvterm')
         ->search( { 'me.name' => $cvterm, 'cv.name' => $cv },
@@ -174,15 +174,17 @@ sub find_or_create_cvterm_id {
         return $rs->first->cvterm_id;
     }
 
-    $db ||= $self->default_db;
+    $db ||= $self->get_dbrow('default')->name;
     $dbxref ||= $cvterm;
 
     #otherwise create one using the default cv namespace
-    my $row = $self->schema->resultset('Cv::Cvterm')->create_with(
+    my $row = $self->schema->resultset('Cv::Cvterm')->create(
         {   name   => $cvterm,
-            cv     => $cv,
-            db     => $db,
-            dbxref => $dbxref
+            cv_id     => $self->default_cv_id,
+            dbxref => {
+            	accession => $dbxref, 
+            	db_id => $self->default_db_id
+            }
         }
     );
     $self->set_cvterm_row( $cvterm, $row );

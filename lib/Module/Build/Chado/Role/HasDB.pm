@@ -60,7 +60,7 @@ sub _setup_loader {
     $self->meta->make_mutable;
     ensure_all_roles( $self,
         $self->extra_loader_count
-        ? ( $self->loader, $self->all_loaders )
+        ? ( $self->loader, $self->extra_loaders )
         : $self->loader );
     $self->meta->make_immutable;
 }
