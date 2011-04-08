@@ -27,10 +27,23 @@ has 'loader_module' => (
 has 'loader' => (
     is      => 'rw',
     isa     => 'Str',
+    trigger => sub {
+    	my ($self,  $value) = @_;
+    	my @name = split /::/, $value;
+    	$self->loader_module(pop @name);
+    	$self->loader_namespace(join('::', @name));
+    }, 
     default => sub {
         my ($self) = @_;
         return $self->loader_namespace . '::' . $self->loader_module;
     }
+);
+
+has 'loader_tag' => (
+    is      => 'rw',
+    isa     => 'Str',
+    default => sub { return lc $_[0]->loader_module },
+    lazy    => 1
 );
 
 has '_loader_stack' => (

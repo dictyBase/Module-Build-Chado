@@ -61,12 +61,6 @@ has 'ontology_namespace' => (
     lazy_build => 1
 );
 
-has 'loader_tag' => (
-    is      => 'rw',
-    isa     => 'Str',
-    default => sub { return lc $_[0]->loader_module },
-    lazy    => 1
-);
 
 has 'obo_xml' => (
     is  => 'rw',
