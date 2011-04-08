@@ -19,9 +19,8 @@ my %opt = (
     dist_author        => 'Pataka'
 );
 
-
 SKIP: {
-	my ($pg, $mb_chado);
+    my ( $pg, $mb_chado );
     try {
         Class::MOP::load_class('Test::postgresql');
     }
@@ -60,20 +59,10 @@ SKIP: {
             lives_ok { $mb_chado->ACTION_load_fixture } 'should run';
             my $bcs       = $mb_chado->_handler->schema;
             my $org_count = $bcs->resultset('Organism::Organism')->count;
-            my $rel_count = $bcs->resultset('Cv::Cvterm')->count(
-                {         'cv.name' => $mb_chado->prepend_namespace
-                        . $mb_chado->_handler->loader_tag
-                        . '-relationship'
-                },
-                { join => 'cv' }
-            );
-            my $so_count = $bcs->resultset('Cv::Cvterm')->count(
-                {         'cv.name' => $mb_chado->prepend_namespace
-                        . $mb_chado->_handler->loader_tag
-                        . '-sequence'
-                },
-                { join => 'cv' }
-            );
+            my $rel_count = $bcs->resultset('Cv::Cvterm')
+                ->count( { 'cv.name' => 'relationship' }, { join => 'cv' } );
+            my $so_count = $bcs->resultset('Cv::Cvterm')
+                ->count( { 'cv.name' => 'sequence' }, { join => 'cv' } );
             cmp_ok( $rel_count, '==', 26,
                 'should populate relationship ontology' );
             cmp_ok( $so_count, '==', 286,
@@ -87,13 +76,8 @@ SKIP: {
 
         my $bcs       = $mb_chado->_handler->schema;
         my $org_count = $bcs->resultset('Organism::Organism')->count;
-        my $rel_count = $bcs->resultset('Cv::Cvterm')->count(
-            {         'cv.name' => $mb_chado->prepend_namespace
-                    . $mb_chado->_handler->loader_tag
-                    . '-relationship'
-            },
-            { join => 'cv' }
-        );
+        my $rel_count = $bcs->resultset('Cv::Cvterm')
+            ->count( { 'cv.name' => 'relationship' }, { join => 'cv' } );
         my $so_count = $bcs->resultset('Cv::Cvterm')->count(
             {         'cv.name' => $mb_chado->prepend_namespace
                     . $mb_chado->_handler->loader_tag
@@ -121,7 +105,7 @@ SKIP: {
 
     };
 
-	subtest 'action drop_schema' => sub {
+    subtest 'action drop_schema' => sub {
         lives_ok { $mb_chado->ACTION_drop_schema } 'should run';
         my $dbh = $mb_chado->_handler->dbh;
         my ( $sth, $ary_ref );
@@ -130,16 +114,14 @@ SKIP: {
             $ary_ref = $dbh->selectcol_arrayref( $sth, { Columns => [3] } );
         }
         'should not retrieve tables';
-        is(scalar @$ary_ref, 0, 'should not have any table name' );
+        is( scalar @$ary_ref, 0, 'should not have any table name' );
     };
 
-
-    if (my $handler = $mb_chado->_handler)  {
-    	$handler->dbh->disconnect;
-    	$handler->dbh_withcommit->disconnect;
-    	$handler->super_dbh->disconnect;
+    if ( my $handler = $mb_chado->_handler ) {
+        $handler->dbh->disconnect;
+        $handler->dbh_withcommit->disconnect;
+        $handler->super_dbh->disconnect;
     }
     undef $pg;
 }
-
 

@@ -35,7 +35,7 @@ subtest 'Module::Build::Chado action load_rel' => sub {
     my $bcs = $mb_chado->_handler->schema;
     my $count
         = $bcs->resultset('Cv::Cvterm')
-        ->count( { 'cv.name' => $mb_chado->_handler->current_cv },
+        ->count( { 'cv.name' => $mb_chado->_handler->ontology_namespace },
         { join => 'cv' } );
     cmp_ok( $count, '>', 0, 'should populate relationship ontology' );
     cmp_ok( $count, '==', 26,
@@ -48,16 +48,11 @@ subtest 'Module::Build::Chado action load_so' => sub {
     my $mb_chado = Module::Build::Chado->new(%opt);
     lives_ok { $mb_chado->ACTION_load_so } 'should run';
     my $bcs       = $mb_chado->_handler->schema;
-    my $rel_count = $bcs->resultset('Cv::Cvterm')->count(
-        {         'cv.name' => $mb_chado->prepend_namespace
-                . $mb_chado->_handler->loader_tag
-                . '-relationship'
-        },
-        { join => 'cv' }
-    );
+    my $rel_count = $bcs->resultset('Cv::Cvterm')
+        ->count( { 'cv.name' => 'relationship' }, { join => 'cv' } );
     my $count
         = $bcs->resultset('Cv::Cvterm')
-        ->count( { 'cv.name' => $mb_chado->_handler->current_cv },
+        ->count( { 'cv.name' => $mb_chado->_handler->ontology_namespace },
         { join => 'cv' } );
     cmp_ok( $rel_count, '==', 26, 'should populate relationship ontology' );
     cmp_ok( $count,     '>',  0,  'should populate sequence ontology' );
@@ -70,7 +65,7 @@ subtest 'Module::Build::Chado action load_so' => sub {
                             chromosome/
                     ]
                 },
-                'cv.name' => $mb_chado->_handler->current_cv
+                'cv.name' => $mb_chado->_handler->ontology_namespace
             },
             { join => 'cv' }
         ),
@@ -84,20 +79,10 @@ subtest 'Module::Build::Chado action load_fixture' => sub {
     lives_ok { $mb_chado->ACTION_load_fixture } 'should run';
     my $bcs       = $mb_chado->_handler->schema;
     my $org_count = $bcs->resultset('Organism::Organism')->count;
-    my $rel_count = $bcs->resultset('Cv::Cvterm')->count(
-        {         'cv.name' => $mb_chado->prepend_namespace
-                . $mb_chado->_handler->loader_tag
-                . '-relationship'
-        },
-        { join => 'cv' }
-    );
-    my $so_count = $bcs->resultset('Cv::Cvterm')->count(
-        {         'cv.name' => $mb_chado->prepend_namespace
-                . $mb_chado->_handler->loader_tag
-                . '-sequence'
-        },
-        { join => 'cv' }
-    );
+    my $rel_count = $bcs->resultset('Cv::Cvterm')
+        ->count( { 'cv.name' => 'relationship' }, { join => 'cv' } );
+    my $so_count = $bcs->resultset('Cv::Cvterm')
+        ->count( { 'cv.name' => 'sequence' }, { join => 'cv' } );
     cmp_ok( $rel_count, '==', 26, 'should populate relationship ontology' );
     cmp_ok( $so_count, '==', 286,
         'should have loaded 286 sequence ontology terms' );

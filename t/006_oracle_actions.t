@@ -62,20 +62,10 @@ SKIP: {
             lives_ok { $mb_chado->ACTION_load_fixture } 'should run';
             my $bcs       = $mb_chado->_handler->schema;
             my $org_count = $bcs->resultset('Organism::Organism')->count;
-            my $rel_count = $bcs->resultset('Cv::Cvterm')->count(
-                {         'cv.name' => $mb_chado->prepend_namespace
-                        . $mb_chado->_handler->loader_tag
-                        . '-relationship'
-                },
-                { join => 'cv' }
-            );
-            my $so_count = $bcs->resultset('Cv::Cvterm')->count(
-                {         'cv.name' => $mb_chado->prepend_namespace
-                        . $mb_chado->_handler->loader_tag
-                        . '-sequence'
-                },
-                { join => 'cv' }
-            );
+            my $rel_count = $bcs->resultset('Cv::Cvterm')
+                ->count( { 'cv.name' => 'relationship' }, { join => 'cv' } );
+            my $so_count = $bcs->resultset('Cv::Cvterm')
+                ->count( { 'cv.name' => 'sequence' }, { join => 'cv' } );
             cmp_ok( $rel_count, '==', 26,
                 'should populate relationship ontology' );
             cmp_ok( $so_count, '==', 286,
@@ -89,20 +79,10 @@ SKIP: {
 
         my $bcs       = $mb_chado->_handler->schema;
         my $org_count = $bcs->resultset('Organism::Organism')->count;
-        my $rel_count = $bcs->resultset('Cv::Cvterm')->count(
-            {         'cv.name' => $mb_chado->prepend_namespace
-                    . $mb_chado->_handler->loader_tag
-                    . '-relationship'
-            },
-            { join => 'cv' }
-        );
-        my $so_count = $bcs->resultset('Cv::Cvterm')->count(
-            {         'cv.name' => $mb_chado->prepend_namespace
-                    . $mb_chado->_handler->loader_tag
-                    . '-sequence'
-            },
-            { join => 'cv' }
-        );
+        my $rel_count = $bcs->resultset('Cv::Cvterm')
+            ->count( { 'cv.name' => 'relationship' }, { join => 'cv' } );
+        my $so_count = $bcs->resultset('Cv::Cvterm')
+            ->count( { 'cv.name' => 'sequence' }, { join => 'cv' } );
 
         cmp_ok( $rel_count, '==', 0,
             'should have deleted relationship ontology' );
@@ -128,8 +108,10 @@ SKIP: {
         my $dbh = $mb_chado->_handler->super_dbh;
         my ( $sth, @ary );
         lives_ok {
-            @ary
-                = uniq @{ $dbh->selectcol_arrayref( 'select table_name from user_tables', { Columns => [1] } )
+            @ary = uniq @{
+                $dbh->selectcol_arrayref(
+                    'select table_name from user_tables',
+                    { Columns => [1] } )
                 };
         }
         'should not retrieve tables';

@@ -61,24 +61,10 @@ has 'ontology_namespace' => (
     lazy_build => 1
 );
 
-
 has 'obo_xml' => (
     is  => 'rw',
     isa => 'Str'
 );
-
-sub current_cv {
-    my ($self) = @_;
-    return
-          $self->module_builder->prepend_namespace
-        . $self->loader_tag . '-'
-        . $self->ontology_namespace;
-}
-
-sub current_db {
-    my ($self) = @_;
-    return $self->current_cv;
-}
 
 sub _build_schema {
     my ($self) = @_;
@@ -156,19 +142,13 @@ sub load_organism {
 sub unload_organism {
     my ($self) = @_;
     my $schema = $self->schema;
-    try {
-        $schema->txn_do(
-            sub {
-                $schema->resultset('Organism::Organism')
-                    ->search( {},
-                    { columns => [ 'organism_id', 'common_name' ] } )
-                    ->delete_all;
-            }
-        );
-    }
-    catch {
-        confess "error in deletion: $_";
-    };
+    $schema->txn_do(
+        sub {
+            $schema->resultset('Organism::Organism')
+                ->search( {},
+                { columns => [ 'organism_id', 'common_name' ] } )->delete_all;
+        }
+    );
 }
 
 sub load_pub {
@@ -234,32 +214,37 @@ sub load_journal_data {
             sub {
                 my $row = $self->schema->resultset('Pub::Pub')->create(
                     {   uniquename => 'PUB' . int( rand(9999999) ),
-                        type_id    => $self->find_or_create_cvterm_id(cvterm => $type,  cv
-                        => $self->current_cv)
-                        ,
-                        pubplace   => $source,
-                        title      => $citation->title,
-                        pyear      => $citation->date,
-                        pages      => $citation->first_page . '--'
+                        type_id    => $self->find_or_create_cvterm_id(
+                            cvterm => $type,
+                            cv     => $self->ontology_namespace
+                        ),
+                        pubplace => $source,
+                        title    => $citation->title,
+                        pyear    => $citation->date,
+                        pages    => $citation->first_page . '--'
                             . $citation->last_page,
                         series_name => $citation->journal->name,
                         issue       => $citation->issue,
                         volume      => $citation->volume,
                         pubauthors  => $authors,
                         pubprops    => [
-                            {   type_id => $self->find_or_create_cvterm_id(cvterm =>
-                            'status',  cv => $self->current_cv),
-                                value   => $citation->status,
+                            {   type_id => $self->find_or_create_cvterm_id(
+                                    cvterm => 'status',
+                                    cv     => $self->ontology_namespace
+                                ),
+                                value => $citation->status,
 
                             },
-                            {   type_id =>
-                                    $self->find_or_create_cvterm_id( cvterm => 'abstract',
-                                    cv => $self->current_cv),
+                            {   type_id => $self->find_or_create_cvterm_id(
+                                    cvterm => 'abstract',
+                                    cv     => $self->ontology_namespace
+                                ),
                                 value => $citation->abstract
                             },
                             {   type_id => $self->find_or_create_cvterm_id(
-                                    cvterm => 'journal_abbreviation',  cv =>
-                                    $self->current_cv),
+                                    cvterm => 'journal_abbreviation',
+                                    cv     => $self->namespace
+                                ),
                                 value => $citation->journal->abbreviation
                             }
                         ]
@@ -302,9 +287,11 @@ sub load_journal_data {
         $self->schema->txn_do(
             sub {
                 my $row = $self->schema->resultset('Pub::Pub')->create(
-                    {   uniquename  => $citation->pmid,
-                        type_id     => $self->find_or_create_cvterm_id(cvterm => $type,
-                        cv => $self->current_cv),
+                    {   uniquename => $citation->pmid,
+                        type_id    => $self->find_or_create_cvterm_id(
+                            cvterm => $type,
+                            cv     => $self->ontology_namespace
+                        ),
                         pubplace    => $source,
                         title       => $citation->title,
                         pyear       => $citation->date,
@@ -313,19 +300,23 @@ sub load_journal_data {
                         volume      => $citation->volume,
                         pubauthors  => $authors,
                         pubprops    => [
-                            {   type_id => $self->find_or_create_cvterm_id(cvterm =>
-                            'status',  cv => $self->current_cv),
-                                value   => $citation->status,
+                            {   type_id => $self->find_or_create_cvterm_id(
+                                    cvterm => 'status',
+                                    cv     => $self->ontology_namespace
+                                ),
+                                value => $citation->status,
 
                             },
-                            {   type_id =>
-                                    $self->find_or_create_cvterm_id(cvterm => 'abstract',
-                                    cv => $self->current_cv),
+                            {   type_id => $self->find_or_create_cvterm_id(
+                                    cvterm => 'abstract',
+                                    cv     => $self->ontology_namespace
+                                ),
                                 value => $citation->abstract
                             },
                             {   type_id => $self->find_or_create_cvterm_id(
-                                    cvterm => 'journal_abbreviation',  cv =>
-                                    $self->current_cv),
+                                    cvterm => 'journal_abbreviation',
+                                    cv     => $self->ontology_namespace
+                                ),
                                 value => $citation->journal->abbreviation
                                     || $citation->journal->name
                             }
@@ -365,46 +356,41 @@ sub unload_pub {
     my ($self) = @_;
     $self->clear_ontology_namespace;
     $self->obo_xml( $self->module_builder->pub_fixture );
-    $self->unload_ontology( $self->current_cv );
+    $self->unload_ontology( $self->ontology_namespace );
 }
 
 sub unload_rel {
     my ($self) = @_;
     $self->clear_ontology_namespace;
     $self->obo_xml( $self->module_builder->rel_fixture );
-    $self->unload_ontology( $self->current_cv );
+    $self->unload_ontology( $self->ontology_namespace );
 }
 
 sub unload_so {
     my ($self) = @_;
     $self->clear_ontology_namespace;
     $self->obo_xml( $self->module_builder->so_fixture );
-    $self->unload_ontology( $self->current_cv );
+    $self->unload_ontology( $self->ontology_namespace );
 }
 
 sub unload_dicty_keywords {
     my ($self) = @_;
     $self->clear_ontology_namespace;
     $self->obo_xml( $self->module_builder->dicty_keywords_fixture );
-    $self->unload_ontology( $self->current_cv );
+    $self->unload_ontology( $self->ontology_namespace );
 }
 
 sub unload_ontology {
     my ( $self, $name ) = @_;
     my $schema = $self->schema;
-    try {
-        $schema->txn_do(
-            sub {
-                $schema->resultset('General::Db')->search( { name => $name } )
-                    ->delete_all;
-                $schema->resultset('Cv::Cv')->search( { name => $name } )
-                    ->delete_all;
-            }
-        );
-    }
-    catch {
-        confess "error in deleting: $_";
-    }
+    $schema->txn_do(
+        sub {
+            $schema->resultset('General::Db')->search( { name => $name } )
+                ->delete_all;
+            $schema->resultset('Cv::Cv')->search( { name => $name } )
+                ->delete_all;
+        }
+    );
 }
 
 sub handle_relationship {
@@ -504,36 +490,32 @@ sub load_typedef {
     my $name        = $node->first_child_text('name');
     my $id          = $node->first_child_text('id');
     my $is_obsolete = $node->first_child_text('is_obsolete');
-    my $namespace   = $self->current_cv;
+    my $namespace
+        = $node->has_child('namespace')
+        ? $node->first_child_text('namespace')
+        : $self->ontology_namespace;
 
     my $def_elem = $node->first_child('def');
     my $definition;
     $definition = $def_elem->first_child_text('defstr') if $def_elem;
 
-    my $schema = $self->schema;
-    my $cvterm_row;
-    try {
-        $cvterm_row = $schema->txn_do(
-            sub {
-                my $cvterm_row = $schema->resultset('Cv::Cvterm')->create(
-                    {   cv_id => $self->find_or_create_cv_id($namespace),
-                        is_relationshiptype => 1,
-                        name                => $self->normalize_name($name),
-                        definition          => $definition || '',
-                        is_obsolete         => $is_obsolete || 0,
-                        dbxref              => {
-                            db_id     => $self->find_or_create_db_id($namespace),
-                            accession => $id,
-                        }
+    my $schema     = $self->schema;
+    my $cvterm_row = $schema->txn_do(
+        sub {
+            return $schema->resultset('Cv::Cvterm')->create(
+                {   cv_id => $self->find_or_create_cv_id($namespace),
+                    is_relationshiptype => 1,
+                    name                => $self->normalize_name($name),
+                    definition          => $definition || '',
+                    is_obsolete         => $is_obsolete || 0,
+                    dbxref              => {
+                        db_id     => $self->find_or_create_db_id($namespace),
+                        accession => $id,
                     }
-                );
-                $cvterm_row;
-            }
-        );
-    }
-    catch {
-        confess "Error in inserting cvterm $_\n";
-    };
+                }
+            );
+        }
+    );
 
     #hold on to the relationships between nodes
     $self->build_relationship( $node, $cvterm_row );
@@ -550,35 +532,31 @@ sub load_term {
     my $name        = $node->first_child_text('name');
     my $id          = $node->first_child_text('id');
     my $is_obsolete = $node->first_child_text('is_obsolete');
-    my $namespace   = $self->current_cv;
+    my $namespace
+        = $node->has_child('namespace')
+        ? $node->first_child_text('namespace')
+        : $self->ontology_namespace;
 
     my $def_elem = $node->first_child('def');
     my $definition;
     $definition = $def_elem->first_child_text('defstr') if $def_elem;
 
-    my $schema = $self->schema;
-    my $cvterm_row;
-    try {
-        $cvterm_row = $schema->txn_do(
-            sub {
-                my $cvterm_row = $schema->resultset('Cv::Cvterm')->create(
-                    {   cv_id       => $self->find_or_create_cv_id($namespace),
-                        name        => $self->normalize_name($name),
-                        definition  => $definition || '',
-                        is_obsolete => $is_obsolete || 0,
-                        dbxref      => {
-                            db_id     => $self->find_or_create_db_id($namespace),
-                            accession => $id,
-                        }
+    my $schema     = $self->schema;
+    my $cvterm_row = $schema->txn_do(
+        sub {
+            return $schema->resultset('Cv::Cvterm')->create(
+                {   cv_id       => $self->find_or_create_cv_id($namespace),
+                    name        => $self->normalize_name($name),
+                    definition  => $definition || '',
+                    is_obsolete => $is_obsolete || 0,
+                    dbxref      => {
+                        db_id     => $self->find_or_create_db_id($namespace),
+                        accession => $id,
                     }
-                );
-                $cvterm_row;
-            }
-        );
-    }
-    catch {
-        confess "Error in inserting cvterm $_\n";
-    };
+                }
+            );
+        }
+    );
 
     #hold on to the relationships between nodes
     $self->build_relationship( $node, $cvterm_row );
@@ -603,23 +581,18 @@ sub create_more_dbxref {
     # - first one goes with alternate id
     my $alt_id = $def_elem->first_child_text('alt_id');
     if ($alt_id) {
-        try {
-            $schema->txn_do(
-                sub {
-                    $cvterm_row->create_related(
-                        'cvterm_dbxrefs',
-                        {   dbxref => {
-                                accession => $alt_id,
-                                db_id     => $self->find_or_create_db_id($namespace)
-                            }
+        $schema->txn_do(
+            sub {
+                $cvterm_row->create_related(
+                    'cvterm_dbxrefs',
+                    {   dbxref => {
+                            accession => $alt_id,
+                            db_id => $self->find_or_create_db_id($namespace)
                         }
-                    );
-                }
-            );
-        }
-        catch {
-            confess "error in creating dbxref $_";
-        };
+                    }
+                );
+            }
+        );
     }
 
     #no more additional dbxrefs
@@ -627,21 +600,18 @@ sub create_more_dbxref {
     return if !$def_dbx;
 
     my $dbname = $def_dbx->first_child_text('dbname');
-    try {
-        $schema->txn_do(
-            sub {
-                $cvterm_row->create_related(
-                    'cvterm_dbxrefs',
-                    {   dbxref => {
-                            accession => $def_dbx->first_child_text('acc'),
-                            db_id     => $self->find_or_create_db_id($dbname)
-                        }
+    $schema->txn_do(
+        sub {
+            $cvterm_row->create_related(
+                'cvterm_dbxrefs',
+                {   dbxref => {
+                        accession => $def_dbx->first_child_text('acc'),
+                        db_id     => $self->find_or_create_db_id($dbname)
                     }
-                );
-            }
-        );
-    }
-    catch { confess "error in creating dbxref $_" };
+                }
+            );
+        }
+    );
 }
 
 1;    # Magic true value required at end of module
@@ -666,18 +636,11 @@ Graph::Traversal instance for DAG
 
 =attr ontology_namespace
 
+Current ontology/cv that is getting loaded
+
 =attr obo_xml
 
 obo_xml file that is currently getting loaded
-
-
-=method current_cv
-
-Current cv that is getting loaded
-
-=method current_db
-
-Current db name
 
 =method reset_all
 

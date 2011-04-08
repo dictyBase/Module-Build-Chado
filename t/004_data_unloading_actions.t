@@ -35,7 +35,7 @@ subtest 'Module::Build::Chado action unload_rel' => sub {
     my $bcs = $mb_chado->_handler->schema;
     my $count
         = $bcs->resultset('Cv::Cvterm')
-        ->count( { 'cv.name' => $mb_chado->_handler->current_cv },
+        ->count( { 'cv.name' => $mb_chado->_handler->ontology_namespace },
         { join => 'cv' } );
     cmp_ok( $count, '==', 0, 'should have deleted relationship ontology' );
 };
@@ -47,7 +47,7 @@ subtest 'Module::Build::Chado action unload_so' => sub {
     my $bcs = $mb_chado->_handler->schema;
     my $count
         = $bcs->resultset('Cv::Cvterm')
-        ->count( { 'cv.name' => $mb_chado->_handler->current_cv },
+        ->count( { 'cv.name' => $mb_chado->_handler->ontology_namespace },
         { join => 'cv' } );
     cmp_ok( $count, '==', 0, 'should have deleted sequence ontology' );
 };
@@ -58,20 +58,10 @@ subtest 'Module::Build::Chado action unload_fixture' => sub {
     lives_ok { $mb_chado->ACTION_unload_fixture } 'should run';
     my $bcs       = $mb_chado->_handler->schema;
     my $org_count = $bcs->resultset('Organism::Organism')->count;
-    my $rel_count = $bcs->resultset('Cv::Cvterm')->count(
-        {         'cv.name' => $mb_chado->prepend_namespace
-                . $mb_chado->_handler->loader_tag
-                . '-relationship'
-        },
-        { join => 'cv' }
-    );
-    my $so_count = $bcs->resultset('Cv::Cvterm')->count(
-        {         'cv.name' => $mb_chado->prepend_namespace
-                . $mb_chado->_handler->loader_tag
-                . '-sequence'
-        },
-        { join => 'cv' }
-    );
+    my $rel_count = $bcs->resultset('Cv::Cvterm')
+        ->count( { 'cv.name' => 'relationship' }, { join => 'cv' } );
+    my $so_count = $bcs->resultset('Cv::Cvterm')
+        ->count( { 'cv.name' => 'sequence' }, { join => 'cv' } );
     cmp_ok( $rel_count, '==', 0,
         'should have deleted relationship ontology' );
     cmp_ok( $so_count,  '==', 0, 'should have deleted sequence ontology' );
@@ -85,20 +75,10 @@ subtest 'Module::Build::Chado action prune_fixture' => sub {
 
     my $bcs       = $mb_chado->_handler->schema;
     my $org_count = $bcs->resultset('Organism::Organism')->count;
-    my $rel_count = $bcs->resultset('Cv::Cvterm')->count(
-        {         'cv.name' => $mb_chado->prepend_namespace
-                . $mb_chado->_handler->loader_tag
-                . '-relationship'
-        },
-        { join => 'cv' }
-    );
-    my $so_count = $bcs->resultset('Cv::Cvterm')->count(
-        {         'cv.name' => $mb_chado->prepend_namespace
-                . $mb_chado->_handler->loader_tag
-                . '-sequence'
-        },
-        { join => 'cv' }
-    );
+    my $rel_count = $bcs->resultset('Cv::Cvterm')
+        ->count( { 'cv.name' => 'relationship' }, { join => 'cv' } );
+    my $so_count = $bcs->resultset('Cv::Cvterm')
+        ->count( { 'cv.name' => 'sequence' }, { join => 'cv' } );
 
     cmp_ok( $rel_count, '==', 0,
         'should have deleted relationship ontology' );
