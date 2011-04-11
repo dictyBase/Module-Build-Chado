@@ -58,21 +58,33 @@ sub find_or_create_db_id {
     my $self = shift;
     my ($dbname) = pos_validated_list( \@_, { isa => 'Str' } );
     my $schema = $self->schema;
+
+    my $dbrow;
+    ## -- check cache
     if ( $self->exist_dbrow($dbname) ) {
-        return $self->get_dbrow($dbname)->db_id;
+        $dbrow = $self->get_dbrow($dbname);
     }
-    my $dbrow = $schema->txn_do(
-        sub {
-            return $schema->resultset('General::Db')->create(
-                {   name => $dbname,
-                    description =>
-                        "db namespace for module-build-chado fixture"
-                }
-            );
-        }
-    );
-    $self->set_dbrow( $dbname, $dbrow );
-    $dbrow->db_id;
+    ## -- check database
+    elsif ( $dbrow
+        = $schema->resultset('General::Db')->find( { name => $dbname } ) )
+    {
+        $self->set_dbrow( $dbname, $dbrow );
+    }
+    ## -- create
+    else {
+        $dbrow = $schema->txn_do(
+            sub {
+                return $schema->resultset('General::Db')->create(
+                    {   name => $dbname,
+                        description =>
+                            "db namespace for module-build-chado fixture"
+                    }
+                );
+            }
+        );
+        $self->set_dbrow( $dbname, $dbrow );
+    }
+    return $dbrow->db_id;
 }
 
 has 'cvrow' => (
@@ -119,21 +131,33 @@ sub find_cv_id {
 sub find_or_create_cv_id {
     my ( $self, $namespace ) = @_;
     my $schema = $self->schema;
-    if ( $self->has_cvrow($namespace) ) {
-        return $self->get_cvrow($namespace)->cv_id;
+
+    my $cvrow;
+    ## -- check in the cache
+    if ( $self->exist_cvrow($namespace) ) {
+        $cvrow = $self->get_cvrow($namespace);
     }
-    my $cvrow = $schema->txn_do(
-        sub {
-            return $schema->resultset('Cv::Cv')->create(
-                {   name => $namespace,
-                    definition =>
-                        "Ontology namespace for module-build-chado fixture"
-                }
-            );
-        }
-    );
-    $self->set_cvrow( $namespace, $cvrow );
-    $cvrow->cv_id;
+    ## -- check in the database
+    elsif ( $cvrow
+        = $schema->resultset('Cv::Cv')->find( { name => $namespace } ) )
+    {
+        $self->set_cvrow( $namespace, $cvrow );
+    }
+    ## -- create
+    else {
+        $cvrow = $schema->txn_do(
+            sub {
+                return $schema->resultset('Cv::Cv')->create(
+                    {   name => $namespace,
+                        definition =>
+                            "Ontology namespace for module-build-chado fixture"
+                    }
+                );
+            }
+        );
+        $self->set_cvrow( $namespace, $cvrow );
+    }
+    return $cvrow->cv_id;
 }
 
 has 'cvterm_row' => (
@@ -165,32 +189,36 @@ sub find_or_create_cvterm_id {
     }
 
     #otherwise try to retrieve from database
-    $cv ||= $self->get_cvrow('default')->name;
-    my $rs
-        = $self->schema->resultset('Cv::Cvterm')
-        ->search( { 'me.name' => $cvterm, 'cv.name' => $cv },
-        { join => 'cv' } );
+    my $cv_id
+        = $cv
+        ? $self->find_or_create_cv_id($cv)
+        : $self->get_cvrow('default')->cv_id;
+
+    my $rs = $self->schema->resultset('Cv::Cvterm')
+        ->search( { 'name' => $cvterm, 'cv_id' => $cv_id }, );
     if ( $rs->count > 0 ) {
         $self->set_cvterm_row( $cvterm, $rs->first );
         return $rs->first->cvterm_id;
     }
 
-    $db ||= $self->get_dbrow('default')->name;
-    $dbxref ||= $cvterm;
+    my $db_id
+        = $db
+        ? $self->find_or_create_db_id($db)
+        : $self->get_dbrow('default')->db_id;
 
-    #otherwise create one using the default cv namespace
+    #otherwise create one cvterm
+    $dbxref ||= $cvterm;
     my $row = $self->schema->resultset('Cv::Cvterm')->create(
         {   name   => $cvterm,
-            cv_id  => $self->default_cv_id,
+            cv_id  => $cv_id,
             dbxref => {
                 accession => $dbxref,
-                db_id     => $self->default_db_id
+                db_id     => $db_id
             }
         }
     );
     $self->set_cvterm_row( $cvterm, $row );
-    $row->cvterm_id;
-
+    return $row->cvterm_id;
 }
 
 sub find_cvterm_id {
