@@ -349,8 +349,7 @@ sub ACTION_unload_fixture {
     if ( $self->feature('is_fixture_loaded') ) {
         $self->depends_on('setup');
         $self->_handler->$_ for qw/unload_rel unload_so unload_organism/;
-        $self->feature( 'is_fixture_loaded'   => 0 );
-        $self->feature( 'is_fixture_unloaded' => 1 );
+        $self->feature( 'is_fixture_loaded' => 0 );
     }
 }
 
@@ -372,8 +371,7 @@ sub ACTION_prune_fixture {
     my ($self) = @_;
     $self->depends_on('setup');
     $self->_handler->prune_fixture;
-    $self->feature( 'is_fixture_loaded'   => 0 );
-    $self->feature( 'is_fixture_unloaded' => 1 );
+    $self->feature( 'is_fixture_loaded' => 0 );
 }
 
 =head3 test
@@ -428,6 +426,7 @@ sub ACTION_drop {
         print "cleaning $name\n" if $self->test_debug;
         $self->feature( $name => 0 );
     }
+
     print "dropped the database\n" if $self->test_debug;
 }
 
@@ -447,7 +446,9 @@ sub ACTION_drop_schema {
     my ($self) = @_;
     $self->depends_on('setup');
     $self->_handler->drop_schema;
-    $self->feature( 'is_schema_loaded' => 0 );
+    $self->feature( 'is_fixture_loaded' => 0 );
+    $self->feature( 'is_schema_loaded'  => 0 );
+    print "dropped the schema\n" if $self->test_debug;
 }
 
 1;
