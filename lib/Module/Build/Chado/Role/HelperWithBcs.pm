@@ -55,7 +55,8 @@ sub find_db_id {
 }
 
 sub find_or_create_db_id {
-    my ( $self, $dbname ) = @_;
+    my $self = shift;
+    my ($dbname) = pos_validated_list( \@_, { isa => 'Str' } );
     my $schema = $self->schema;
     if ( $self->exist_dbrow($dbname) ) {
         return $self->get_dbrow($dbname)->db_id;
@@ -170,7 +171,7 @@ sub find_or_create_cvterm_id {
         ->search( { 'me.name' => $cvterm, 'cv.name' => $cv },
         { join => 'cv' } );
     if ( $rs->count > 0 ) {
-        $self->set_cvterm_row( $cvterm , $rs->first );
+        $self->set_cvterm_row( $cvterm, $rs->first );
         return $rs->first->cvterm_id;
     }
 
@@ -180,10 +181,10 @@ sub find_or_create_cvterm_id {
     #otherwise create one using the default cv namespace
     my $row = $self->schema->resultset('Cv::Cvterm')->create(
         {   name   => $cvterm,
-            cv_id     => $self->default_cv_id,
+            cv_id  => $self->default_cv_id,
             dbxref => {
-            	accession => $dbxref, 
-            	db_id => $self->default_db_id
+                accession => $dbxref,
+                db_id     => $self->default_db_id
             }
         }
     );
