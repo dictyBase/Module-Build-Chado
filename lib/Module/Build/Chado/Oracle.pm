@@ -140,7 +140,6 @@ LINE:
             $dbh->rollback();
             confess "$_\n";
         };
-
     }
 
     $sidx->execute() or croak $dbh->errstr();
