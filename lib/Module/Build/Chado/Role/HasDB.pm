@@ -27,6 +27,7 @@ has 'loader_module' => (
 has 'loader' => (
     is      => 'rw',
     isa     => 'Str',
+    lazy => 1, 
     trigger => sub {
     	my ($self,  $value) = @_;
     	my @name = split /::/, $value;
