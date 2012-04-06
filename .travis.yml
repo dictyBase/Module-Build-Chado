@@ -7,4 +7,4 @@ before_install:
  - "cpanm -n Dist::Zilla"
  - "dzil authordeps | cpanm -n"
  - "sudo apt-get update"
- - "sudo apt-get install libdb-devel"
+ - "sudo apt-get install libdb-dev"
