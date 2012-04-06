@@ -15,7 +15,7 @@ use namespace::autoclean;
 
 has 'dbrow' => (
     is         => 'rw',
-    isa        => 'HashRef[Bio::Chado::Schema::General::Db]',
+    isa        => 'HashRef',
     traits     => ['Hash'],
     lazy_build => 1,
     handles    => {
@@ -89,7 +89,7 @@ sub find_or_create_db_id {
 
 has 'cvrow' => (
     is         => 'rw',
-    isa        => 'HashRef[Bio::Chado::Schema::Cv::Cv]',
+    isa        => 'HashRef',
     traits     => ['Hash'],
     lazy_build => 1,
     handles    => {
