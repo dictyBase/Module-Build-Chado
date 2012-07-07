@@ -576,6 +576,43 @@ isa_ok($schema, 'Bio::Chado::Schema');
 
 =head2 Loading custom fixtures
 
+=over 
+
+=item *
+
+Create your own subclass and implement either or both of two methods
+B<before_all_fixtures> and B<after_all_fixtures>
+
+=over
+
+=item before_all_fixtures
+
+This code will run before any fixture is loaded
+
+=item after_all_fixtures
+
+This code will run after organism data, relationship and sequence ontologies are loaded
+
+=back
+
+   package MyBuilder;
+   use base qw/Module::Build::Chado/;
+
+   sub before_all_fixtures {
+      my ($self) = @_;
+   }
+
+   sub before_all_fixtures {
+      my ($self) = @_;
+   }
+
+=item *
+
+All the attributes and methods of B<Module::Build> and B<Module::Build::Chado> L<API>
+become available through I<$self>.
+ 
+=back
+
 
 =head1 API
 
