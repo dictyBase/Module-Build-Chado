@@ -1,0 +1,6 @@
+schema_class: 'Bio::Chado::Schema'
+keep_db: 1
+deploy_db: 0
+resultsets:
+   - 'Organism::Organism'
+   - 'Cv::Cvterm'
