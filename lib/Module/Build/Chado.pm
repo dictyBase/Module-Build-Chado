@@ -112,7 +112,7 @@ sub ACTION_setup {
     Class::MOP::load_class($db_class);
     my $chado = $db_class->new( module_builder => $self );
     $self->_handler($chado);
-    $self->schema($chado);
+    $self->schema($chado->schema);
     $self->config( 'setup_done', 1 );
 
     print "done with setup\n" if $self->test_debug;
@@ -270,7 +270,6 @@ B<deploy_schema> is implied.
 
 sub ACTION_load_fixture {
     my ($self) = @_;
-    $self->depends_on('deploy_schema');
     if ( !$self->feature('is_fixture_loaded') ) {
         $self->_handler->load_organism;
         $self->_handler->load_rel;
@@ -399,6 +398,7 @@ sub ACTION_test {
         $self->feature( $name => 0 );
     }
     $self->depends_on('drop_schema');
+    $self->depends_on('deploy_schema');
     $self->depends_on('load_fixture');
     $self->recursive_test_files(1);
     $self->SUPER::ACTION_test(@_);
@@ -480,37 +480,97 @@ sub ACTION_drop_schema {
 
 It will deploy chado schema in a SQLite database, load fixtures and run all tests)
 
+
+=head3 In each of the test file(.t) access the schema(Bio::Chado::Schema) object
+
+   use Module::Build::Chado;
+
+   my $schema = Module::Build::Chado->current->schema;
+
+   #do something with it ....
+
+   $schema->resultset('Organism::Organism')->....
+
+=head3 Use for other database backend
+
+B<PostgreSQL>
+
   ./Build test --dsn "dbi:Pg:dbname=mychado" --user tucker --password booze
 
+B<Oracle>
+
    ./Build test --dsn "dbi:Oracle:sid=myoracle" --user tucker --password hammer
-
-   ./Build deploy_schema (deploy a chado schema)
-
-   ./Build load_fixture (load some standard fixtures)
-
-   ./Build drop_schema
 
 
 =head1 DESCRIPTION
 
 This is subclass of L<Module::Build> to configure,  build and test
 L<chado|http://gmod.org/wiki/Chado> database backed
-perl modules and applications. It is based on L<Bio::Chado::Schema> and provides the
-following additional features ...
+perl modules and applications. During the B</Build test>  testing phase it loads some
+default fixtures which can be accessed in every test(.t) file using standard
+L<DBIx::Class> API.
+
+=head2 Default fixtures loaded
 
 =over
 
-=item * 
+=item  List of organisms
 
-Extra Module::Build properties and actions to deploy, load fixtures and run tests on a
-chado database schema.
+Look at the organism.yaml in the shared folder
 
-=item *
+=item Relationship ontology
 
-Support SQLite, Postgresql and Oracle backends.
+OBO relationship types, available here
+L<http://bioportal.bioontology.org/ontologies/1042>. 
+
+=item Sequence ontology
+
+Sequence types and features,  available here
+L<http://bioportal.bioontology.org/ontologies/1109>
 
 =back
 
+
+=head2 Accessing fixtures data in test(.t) files
+
+=over
+
+=item Get a L<Bio::Chado::Schema> aka L<DBIx::Class> object
+
+my $schema = Module::Build->current->schema;
+
+isa_ok($schema, 'Bio::Chado::Schema');
+
+=item Access them using L<DBIx::Class> API
+
+  my $row = $schema->resultset('Organism::Organism')->find({species => 'Homo',  genus =>
+'sapiens'});
+
+  my $resultset = $schema->resultset('Organism::Organism')->search({});
+
+  my $relonto = $schema->resultset('Cv::Cv')->find({'name' => 'relationship'});
+
+  my $seqonto = $schema->resultset('Cv::Cv')->find({'name' => 'sequence'});
+
+  my $cvterm_rs = $seqonto->cvterms;
+  
+  while(my $cvterm = $cvterm_rs->next) {
+    .....
+  }
+
+  You probably will not be accessing them too often,  but mostly needed to load other test
+  fixtures.
+
+=back
+
+=head2 Loading custom fixtures
+
+
+=head1 API
+
+=attr schema
+
+A L<Bio::Chado::Schema> object.
 
 =attr dsn
 
