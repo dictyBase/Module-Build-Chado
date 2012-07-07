@@ -52,6 +52,7 @@ __PACKAGE__->add_property('password');
 __PACKAGE__->add_property('superuser');
 __PACKAGE__->add_property('superpassword');
 __PACKAGE__->add_property('_handler');
+__PACKAGE__->add_property('schema');
 __PACKAGE__->add_property('test_debug');
 
 sub connect_hash {
@@ -111,6 +112,7 @@ sub ACTION_setup {
     Class::MOP::load_class($db_class);
     my $chado = $db_class->new( module_builder => $self );
     $self->_handler($chado);
+    $self->schema($chado);
     $self->config( 'setup_done', 1 );
 
     print "done with setup\n" if $self->test_debug;
@@ -457,35 +459,36 @@ sub ACTION_drop_schema {
 
 =head1 SYNOPSIS
 
-In Build.PL:
+=head3 Write build script(Build.PL) for your module or web application:
 
-use Module::Build::Chado;
+   use Module::Build::Chado;
 
-my $build = Module::Build::Chado->new(
+   my $build = Module::Build::Chado->new(
                  module_name => 'MyChadoApp', 
                  license => 'perl', 
                  dist_abstract => 'My chado module'
                  dist_version => '1.0'
 
-);
+   );
 
-$build->create_build_script;
+  $build->create_build_script;
 
-On the command line:
 
-perl Build.PL (default is a temporary SQLite database)
+=head3 Then from the command line:
 
-./Build test (deploy chado schema and load fixtures)
+  perl Build.PL && ./Build test(default is a temporary SQLite database)
 
-./Build test --dsn "dbi:Pg:dbname=mychado" --user tucker --password booze
+It will deploy chado schema in a SQLite database, load fixtures and run all tests)
 
-./Build test --dsn "dbi:Oracle:sid=myoracle" --user tucker --password hammer
+  ./Build test --dsn "dbi:Pg:dbname=mychado" --user tucker --password booze
 
-./Build deploy_schema (deploy a chado schema)
+   ./Build test --dsn "dbi:Oracle:sid=myoracle" --user tucker --password hammer
 
-./Build load_fixture (load some standard fixtures)
+   ./Build deploy_schema (deploy a chado schema)
 
-./Build drop_schema
+   ./Build load_fixture (load some standard fixtures)
+
+   ./Build drop_schema
 
 
 =head1 DESCRIPTION
