@@ -6,6 +6,7 @@ use File::Temp;
 use Class::MOP;
 use DBI;
 use Carp;
+use Log::Message::Simple qw[:STD :CARP];
 use base qw/Module::Build/;
 
 __PACKAGE__->add_property(
@@ -112,7 +113,7 @@ sub ACTION_setup {
     Class::MOP::load_class($db_class);
     my $chado = $db_class->new( module_builder => $self );
     $self->_handler($chado);
-    $self->schema($chado->schema);
+    $self->schema( $chado->schema );
     $self->config( 'setup_done', 1 );
 
     print "done with setup\n" if $self->test_debug;
@@ -270,13 +271,23 @@ B<deploy_schema> is implied.
 
 sub ACTION_load_fixture {
     my ($self) = @_;
-    if ( !$self->feature('is_fixture_loaded') ) {
-        $self->_handler->load_organism;
-        $self->_handler->load_rel;
-        $self->_handler->load_so;
-        $self->feature( 'is_fixture_loaded' => 1 );
-        print "loaded fixture\n" if $self->test_debug;
+    return if $self->feature('is_fixture_loaded');
+
+    if ( $self->can('before_all_fixtures') ) {
+        debug( 'invoking before_all_fixtures', $self->test_debug );
+        $self->before_all_fixtures;
     }
+    $self->_handler->load_organism;
+    $self->_handler->load_rel;
+    $self->_handler->load_so;
+
+    if ( $self->can('after_all_fixtures') ) {
+        debug( 'invoking after_all_fixtures', $self->test_debug );
+        $self->after_all_fixtures;
+    }
+
+    $self->feature( 'is_fixture_loaded' => 1 );
+    debug('loaded fixture', $self->test_debug);
 }
 
 =head3 unload_rel
