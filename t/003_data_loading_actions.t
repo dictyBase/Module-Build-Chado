@@ -27,6 +27,8 @@ subtest 'Module::Build::Chado action load_organsim' => sub {
         = $mb_chado->_handler->schema->resultset('Organism::Organism')->count;
     cmp_ok( $count, '>',  0,  'should populate organism table' );
     cmp_ok( $count, '==', 12, 'should have 12 organisms' );
+    #cmp_ok (ResultSet('Organism')->count,  '>' ,  0,  'should populate organism table');
+    #cmp_ok( ResultSet('Organism')->count, '==', 12, 'should have 12 organisms' );
 };
 
 subtest 'Module::Build::Chado action load_rel' => sub {

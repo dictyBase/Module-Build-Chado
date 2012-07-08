@@ -6,8 +6,11 @@ use File::Temp;
 use Class::MOP;
 use DBI;
 use Carp;
+use File::Path qw/make_path/;
+use YAML qw/LoadFile DumpFile/;
 use base qw/Module::Build/;
 
+__PACKAGE__->add_property('dbic_config_file' => 'mbchado.yaml');
 __PACKAGE__->add_property(
     'dsn',
     default => sub {
@@ -460,6 +463,35 @@ sub ACTION_drop_schema {
     $self->feature( 'is_fixture_loaded' => 0 );
     $self->feature( 'is_schema_loaded'  => 0 );
     print "dropped the schema\n" if $self->test_debug;
+}
+
+sub ACTION_create_config {
+	my ($self) = @_;
+	$self->depends_on('setup');
+	my $base_path = catdir ($self->base_dir,  't',  'etc');
+	my $config_file = catfile($base_path, $self->dbic_config_file);
+	make_path ($base_path);
+
+	unlink $config_file if -e $config_file;
+	my $config_hash = {
+	   'schema_class' => 'Bio::Chado::Schema', 
+	   'keep_db' => 1, 
+	   'deploy_db' => 0, 
+	   'connect_info' => [$self->connect_info], 
+	   'resultsets' => [
+	   	  'Cv::Cv' 	=> { -as => 'Cv'}, 
+	   	  'Organism::Organism' => { -as => 'Organism'}, 
+	   	  'Cv::Cvterm' => { -as => 'Cvterm'}, 
+	   	  'Sequence::Feature' => { -as => 'Sequence'}
+	   ]
+	};
+	DumpFile $config_file, $config_hash;
+}
+
+sub ACTION_delete_config {
+	my ($self) = @_;
+	my $config_file = catfile($self->base_dir,  't',  'etc', $self->dbic_config_file);
+	unlink $config_file if -e $config_file;
 }
 
 1;

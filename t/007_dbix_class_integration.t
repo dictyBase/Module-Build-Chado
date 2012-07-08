@@ -1,0 +1,37 @@
+use Test::More qw/no_plan/;
+use Test::Exception;
+use File::Spec::Functions;
+use Module::Build;
+
+my $build = Module::Build->current;
+my $dir = catdir( $build->base_dir, 't', 'lib', 'mydb' );
+chdir $dir or die "cannot change dir to $dir\n";
+my %opt = (
+    module_name        => 'MyDB',
+    license            => 'perl',
+    create_readme      => 1,
+    dist_abstract      => 'Module for testing module',
+    configure_requires => { 'Module::Build' => '' },
+    dist_version       => '0.001',
+    dist_author        => 'Pataka',
+    quiet              => 1
+);
+
+use_ok('Module::Build::Chado');
+
+subtest 'Module::Build::Chado actions for creating and deleting config' =>
+    sub {
+    my $mb_chado = Module::Build::Chado->new(%opt);
+    my $config_file
+        = catfile( $mb_chado->base_dir, 't', 'etc', $mb_chado->dbic_config_file );
+    isnt(
+        -e $config_file, 1,
+        'should not have any config file before the action is run'
+    );
+    lives_ok { $mb_chado->ACTION_create_config } 'should run';
+    is( -e $config_file,
+        1, 'should have config file after the action is run' );
+    lives_ok { $mb_chado->ACTION_delete_config } 'should run';
+    isnt(-e $config_file,  1,  'should not have any config file after delete action');
+    };
+
