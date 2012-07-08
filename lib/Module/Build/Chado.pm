@@ -7,10 +7,11 @@ use Class::MOP;
 use DBI;
 use Carp;
 use File::Path qw/make_path/;
-use YAML qw/LoadFile DumpFile/;
+use Data::Dumper;
+use IO::File;
 use base qw/Module::Build/;
 
-__PACKAGE__->add_property('dbic_config_file' => 'mbchado.yaml');
+__PACKAGE__->add_property( 'dbic_config_file' => 'schema.pl' );
 __PACKAGE__->add_property(
     'dsn',
     default => sub {
@@ -56,7 +57,7 @@ __PACKAGE__->add_property('superuser');
 __PACKAGE__->add_property('superpassword');
 __PACKAGE__->add_property('_handler');
 __PACKAGE__->add_property('schema');
-__PACKAGE__->add_property('test_debug' => 0);
+__PACKAGE__->add_property( 'test_debug' => 0 );
 
 sub connect_hash {
     my ($self) = @_;
@@ -412,9 +413,11 @@ sub ACTION_test {
     $self->depends_on('drop_schema');
     $self->depends_on('deploy_schema');
     $self->depends_on('load_fixture');
+    $self->depends_on('create_config');
     $self->recursive_test_files(1);
     $self->SUPER::ACTION_test(@_);
     $self->depends_on('drop_schema');
+    $self->depends_on('delete_config');
 }
 
 =head3 drop
@@ -466,32 +469,40 @@ sub ACTION_drop_schema {
 }
 
 sub ACTION_create_config {
-	my ($self) = @_;
-	$self->depends_on('setup');
-	my $base_path = catdir ($self->base_dir,  't',  'etc');
-	my $config_file = catfile($base_path, $self->dbic_config_file);
-	make_path ($base_path);
+    my ($self) = @_;
+    $self->depends_on('setup');
+    my $base_path = catdir( $self->base_dir, 't', 'etc' );
+    my $config_file = catfile( $base_path, $self->dbic_config_file );
+    make_path($base_path);
 
-	unlink $config_file if -e $config_file;
-	my $config_hash = {
-	   'schema_class' => 'Bio::Chado::Schema', 
-	   'keep_db' => 1, 
-	   'deploy_db' => 0, 
-	   'connect_info' => [$self->connect_info], 
-	   'resultsets' => [
-	   	  'Cv::Cv' 	=> { -as => 'Cv'}, 
-	   	  'Organism::Organism' => { -as => 'Organism'}, 
-	   	  'Cv::Cvterm' => { -as => 'Cvterm'}, 
-	   	  'Sequence::Feature' => { -as => 'Sequence'}
-	   ]
-	};
-	DumpFile $config_file, $config_hash;
+    unlink $config_file if -e $config_file;
+    my %connect_hash = $self->connect_hash;
+    $connect_hash{dbi_attributes}->{AutoCommit} = 1;
+    my $connect_info
+        = [ @connect_hash{qw/dsn user password dbi_attributes/} ];
+
+    my $config_hash = {
+        'schema_class' => 'Bio::Chado::Schema',
+        'keep_db'      => 1,
+        'deploy_db'    => 0,
+        'connect_info' => $connect_info,
+        'resultsets'   => [
+            'Cv::Cv',     'Organism::Organism',
+            'Cv::Cvterm', 'Sequence::Feature', 'General::Db', 
+            'General::Dbxref'
+        ]
+    };
+    my $output = IO::File->new( $config_file, 'w' )
+        or die "cannot open file:$!";
+    $output->print( Dumper $config_hash);
+    $output->close;
 }
 
 sub ACTION_delete_config {
-	my ($self) = @_;
-	my $config_file = catfile($self->base_dir,  't',  'etc', $self->dbic_config_file);
-	unlink $config_file if -e $config_file;
+    my ($self) = @_;
+    my $config_file
+        = catfile( $self->base_dir, 't', 'etc', $self->dbic_config_file );
+    unlink $config_file if -e $config_file;
 }
 
 1;

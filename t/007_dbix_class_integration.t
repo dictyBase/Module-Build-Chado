@@ -35,3 +35,15 @@ subtest 'Module::Build::Chado actions for creating and deleting config' =>
     isnt(-e $config_file,  1,  'should not have any config file after delete action');
     };
 
+subtest 'Moduld::Build::Chado integration with Test::DBIx::Class and organism fixture' =>
+sub {
+    my $mb_chado = Module::Build::Chado->new(%opt);
+    lives_ok { $mb_chado->ACTION_create_config } 'should run';
+    lives_ok { $mb_chado->ACTION_load_organism } 'should run';
+    use_ok('Test::DBIx::Class');
+    ok ResultSet('Organism::Organism'),  'should have organism in the database';
+    cmp_ok (ResultSet('Organism::Organism')->count,  '>' ,  0,  'should populate organism table');
+    cmp_ok( ResultSet('Organism::Organism')->count, '==', 12, 'should have 12 organisms' );
+    lives_ok { $mb_chado->ACTION_delete_config } 'should run';
+
+};
