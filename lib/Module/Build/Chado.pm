@@ -6,7 +6,6 @@ use File::Temp;
 use Class::MOP;
 use DBI;
 use Carp;
-use Log::Message::Simple qw[:STD :CARP];
 use base qw/Module::Build/;
 
 __PACKAGE__->add_property(
@@ -54,7 +53,7 @@ __PACKAGE__->add_property('superuser');
 __PACKAGE__->add_property('superpassword');
 __PACKAGE__->add_property('_handler');
 __PACKAGE__->add_property('schema');
-__PACKAGE__->add_property('test_debug');
+__PACKAGE__->add_property('test_debug' => 0);
 
 sub connect_hash {
     my ($self) = @_;
@@ -274,20 +273,19 @@ sub ACTION_load_fixture {
     return if $self->feature('is_fixture_loaded');
 
     if ( $self->can('before_all_fixtures') ) {
-        debug( 'invoking before_all_fixtures', $self->test_debug );
         $self->before_all_fixtures;
     }
+
+    $self->depends_on('deploy_schema');
     $self->_handler->load_organism;
     $self->_handler->load_rel;
     $self->_handler->load_so;
 
     if ( $self->can('after_all_fixtures') ) {
-        debug( 'invoking after_all_fixtures', $self->test_debug );
         $self->after_all_fixtures;
     }
 
     $self->feature( 'is_fixture_loaded' => 1 );
-    debug('loaded fixture', $self->test_debug);
 }
 
 =head3 unload_rel
