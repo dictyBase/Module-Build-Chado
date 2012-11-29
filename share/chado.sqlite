@@ -1,7 +1,10 @@
 -- 
 -- Created by main
--- Created on Thu Mar 24 15:40:00 2011
+-- Created on Thu Nov 29 14:29:57 2012
 -- 
+
+
+BEGIN TRANSACTION;
 
 --
 -- Table: acquisition
@@ -12,7 +15,7 @@ CREATE TABLE acquisition (
   assay_id integer NOT NULL,
   protocol_id integer,
   channel_id integer,
-  acquisitiondate timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+  acquisitiondate timestamp DEFAULT current_timestamp,
   name text,
   uri text,
   FOREIGN KEY(assay_id) REFERENCES assay(assay_id) ON DELETE CASCADE,
@@ -78,15 +81,15 @@ CREATE UNIQUE INDEX acquisitionprop_c1 ON acquisitionprop (acquisition_id, type_
 
 CREATE TABLE analysis (
   analysis_id INTEGER PRIMARY KEY NOT NULL,
-  name character varying(255),
+  name varchar(255),
   description text,
-  program character varying(255) NOT NULL,
-  programversion character varying(255) NOT NULL,
-  algorithm character varying(255),
-  sourcename character varying(255),
-  sourceversion character varying(255),
+  program varchar(255) NOT NULL,
+  programversion varchar(255) NOT NULL,
+  algorithm varchar(255),
+  sourcename varchar(255),
+  sourceversion varchar(255),
   sourceuri text,
-  timeexecuted timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP
+  timeexecuted timestamp NOT NULL DEFAULT current_timestamp
 );
 
 CREATE UNIQUE INDEX analysis_c1 ON analysis (program, programversion, sourcename);
@@ -223,7 +226,7 @@ CREATE TABLE assay (
   assay_id INTEGER PRIMARY KEY NOT NULL,
   arraydesign_id integer NOT NULL,
   protocol_id integer,
-  assaydate timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+  assaydate timestamp DEFAULT current_timestamp,
   arrayidentifier text,
   arraybatchidentifier text,
   operator_id integer NOT NULL,
@@ -421,11 +424,11 @@ CREATE UNIQUE INDEX biomaterialprop_c1 ON biomaterialprop (biomaterial_id, type_
 
 CREATE TABLE cell_line (
   cell_line_id INTEGER PRIMARY KEY NOT NULL,
-  name character varying(255),
-  uniquename character varying(255) NOT NULL,
+  name varchar(255),
+  uniquename varchar(255) NOT NULL,
   organism_id integer NOT NULL,
-  timeaccessioned timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  timelastmodified timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  timeaccessioned timestamp NOT NULL DEFAULT current_timestamp,
+  timelastmodified timestamp NOT NULL DEFAULT current_timestamp,
   FOREIGN KEY(organism_id) REFERENCES organism(organism_id) ON DELETE CASCADE
 );
 
@@ -642,6 +645,22 @@ CREATE INDEX cell_lineprop_pub_idx_pub_id ON cell_lineprop_pub (pub_id);
 CREATE UNIQUE INDEX cell_lineprop_pub_c1 ON cell_lineprop_pub (cell_lineprop_id, pub_id);
 
 --
+-- Table: chadoprop
+--
+
+CREATE TABLE chadoprop (
+  chadoprop_id INTEGER PRIMARY KEY NOT NULL,
+  type_id integer NOT NULL,
+  value text,
+  rank integer NOT NULL DEFAULT 0,
+  FOREIGN KEY(type_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
+);
+
+CREATE INDEX chadoprop_idx_type_id ON chadoprop (type_id);
+
+CREATE UNIQUE INDEX chadoprop_c1 ON chadoprop (type_id, rank);
+
+--
 -- Table: channel
 --
 
@@ -660,8 +679,8 @@ CREATE UNIQUE INDEX channel_c1 ON channel (name);
 CREATE TABLE contact (
   contact_id INTEGER PRIMARY KEY NOT NULL,
   type_id integer,
-  name character varying(255) NOT NULL,
-  description character varying(255),
+  name varchar(255) NOT NULL,
+  description varchar(255),
   FOREIGN KEY(type_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
 );
 
@@ -721,11 +740,31 @@ CREATE INDEX control_idx_type_id ON control (type_id);
 
 CREATE TABLE cv (
   cv_id INTEGER PRIMARY KEY NOT NULL,
-  name character varying(255) NOT NULL,
+  name varchar(255) NOT NULL,
   definition text
 );
 
 CREATE UNIQUE INDEX cv_c1 ON cv (name);
+
+--
+-- Table: cvprop
+--
+
+CREATE TABLE cvprop (
+  cvprop_id INTEGER PRIMARY KEY NOT NULL,
+  cv_id integer NOT NULL,
+  type_id integer NOT NULL,
+  value text,
+  rank integer NOT NULL DEFAULT 0,
+  FOREIGN KEY(cv_id) REFERENCES cv(cv_id) ON DELETE CASCADE,
+  FOREIGN KEY(type_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
+);
+
+CREATE INDEX cvprop_idx_cv_id ON cvprop (cv_id);
+
+CREATE INDEX cvprop_idx_type_id ON cvprop (type_id);
+
+CREATE UNIQUE INDEX cvprop_c1 ON cvprop (cv_id, type_id, rank);
 
 --
 -- Table: cvterm
@@ -734,7 +773,7 @@ CREATE UNIQUE INDEX cv_c1 ON cv (name);
 CREATE TABLE cvterm (
   cvterm_id INTEGER PRIMARY KEY NOT NULL,
   cv_id integer NOT NULL,
-  name character varying(1024) NOT NULL,
+  name varchar(1024) NOT NULL,
   definition text,
   dbxref_id integer NOT NULL,
   is_obsolete integer NOT NULL DEFAULT 0,
@@ -846,7 +885,7 @@ CREATE UNIQUE INDEX cvtermprop_cvterm_id_key ON cvtermprop (cvterm_id, type_id, 
 CREATE TABLE cvtermsynonym (
   cvtermsynonym_id INTEGER PRIMARY KEY NOT NULL,
   cvterm_id integer NOT NULL,
-  synonym character varying(1024) NOT NULL,
+  synonym varchar(1024) NOT NULL,
   type_id integer,
   FOREIGN KEY(cvterm_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE,
   FOREIGN KEY(type_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
@@ -864,10 +903,10 @@ CREATE UNIQUE INDEX cvtermsynonym_c1 ON cvtermsynonym (cvterm_id, synonym);
 
 CREATE TABLE db (
   db_id INTEGER PRIMARY KEY NOT NULL,
-  name character varying(255) NOT NULL,
-  description character varying(255),
-  urlprefix character varying(255),
-  url character varying(255)
+  name varchar(255) NOT NULL,
+  description varchar(255),
+  urlprefix varchar(255),
+  url varchar(255)
 );
 
 CREATE UNIQUE INDEX db_c1 ON db (name);
@@ -879,8 +918,8 @@ CREATE UNIQUE INDEX db_c1 ON db (name);
 CREATE TABLE dbxref (
   dbxref_id INTEGER PRIMARY KEY NOT NULL,
   db_id integer NOT NULL,
-  accession character varying(255) NOT NULL,
-  version character varying(255) NOT NULL DEFAULT '',
+  accession varchar(255) NOT NULL,
+  version varchar(255) NOT NULL DEFAULT '',
   description text,
   FOREIGN KEY(db_id) REFERENCES db(db_id) ON DELETE CASCADE
 );
@@ -916,8 +955,8 @@ CREATE UNIQUE INDEX dbxrefprop_c1 ON dbxrefprop (dbxref_id, type_id, rank);
 CREATE TABLE eimage (
   eimage_id INTEGER PRIMARY KEY NOT NULL,
   eimage_data text,
-  eimage_type character varying(255) NOT NULL,
-  image_uri character varying(255)
+  eimage_type varchar(255) NOT NULL,
+  image_uri varchar(255)
 );
 
 --
@@ -1050,7 +1089,7 @@ CREATE UNIQUE INDEX environment_cvterm_c1 ON environment_cvterm (environment_id,
 CREATE TABLE expression (
   expression_id INTEGER PRIMARY KEY NOT NULL,
   uniquename text NOT NULL,
-  md5checksum character(32),
+  md5checksum char(32),
   description text
 );
 
@@ -1163,16 +1202,16 @@ CREATE TABLE feature (
   feature_id INTEGER PRIMARY KEY NOT NULL,
   dbxref_id integer,
   organism_id integer NOT NULL,
-  name character varying(255),
+  name varchar(255),
   uniquename text NOT NULL,
   residues text,
   seqlen integer,
-  md5checksum character(32),
+  md5checksum char(32),
   type_id integer NOT NULL,
   is_analysis boolean NOT NULL DEFAULT false,
   is_obsolete boolean NOT NULL DEFAULT false,
-  timeaccessioned timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  timelastmodified timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  timeaccessioned timestamp NOT NULL DEFAULT current_timestamp,
+  timelastmodified timestamp NOT NULL DEFAULT current_timestamp,
   FOREIGN KEY(dbxref_id) REFERENCES dbxref(dbxref_id) ON DELETE CASCADE,
   FOREIGN KEY(organism_id) REFERENCES organism(organism_id) ON DELETE CASCADE,
   FOREIGN KEY(type_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
@@ -1566,7 +1605,7 @@ CREATE UNIQUE INDEX featureloc_pub_c1 ON featureloc_pub (featureloc_id, pub_id);
 
 CREATE TABLE featuremap (
   featuremap_id INTEGER PRIMARY KEY NOT NULL,
-  name character varying(255),
+  name varchar(255),
   description text,
   unittype_id integer,
   FOREIGN KEY(unittype_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
@@ -1643,7 +1682,7 @@ CREATE TABLE featurerange (
   leftendf_id integer,
   rightstartf_id integer,
   rightendf_id integer NOT NULL,
-  rangestr character varying(255),
+  rangestr varchar(255),
   FOREIGN KEY(feature_id) REFERENCES feature(feature_id) ON DELETE CASCADE,
   FOREIGN KEY(featuremap_id) REFERENCES featuremap(featuremap_id) ON DELETE CASCADE,
   FOREIGN KEY(leftendf_id) REFERENCES feature(feature_id) ON DELETE CASCADE,
@@ -1672,10 +1711,34 @@ CREATE TABLE genotype (
   genotype_id INTEGER PRIMARY KEY NOT NULL,
   name text,
   uniquename text NOT NULL,
-  description character varying(255)
+  description varchar(255),
+  type_id integer NOT NULL,
+  FOREIGN KEY(type_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
 );
 
+CREATE INDEX genotype_idx_type_id ON genotype (type_id);
+
 CREATE UNIQUE INDEX genotype_c1 ON genotype (uniquename);
+
+--
+-- Table: genotypeprop
+--
+
+CREATE TABLE genotypeprop (
+  genotypeprop_id INTEGER PRIMARY KEY NOT NULL,
+  genotype_id integer NOT NULL,
+  type_id integer NOT NULL,
+  value text,
+  rank integer NOT NULL DEFAULT 0,
+  FOREIGN KEY(genotype_id) REFERENCES genotype(genotype_id) ON DELETE CASCADE,
+  FOREIGN KEY(type_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
+);
+
+CREATE INDEX genotypeprop_idx_genotype_id ON genotypeprop (genotype_id);
+
+CREATE INDEX genotypeprop_idx_type_id ON genotypeprop (type_id);
+
+CREATE UNIQUE INDEX genotypeprop_c1 ON genotypeprop (genotype_id, type_id, rank);
 
 --
 -- Table: library
@@ -1684,12 +1747,12 @@ CREATE UNIQUE INDEX genotype_c1 ON genotype (uniquename);
 CREATE TABLE library (
   library_id INTEGER PRIMARY KEY NOT NULL,
   organism_id integer NOT NULL,
-  name character varying(255),
+  name varchar(255),
   uniquename text NOT NULL,
   type_id integer NOT NULL,
   is_obsolete integer NOT NULL DEFAULT 0,
-  timeaccessioned timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  timelastmodified timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  timeaccessioned timestamp NOT NULL DEFAULT current_timestamp,
+  timelastmodified timestamp NOT NULL DEFAULT current_timestamp,
   FOREIGN KEY(organism_id) REFERENCES organism(organism_id) ON DELETE CASCADE,
   FOREIGN KEY(type_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
 );
@@ -1931,7 +1994,7 @@ CREATE INDEX nd_experiment_genotype_idx_genotype_id ON nd_experiment_genotype (g
 
 CREATE INDEX nd_experiment_genotype_idx_nd_experiment_id ON nd_experiment_genotype (nd_experiment_id);
 
-CREATE UNIQUE INDEX nd_experiment_genotype_nd_experiment_id_key ON nd_experiment_genotype (nd_experiment_id);
+CREATE UNIQUE INDEX nd_experiment_genotype_c1 ON nd_experiment_genotype (nd_experiment_id, genotype_id);
 
 --
 -- Table: nd_experiment_phenotype
@@ -1949,7 +2012,7 @@ CREATE INDEX nd_experiment_phenotype_idx_nd_experiment_id ON nd_experiment_pheno
 
 CREATE INDEX nd_experiment_phenotype_idx_phenotype_id ON nd_experiment_phenotype (phenotype_id);
 
-CREATE UNIQUE INDEX nd_experiment_phenotype_nd_experiment_id_key ON nd_experiment_phenotype (nd_experiment_id);
+CREATE UNIQUE INDEX nd_experiment_phenotype_c1 ON nd_experiment_phenotype (nd_experiment_id, phenotype_id);
 
 --
 -- Table: nd_experiment_project
@@ -2044,18 +2107,18 @@ CREATE INDEX nd_experiment_stock_dbxref_idx_nd_experiment_stock_id ON nd_experim
 CREATE TABLE nd_experiment_stockprop (
   nd_experiment_stockprop_id INTEGER PRIMARY KEY NOT NULL,
   nd_experiment_stock_id integer NOT NULL,
-  cvterm_id integer NOT NULL,
-  value varchar(255),
+  type_id integer NOT NULL,
+  value text,
   rank integer NOT NULL DEFAULT 0,
-  FOREIGN KEY(cvterm_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE,
-  FOREIGN KEY(nd_experiment_stock_id) REFERENCES nd_experiment_stock(nd_experiment_stock_id) ON DELETE CASCADE
+  FOREIGN KEY(nd_experiment_stock_id) REFERENCES nd_experiment_stock(nd_experiment_stock_id) ON DELETE CASCADE,
+  FOREIGN KEY(type_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
 );
-
-CREATE INDEX nd_experiment_stockprop_idx_cvterm_id ON nd_experiment_stockprop (cvterm_id);
 
 CREATE INDEX nd_experiment_stockprop_idx_nd_experiment_stock_id ON nd_experiment_stockprop (nd_experiment_stock_id);
 
-CREATE UNIQUE INDEX nd_experiment_stockprop_c1 ON nd_experiment_stockprop (nd_experiment_stock_id, cvterm_id, rank);
+CREATE INDEX nd_experiment_stockprop_idx_type_id ON nd_experiment_stockprop (type_id);
+
+CREATE UNIQUE INDEX nd_experiment_stockprop_c1 ON nd_experiment_stockprop (nd_experiment_stock_id, type_id, rank);
 
 --
 -- Table: nd_experimentprop
@@ -2064,18 +2127,18 @@ CREATE UNIQUE INDEX nd_experiment_stockprop_c1 ON nd_experiment_stockprop (nd_ex
 CREATE TABLE nd_experimentprop (
   nd_experimentprop_id INTEGER PRIMARY KEY NOT NULL,
   nd_experiment_id integer NOT NULL,
-  cvterm_id integer NOT NULL,
-  value varchar(255) NOT NULL,
+  type_id integer NOT NULL,
+  value text,
   rank integer NOT NULL DEFAULT 0,
-  FOREIGN KEY(cvterm_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE,
-  FOREIGN KEY(nd_experiment_id) REFERENCES nd_experiment(nd_experiment_id) ON DELETE CASCADE
+  FOREIGN KEY(nd_experiment_id) REFERENCES nd_experiment(nd_experiment_id) ON DELETE CASCADE,
+  FOREIGN KEY(type_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
 );
-
-CREATE INDEX nd_experimentprop_idx_cvterm_id ON nd_experimentprop (cvterm_id);
 
 CREATE INDEX nd_experimentprop_idx_nd_experiment_id ON nd_experimentprop (nd_experiment_id);
 
-CREATE UNIQUE INDEX nd_experimentprop_c1 ON nd_experimentprop (nd_experiment_id, cvterm_id, rank);
+CREATE INDEX nd_experimentprop_idx_type_id ON nd_experimentprop (type_id);
+
+CREATE UNIQUE INDEX nd_experimentprop_c1 ON nd_experimentprop (nd_experiment_id, type_id, rank);
 
 --
 -- Table: nd_geolocation
@@ -2097,18 +2160,18 @@ CREATE TABLE nd_geolocation (
 CREATE TABLE nd_geolocationprop (
   nd_geolocationprop_id INTEGER PRIMARY KEY NOT NULL,
   nd_geolocation_id integer NOT NULL,
-  cvterm_id integer NOT NULL,
-  value varchar(250),
+  type_id integer NOT NULL,
+  value text,
   rank integer NOT NULL DEFAULT 0,
-  FOREIGN KEY(cvterm_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE,
-  FOREIGN KEY(nd_geolocation_id) REFERENCES nd_geolocation(nd_geolocation_id) ON DELETE CASCADE
+  FOREIGN KEY(nd_geolocation_id) REFERENCES nd_geolocation(nd_geolocation_id) ON DELETE CASCADE,
+  FOREIGN KEY(type_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
 );
-
-CREATE INDEX nd_geolocationprop_idx_cvterm_id ON nd_geolocationprop (cvterm_id);
 
 CREATE INDEX nd_geolocationprop_idx_nd_geolocation_id ON nd_geolocationprop (nd_geolocation_id);
 
-CREATE UNIQUE INDEX nd_geolocationprop_c1 ON nd_geolocationprop (nd_geolocation_id, cvterm_id, rank);
+CREATE INDEX nd_geolocationprop_idx_type_id ON nd_geolocationprop (type_id);
+
+CREATE UNIQUE INDEX nd_geolocationprop_c1 ON nd_geolocationprop (nd_geolocation_id, type_id, rank);
 
 --
 -- Table: nd_protocol
@@ -2116,8 +2179,12 @@ CREATE UNIQUE INDEX nd_geolocationprop_c1 ON nd_geolocationprop (nd_geolocation_
 
 CREATE TABLE nd_protocol (
   nd_protocol_id INTEGER PRIMARY KEY NOT NULL,
-  name varchar(255) NOT NULL
+  name varchar(255) NOT NULL,
+  type_id integer NOT NULL,
+  FOREIGN KEY(type_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
 );
+
+CREATE INDEX nd_protocol_idx_type_id ON nd_protocol (type_id);
 
 CREATE UNIQUE INDEX nd_protocol_name_key ON nd_protocol (name);
 
@@ -2148,18 +2215,18 @@ CREATE INDEX nd_protocol_reagent_idx_type_id ON nd_protocol_reagent (type_id);
 CREATE TABLE nd_protocolprop (
   nd_protocolprop_id INTEGER PRIMARY KEY NOT NULL,
   nd_protocol_id integer NOT NULL,
-  cvterm_id integer NOT NULL,
-  value varchar(255),
+  type_id integer NOT NULL,
+  value text,
   rank integer NOT NULL DEFAULT 0,
-  FOREIGN KEY(cvterm_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE,
-  FOREIGN KEY(nd_protocol_id) REFERENCES nd_protocol(nd_protocol_id) ON DELETE CASCADE
+  FOREIGN KEY(nd_protocol_id) REFERENCES nd_protocol(nd_protocol_id) ON DELETE CASCADE,
+  FOREIGN KEY(type_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
 );
-
-CREATE INDEX nd_protocolprop_idx_cvterm_id ON nd_protocolprop (cvterm_id);
 
 CREATE INDEX nd_protocolprop_idx_nd_protocol_id ON nd_protocolprop (nd_protocol_id);
 
-CREATE UNIQUE INDEX nd_protocolprop_c1 ON nd_protocolprop (nd_protocol_id, cvterm_id, rank);
+CREATE INDEX nd_protocolprop_idx_type_id ON nd_protocolprop (type_id);
+
+CREATE UNIQUE INDEX nd_protocolprop_c1 ON nd_protocolprop (nd_protocol_id, type_id, rank);
 
 --
 -- Table: nd_reagent
@@ -2202,18 +2269,18 @@ CREATE INDEX nd_reagent_relationship_idx_type_id ON nd_reagent_relationship (typ
 CREATE TABLE nd_reagentprop (
   nd_reagentprop_id INTEGER PRIMARY KEY NOT NULL,
   nd_reagent_id integer NOT NULL,
-  cvterm_id integer NOT NULL,
-  value varchar(255),
+  type_id integer NOT NULL,
+  value text,
   rank integer NOT NULL DEFAULT 0,
-  FOREIGN KEY(cvterm_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE,
-  FOREIGN KEY(nd_reagent_id) REFERENCES nd_reagent(nd_reagent_id) ON DELETE CASCADE
+  FOREIGN KEY(nd_reagent_id) REFERENCES nd_reagent(nd_reagent_id) ON DELETE CASCADE,
+  FOREIGN KEY(type_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
 );
-
-CREATE INDEX nd_reagentprop_idx_cvterm_id ON nd_reagentprop (cvterm_id);
 
 CREATE INDEX nd_reagentprop_idx_nd_reagent_id ON nd_reagentprop (nd_reagent_id);
 
-CREATE UNIQUE INDEX nd_reagentprop_c1 ON nd_reagentprop (nd_reagent_id, cvterm_id, rank);
+CREATE INDEX nd_reagentprop_idx_type_id ON nd_reagentprop (type_id);
+
+CREATE UNIQUE INDEX nd_reagentprop_c1 ON nd_reagentprop (nd_reagent_id, type_id, rank);
 
 --
 -- Table: organism
@@ -2221,10 +2288,10 @@ CREATE UNIQUE INDEX nd_reagentprop_c1 ON nd_reagentprop (nd_reagent_id, cvterm_i
 
 CREATE TABLE organism (
   organism_id INTEGER PRIMARY KEY NOT NULL,
-  abbreviation character varying(255),
-  genus character varying(255) NOT NULL,
-  species character varying(255) NOT NULL,
-  common_name character varying(255),
+  abbreviation varchar(255),
+  genus varchar(255) NOT NULL,
+  species varchar(255) NOT NULL,
+  common_name varchar(255),
   comment text
 );
 
@@ -2302,6 +2369,7 @@ CREATE UNIQUE INDEX phendesc_c1 ON phendesc (genotype_id, environment_id, type_i
 CREATE TABLE phenotype (
   phenotype_id INTEGER PRIMARY KEY NOT NULL,
   uniquename text NOT NULL,
+  name text,
   observable_id integer,
   attr_id integer,
   value text,
@@ -2408,6 +2476,26 @@ CREATE INDEX phenotype_cvterm_idx_phenotype_id ON phenotype_cvterm (phenotype_id
 CREATE UNIQUE INDEX phenotype_cvterm_c1 ON phenotype_cvterm (phenotype_id, cvterm_id, rank);
 
 --
+-- Table: phenotypeprop
+--
+
+CREATE TABLE phenotypeprop (
+  phenotypeprop_id INTEGER PRIMARY KEY NOT NULL,
+  phenotype_id integer NOT NULL,
+  type_id integer NOT NULL,
+  value text,
+  rank integer NOT NULL DEFAULT 0,
+  FOREIGN KEY(phenotype_id) REFERENCES phenotype(phenotype_id) ON DELETE CASCADE,
+  FOREIGN KEY(type_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
+);
+
+CREATE INDEX phenotypeprop_idx_phenotype_id ON phenotypeprop (phenotype_id);
+
+CREATE INDEX phenotypeprop_idx_type_id ON phenotypeprop (type_id);
+
+CREATE UNIQUE INDEX phenotypeprop_c1 ON phenotypeprop (phenotype_id, type_id, rank);
+
+--
 -- Table: phenstatement
 --
 
@@ -2449,9 +2537,10 @@ CREATE TABLE phylonode (
   right_idx integer NOT NULL,
   type_id integer,
   feature_id integer,
-  label character varying(255),
+  label varchar(255),
   distance double precision,
   FOREIGN KEY(feature_id) REFERENCES feature(feature_id) ON DELETE CASCADE,
+  FOREIGN KEY(phylotree_id) REFERENCES phylonode(phylotree_id) ON DELETE CASCADE,
   FOREIGN KEY(parent_phylonode_id) REFERENCES phylonode(phylonode_id) ON DELETE CASCADE,
   FOREIGN KEY(phylotree_id) REFERENCES phylotree(phylotree_id) ON DELETE CASCADE,
   FOREIGN KEY(type_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
@@ -2459,9 +2548,9 @@ CREATE TABLE phylonode (
 
 CREATE INDEX phylonode_idx_feature_id ON phylonode (feature_id);
 
-CREATE INDEX phylonode_idx_parent_phylonode_id ON phylonode (parent_phylonode_id);
-
 CREATE INDEX phylonode_idx_phylotree_id ON phylonode (phylotree_id);
+
+CREATE INDEX phylonode_idx_parent_phylonode_id ON phylonode (parent_phylonode_id);
 
 CREATE INDEX phylonode_idx_type_id ON phylonode (type_id);
 
@@ -2577,7 +2666,7 @@ CREATE UNIQUE INDEX phylonodeprop_phylonode_id_key ON phylonodeprop (phylonode_i
 CREATE TABLE phylotree (
   phylotree_id INTEGER PRIMARY KEY NOT NULL,
   dbxref_id integer NOT NULL,
-  name character varying(255),
+  name varchar(255),
   type_id integer,
   analysis_id integer,
   comment text,
@@ -2616,8 +2705,8 @@ CREATE UNIQUE INDEX phylotree_pub_phylotree_id_key ON phylotree_pub (phylotree_i
 
 CREATE TABLE project (
   project_id INTEGER PRIMARY KEY NOT NULL,
-  name character varying(255) NOT NULL,
-  description character varying(255) NOT NULL
+  name varchar(255) NOT NULL,
+  description varchar(255) NOT NULL
 );
 
 CREATE UNIQUE INDEX project_c1 ON project (name);
@@ -2687,18 +2776,18 @@ CREATE UNIQUE INDEX project_relationship_c1 ON project_relationship (subject_pro
 CREATE TABLE projectprop (
   projectprop_id INTEGER PRIMARY KEY NOT NULL,
   project_id integer NOT NULL,
-  cvterm_id integer NOT NULL,
+  type_id integer NOT NULL,
   value text,
   rank integer NOT NULL DEFAULT 0,
-  FOREIGN KEY(cvterm_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE,
-  FOREIGN KEY(project_id) REFERENCES project(project_id) ON DELETE CASCADE
+  FOREIGN KEY(project_id) REFERENCES project(project_id) ON DELETE CASCADE,
+  FOREIGN KEY(type_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
 );
-
-CREATE INDEX projectprop_idx_cvterm_id ON projectprop (cvterm_id);
 
 CREATE INDEX projectprop_idx_project_id ON projectprop (project_id);
 
-CREATE UNIQUE INDEX projectprop_c1 ON projectprop (project_id, cvterm_id, rank);
+CREATE INDEX projectprop_idx_type_id ON projectprop (type_id);
+
+CREATE UNIQUE INDEX projectprop_c1 ON projectprop (project_id, type_id, rank);
 
 --
 -- Table: protocol
@@ -2758,17 +2847,17 @@ CREATE TABLE pub (
   pub_id INTEGER PRIMARY KEY NOT NULL,
   title text,
   volumetitle text,
-  volume character varying(255),
-  series_name character varying(255),
-  issue character varying(255),
-  pyear character varying(255),
-  pages character varying(255),
-  miniref character varying(255),
+  volume varchar(255),
+  series_name varchar(255),
+  issue varchar(255),
+  pyear varchar(255),
+  pages varchar(255),
+  miniref varchar(255),
   uniquename text NOT NULL,
   type_id integer NOT NULL,
   is_obsolete boolean DEFAULT false,
-  publisher character varying(255),
-  pubplace character varying(255),
+  publisher varchar(255),
+  pubplace varchar(255),
   FOREIGN KEY(type_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
 );
 
@@ -2826,9 +2915,9 @@ CREATE TABLE pubauthor (
   pub_id integer NOT NULL,
   rank integer NOT NULL,
   editor boolean DEFAULT false,
-  surname character varying(100) NOT NULL,
-  givennames character varying(100),
-  suffix character varying(100),
+  surname varchar(100) NOT NULL,
+  givennames varchar(100),
+  suffix varchar(100),
   FOREIGN KEY(pub_id) REFERENCES pub(pub_id) ON DELETE CASCADE
 );
 
@@ -2866,7 +2955,7 @@ CREATE TABLE quantification (
   operator_id integer,
   protocol_id integer,
   analysis_id integer NOT NULL,
-  quantificationdate timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+  quantificationdate timestamp DEFAULT current_timestamp,
   name text,
   uri text,
   FOREIGN KEY(acquisition_id) REFERENCES acquisition(acquisition_id) ON DELETE CASCADE,
@@ -2934,8 +3023,8 @@ CREATE UNIQUE INDEX quantificationprop_c1 ON quantificationprop (quantification_
 CREATE TABLE stock (
   stock_id INTEGER PRIMARY KEY NOT NULL,
   dbxref_id integer,
-  organism_id integer NOT NULL,
-  name character varying(255),
+  organism_id integer,
+  name varchar(255),
   uniquename text NOT NULL,
   description text,
   type_id integer NOT NULL,
@@ -2962,6 +3051,8 @@ CREATE TABLE stock_cvterm (
   stock_id integer NOT NULL,
   cvterm_id integer NOT NULL,
   pub_id integer NOT NULL,
+  is_not boolean NOT NULL DEFAULT false,
+  rank integer NOT NULL DEFAULT 0,
   FOREIGN KEY(cvterm_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE,
   FOREIGN KEY(pub_id) REFERENCES pub(pub_id) ON DELETE CASCADE,
   FOREIGN KEY(stock_id) REFERENCES stock(stock_id) ON DELETE CASCADE
@@ -2973,7 +3064,27 @@ CREATE INDEX stock_cvterm_idx_pub_id ON stock_cvterm (pub_id);
 
 CREATE INDEX stock_cvterm_idx_stock_id ON stock_cvterm (stock_id);
 
-CREATE UNIQUE INDEX stock_cvterm_c1 ON stock_cvterm (stock_id, cvterm_id, pub_id);
+CREATE UNIQUE INDEX stock_cvterm_c1 ON stock_cvterm (stock_id, cvterm_id, pub_id, rank);
+
+--
+-- Table: stock_cvtermprop
+--
+
+CREATE TABLE stock_cvtermprop (
+  stock_cvtermprop_id INTEGER PRIMARY KEY NOT NULL,
+  stock_cvterm_id integer NOT NULL,
+  type_id integer NOT NULL,
+  value text,
+  rank integer NOT NULL DEFAULT 0,
+  FOREIGN KEY(stock_cvterm_id) REFERENCES stock_cvterm(stock_cvterm_id) ON DELETE CASCADE,
+  FOREIGN KEY(type_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
+);
+
+CREATE INDEX stock_cvtermprop_idx_stock_cvterm_id ON stock_cvtermprop (stock_cvterm_id);
+
+CREATE INDEX stock_cvtermprop_idx_type_id ON stock_cvtermprop (type_id);
+
+CREATE UNIQUE INDEX stock_cvtermprop_c1 ON stock_cvtermprop (stock_cvterm_id, type_id, rank);
 
 --
 -- Table: stock_dbxref
@@ -2993,6 +3104,26 @@ CREATE INDEX stock_dbxref_idx_dbxref_id ON stock_dbxref (dbxref_id);
 CREATE INDEX stock_dbxref_idx_stock_id ON stock_dbxref (stock_id);
 
 CREATE UNIQUE INDEX stock_dbxref_c1 ON stock_dbxref (stock_id, dbxref_id);
+
+--
+-- Table: stock_dbxrefprop
+--
+
+CREATE TABLE stock_dbxrefprop (
+  stock_dbxrefprop_id INTEGER PRIMARY KEY NOT NULL,
+  stock_dbxref_id integer NOT NULL,
+  type_id integer NOT NULL,
+  value text,
+  rank integer NOT NULL DEFAULT 0,
+  FOREIGN KEY(stock_dbxref_id) REFERENCES stock_dbxref(stock_dbxref_id) ON DELETE CASCADE,
+  FOREIGN KEY(type_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
+);
+
+CREATE INDEX stock_dbxrefprop_idx_stock_dbxref_id ON stock_dbxrefprop (stock_dbxref_id);
+
+CREATE INDEX stock_dbxrefprop_idx_type_id ON stock_dbxrefprop (type_id);
+
+CREATE UNIQUE INDEX stock_dbxrefprop_c1 ON stock_dbxrefprop (stock_dbxref_id, type_id, rank);
 
 --
 -- Table: stock_genotype
@@ -3060,16 +3191,19 @@ CREATE UNIQUE INDEX stock_relationship_c1 ON stock_relationship (subject_id, obj
 
 CREATE TABLE stock_relationship_cvterm (
   stock_relationship_cvterm_id INTEGER PRIMARY KEY NOT NULL,
-  stock_relatiohship_id integer NOT NULL,
+  stock_relationship_id integer NOT NULL,
   cvterm_id integer NOT NULL,
   pub_id integer,
   FOREIGN KEY(cvterm_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE,
-  FOREIGN KEY(pub_id) REFERENCES pub(pub_id) ON DELETE CASCADE
+  FOREIGN KEY(pub_id) REFERENCES pub(pub_id) ON DELETE CASCADE,
+  FOREIGN KEY(stock_relationship_id) REFERENCES stock_relationship(stock_relationship_id) ON DELETE CASCADE
 );
 
 CREATE INDEX stock_relationship_cvterm_idx_cvterm_id ON stock_relationship_cvterm (cvterm_id);
 
 CREATE INDEX stock_relationship_cvterm_idx_pub_id ON stock_relationship_cvterm (pub_id);
+
+CREATE INDEX stock_relationship_cvterm_idx_stock_relationship_id ON stock_relationship_cvterm (stock_relationship_id);
 
 --
 -- Table: stock_relationship_pub
@@ -3097,7 +3231,7 @@ CREATE TABLE stockcollection (
   stockcollection_id INTEGER PRIMARY KEY NOT NULL,
   type_id integer NOT NULL,
   contact_id integer,
-  name character varying(255),
+  name varchar(255),
   uniquename text NOT NULL,
   FOREIGN KEY(contact_id) REFERENCES contact(contact_id) ON DELETE CASCADE,
   FOREIGN KEY(type_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
@@ -3345,9 +3479,9 @@ CREATE UNIQUE INDEX studyprop_feature_studyprop_id_key ON studyprop_feature (stu
 
 CREATE TABLE synonym (
   synonym_id INTEGER PRIMARY KEY NOT NULL,
-  name character varying(255) NOT NULL,
+  name varchar(255) NOT NULL,
   type_id integer NOT NULL,
-  synonym_sgml character varying(255) NOT NULL,
+  synonym_sgml varchar(255) NOT NULL,
   FOREIGN KEY(type_id) REFERENCES cvterm(cvterm_id) ON DELETE CASCADE
 );
 
@@ -3361,13 +3495,13 @@ CREATE UNIQUE INDEX synonym_c1 ON synonym (name, type_id);
 
 CREATE TABLE tableinfo (
   tableinfo_id INTEGER PRIMARY KEY NOT NULL,
-  name character varying(30) NOT NULL,
-  primary_key_column character varying(30),
+  name varchar(30) NOT NULL,
+  primary_key_column varchar(30),
   is_view integer NOT NULL DEFAULT 0,
   view_on_table_id integer,
   superclass_table_id integer,
   is_updateable integer NOT NULL DEFAULT 1,
-  modification_date date NOT NULL DEFAULT CURRENT_TIMESTAMP
+  modification_date date NOT NULL DEFAULT current_timestamp
 );
 
 CREATE UNIQUE INDEX tableinfo_c1 ON tableinfo (name);
@@ -3413,3 +3547,5 @@ CREATE INDEX featureprop_idx_type_id ON featureprop (type_id);
 CREATE INDEX featureprop_idx_feature_id ON featureprop (feature_id);
 
 CREATE UNIQUE INDEX featureprop_c1 ON featureprop (feature_id, type_id, rank);
+
+COMMIT;
