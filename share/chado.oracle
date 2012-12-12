@@ -2752,783 +2752,783 @@ CREATE TABLE featureprop (
   CONSTRAINT featureprop_c1 UNIQUE (feature_id, type_id, rank)
 );
 
-ALTER TABLE acquisition ADD CONSTRAINT acquisition_assay_id_fk FOREIGN KEY (assay_id) REFERENCES assay (assay_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE acquisition ADD CONSTRAINT acquisition_assay_id_fk FOREIGN KEY (assay_id) REFERENCES assay (assay_id)  ON DELETE CASCADE;
 
-ALTER TABLE acquisition ADD CONSTRAINT acquisition_channel_id_fk FOREIGN KEY (channel_id) REFERENCES channel (channel_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE acquisition ADD CONSTRAINT acquisition_channel_id_fk FOREIGN KEY (channel_id) REFERENCES channel (channel_id)  ON DELETE CASCADE;
 
-ALTER TABLE acquisition ADD CONSTRAINT acquisition_protocol_id_fk FOREIGN KEY (protocol_id) REFERENCES protocol (protocol_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE acquisition ADD CONSTRAINT acquisition_protocol_id_fk FOREIGN KEY (protocol_id) REFERENCES protocol (protocol_id)  ON DELETE CASCADE;
 
-ALTER TABLE acquisition_relationship ADD CONSTRAINT acquisition_relationship_objec FOREIGN KEY (object_id) REFERENCES acquisition (acquisition_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE acquisition_relationship ADD CONSTRAINT acquisition_relationship_objec FOREIGN KEY (object_id) REFERENCES acquisition (acquisition_id)  ON DELETE CASCADE;
 
-ALTER TABLE acquisition_relationship ADD CONSTRAINT acquisition_relationship_subje FOREIGN KEY (subject_id) REFERENCES acquisition (acquisition_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE acquisition_relationship ADD CONSTRAINT acquisition_relationship_subje FOREIGN KEY (subject_id) REFERENCES acquisition (acquisition_id)  ON DELETE CASCADE;
 
-ALTER TABLE acquisition_relationship ADD CONSTRAINT acquisition_relationship_type_ FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE acquisition_relationship ADD CONSTRAINT acquisition_relationship_type_ FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE acquisitionprop ADD CONSTRAINT acquisitionprop_acquisition_id FOREIGN KEY (acquisition_id) REFERENCES acquisition (acquisition_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE acquisitionprop ADD CONSTRAINT acquisitionprop_acquisition_id FOREIGN KEY (acquisition_id) REFERENCES acquisition (acquisition_id)  ON DELETE CASCADE;
 
-ALTER TABLE acquisitionprop ADD CONSTRAINT acquisitionprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE acquisitionprop ADD CONSTRAINT acquisitionprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE analysisfeature ADD CONSTRAINT analysisfeature_analysis_id_fk FOREIGN KEY (analysis_id) REFERENCES analysis (analysis_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE analysisfeature ADD CONSTRAINT analysisfeature_analysis_id_fk FOREIGN KEY (analysis_id) REFERENCES analysis (analysis_id)  ON DELETE CASCADE;
 
-ALTER TABLE analysisfeature ADD CONSTRAINT analysisfeature_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE analysisfeature ADD CONSTRAINT analysisfeature_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE analysisfeatureprop ADD CONSTRAINT analysisfeatureprop_analysisfe FOREIGN KEY (analysisfeature_id) REFERENCES analysisfeature (analysisfeature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE analysisfeatureprop ADD CONSTRAINT analysisfeatureprop_analysisfe FOREIGN KEY (analysisfeature_id) REFERENCES analysisfeature (analysisfeature_id)  ON DELETE CASCADE;
 
-ALTER TABLE analysisfeatureprop ADD CONSTRAINT analysisfeatureprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE analysisfeatureprop ADD CONSTRAINT analysisfeatureprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE analysisprop ADD CONSTRAINT analysisprop_analysis_id_fk FOREIGN KEY (analysis_id) REFERENCES analysis (analysis_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE analysisprop ADD CONSTRAINT analysisprop_analysis_id_fk FOREIGN KEY (analysis_id) REFERENCES analysis (analysis_id)  ON DELETE CASCADE;
 
-ALTER TABLE analysisprop ADD CONSTRAINT analysisprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE analysisprop ADD CONSTRAINT analysisprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE arraydesign ADD CONSTRAINT arraydesign_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE arraydesign ADD CONSTRAINT arraydesign_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE arraydesign ADD CONSTRAINT arraydesign_manufacturer_id_fk FOREIGN KEY (manufacturer_id) REFERENCES contact (contact_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE arraydesign ADD CONSTRAINT arraydesign_manufacturer_id_fk FOREIGN KEY (manufacturer_id) REFERENCES contact (contact_id)  ON DELETE CASCADE;
 
-ALTER TABLE arraydesign ADD CONSTRAINT arraydesign_platformtype_id_fk FOREIGN KEY (platformtype_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE arraydesign ADD CONSTRAINT arraydesign_platformtype_id_fk FOREIGN KEY (platformtype_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE arraydesign ADD CONSTRAINT arraydesign_protocol_id_fk FOREIGN KEY (protocol_id) REFERENCES protocol (protocol_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE arraydesign ADD CONSTRAINT arraydesign_protocol_id_fk FOREIGN KEY (protocol_id) REFERENCES protocol (protocol_id)  ON DELETE CASCADE;
 
-ALTER TABLE arraydesign ADD CONSTRAINT arraydesign_substratetype_id_f FOREIGN KEY (substratetype_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE arraydesign ADD CONSTRAINT arraydesign_substratetype_id_f FOREIGN KEY (substratetype_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE arraydesignprop ADD CONSTRAINT arraydesignprop_arraydesign_id FOREIGN KEY (arraydesign_id) REFERENCES arraydesign (arraydesign_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE arraydesignprop ADD CONSTRAINT arraydesignprop_arraydesign_id FOREIGN KEY (arraydesign_id) REFERENCES arraydesign (arraydesign_id)  ON DELETE CASCADE;
 
-ALTER TABLE arraydesignprop ADD CONSTRAINT arraydesignprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE arraydesignprop ADD CONSTRAINT arraydesignprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE assay ADD CONSTRAINT assay_arraydesign_id_fk FOREIGN KEY (arraydesign_id) REFERENCES arraydesign (arraydesign_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE assay ADD CONSTRAINT assay_arraydesign_id_fk FOREIGN KEY (arraydesign_id) REFERENCES arraydesign (arraydesign_id)  ON DELETE CASCADE;
 
-ALTER TABLE assay ADD CONSTRAINT assay_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE assay ADD CONSTRAINT assay_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE assay ADD CONSTRAINT assay_operator_id_fk FOREIGN KEY (operator_id) REFERENCES contact (contact_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE assay ADD CONSTRAINT assay_operator_id_fk FOREIGN KEY (operator_id) REFERENCES contact (contact_id)  ON DELETE CASCADE;
 
-ALTER TABLE assay ADD CONSTRAINT assay_protocol_id_fk FOREIGN KEY (protocol_id) REFERENCES protocol (protocol_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE assay ADD CONSTRAINT assay_protocol_id_fk FOREIGN KEY (protocol_id) REFERENCES protocol (protocol_id)  ON DELETE CASCADE;
 
-ALTER TABLE assay_biomaterial ADD CONSTRAINT assay_biomaterial_assay_id_fk FOREIGN KEY (assay_id) REFERENCES assay (assay_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE assay_biomaterial ADD CONSTRAINT assay_biomaterial_assay_id_fk FOREIGN KEY (assay_id) REFERENCES assay (assay_id)  ON DELETE CASCADE;
 
-ALTER TABLE assay_biomaterial ADD CONSTRAINT assay_biomaterial_biomaterial_ FOREIGN KEY (biomaterial_id) REFERENCES biomaterial (biomaterial_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE assay_biomaterial ADD CONSTRAINT assay_biomaterial_biomaterial_ FOREIGN KEY (biomaterial_id) REFERENCES biomaterial (biomaterial_id)  ON DELETE CASCADE;
 
-ALTER TABLE assay_biomaterial ADD CONSTRAINT assay_biomaterial_channel_id_f FOREIGN KEY (channel_id) REFERENCES channel (channel_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE assay_biomaterial ADD CONSTRAINT assay_biomaterial_channel_id_f FOREIGN KEY (channel_id) REFERENCES channel (channel_id)  ON DELETE CASCADE;
 
-ALTER TABLE assay_project ADD CONSTRAINT assay_project_assay_id_fk FOREIGN KEY (assay_id) REFERENCES assay (assay_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE assay_project ADD CONSTRAINT assay_project_assay_id_fk FOREIGN KEY (assay_id) REFERENCES assay (assay_id)  ON DELETE CASCADE;
 
-ALTER TABLE assay_project ADD CONSTRAINT assay_project_project_id_fk FOREIGN KEY (project_id) REFERENCES project (project_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE assay_project ADD CONSTRAINT assay_project_project_id_fk FOREIGN KEY (project_id) REFERENCES project (project_id)  ON DELETE CASCADE;
 
-ALTER TABLE assayprop ADD CONSTRAINT assayprop_assay_id_fk FOREIGN KEY (assay_id) REFERENCES assay (assay_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE assayprop ADD CONSTRAINT assayprop_assay_id_fk FOREIGN KEY (assay_id) REFERENCES assay (assay_id)  ON DELETE CASCADE;
 
-ALTER TABLE assayprop ADD CONSTRAINT assayprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE assayprop ADD CONSTRAINT assayprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE biomaterial ADD CONSTRAINT biomaterial_biosourceprovider_ FOREIGN KEY (biosourceprovider_id) REFERENCES contact (contact_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE biomaterial ADD CONSTRAINT biomaterial_biosourceprovider_ FOREIGN KEY (biosourceprovider_id) REFERENCES contact (contact_id)  ON DELETE CASCADE;
 
-ALTER TABLE biomaterial ADD CONSTRAINT biomaterial_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE biomaterial ADD CONSTRAINT biomaterial_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE biomaterial ADD CONSTRAINT biomaterial_taxon_id_fk FOREIGN KEY (taxon_id) REFERENCES organism (organism_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE biomaterial ADD CONSTRAINT biomaterial_taxon_id_fk FOREIGN KEY (taxon_id) REFERENCES organism (organism_id)  ON DELETE CASCADE;
 
-ALTER TABLE biomaterial_dbxref ADD CONSTRAINT biomaterial_dbxref_biomaterial FOREIGN KEY (biomaterial_id) REFERENCES biomaterial (biomaterial_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE biomaterial_dbxref ADD CONSTRAINT biomaterial_dbxref_biomaterial FOREIGN KEY (biomaterial_id) REFERENCES biomaterial (biomaterial_id)  ON DELETE CASCADE;
 
-ALTER TABLE biomaterial_dbxref ADD CONSTRAINT biomaterial_dbxref_dbxref_id_f FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE biomaterial_dbxref ADD CONSTRAINT biomaterial_dbxref_dbxref_id_f FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE biomaterial_relationship ADD CONSTRAINT biomaterial_relationship_objec FOREIGN KEY (object_id) REFERENCES biomaterial (biomaterial_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE biomaterial_relationship ADD CONSTRAINT biomaterial_relationship_objec FOREIGN KEY (object_id) REFERENCES biomaterial (biomaterial_id)  ON DELETE CASCADE;
 
-ALTER TABLE biomaterial_relationship ADD CONSTRAINT biomaterial_relationship_subje FOREIGN KEY (subject_id) REFERENCES biomaterial (biomaterial_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE biomaterial_relationship ADD CONSTRAINT biomaterial_relationship_subje FOREIGN KEY (subject_id) REFERENCES biomaterial (biomaterial_id)  ON DELETE CASCADE;
 
-ALTER TABLE biomaterial_relationship ADD CONSTRAINT biomaterial_relationship_type_ FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE biomaterial_relationship ADD CONSTRAINT biomaterial_relationship_type_ FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE biomaterial_treatment ADD CONSTRAINT biomaterial_treatment_biomater FOREIGN KEY (biomaterial_id) REFERENCES biomaterial (biomaterial_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE biomaterial_treatment ADD CONSTRAINT biomaterial_treatment_biomater FOREIGN KEY (biomaterial_id) REFERENCES biomaterial (biomaterial_id)  ON DELETE CASCADE;
 
-ALTER TABLE biomaterial_treatment ADD CONSTRAINT biomaterial_treatment_treatmen FOREIGN KEY (treatment_id) REFERENCES treatment (treatment_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE biomaterial_treatment ADD CONSTRAINT biomaterial_treatment_treatmen FOREIGN KEY (treatment_id) REFERENCES treatment (treatment_id)  ON DELETE CASCADE;
 
-ALTER TABLE biomaterial_treatment ADD CONSTRAINT biomaterial_treatment_unittype FOREIGN KEY (unittype_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE biomaterial_treatment ADD CONSTRAINT biomaterial_treatment_unittype FOREIGN KEY (unittype_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE biomaterialprop ADD CONSTRAINT biomaterialprop_biomaterial_id FOREIGN KEY (biomaterial_id) REFERENCES biomaterial (biomaterial_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE biomaterialprop ADD CONSTRAINT biomaterialprop_biomaterial_id FOREIGN KEY (biomaterial_id) REFERENCES biomaterial (biomaterial_id)  ON DELETE CASCADE;
 
-ALTER TABLE biomaterialprop ADD CONSTRAINT biomaterialprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE biomaterialprop ADD CONSTRAINT biomaterialprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_line ADD CONSTRAINT cell_line_organism_id_fk FOREIGN KEY (organism_id) REFERENCES organism (organism_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_line ADD CONSTRAINT cell_line_organism_id_fk FOREIGN KEY (organism_id) REFERENCES organism (organism_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_line_cvterm ADD CONSTRAINT cell_line_cvterm_cell_line_id_ FOREIGN KEY (cell_line_id) REFERENCES cell_line (cell_line_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_line_cvterm ADD CONSTRAINT cell_line_cvterm_cell_line_id_ FOREIGN KEY (cell_line_id) REFERENCES cell_line (cell_line_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_line_cvterm ADD CONSTRAINT cell_line_cvterm_cvterm_id_fk FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_line_cvterm ADD CONSTRAINT cell_line_cvterm_cvterm_id_fk FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_line_cvterm ADD CONSTRAINT cell_line_cvterm_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_line_cvterm ADD CONSTRAINT cell_line_cvterm_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_line_cvtermprop ADD CONSTRAINT cell_line_cvtermprop_cell_line FOREIGN KEY (cell_line_cvterm_id) REFERENCES cell_line_cvterm (cell_line_cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_line_cvtermprop ADD CONSTRAINT cell_line_cvtermprop_cell_line FOREIGN KEY (cell_line_cvterm_id) REFERENCES cell_line_cvterm (cell_line_cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_line_cvtermprop ADD CONSTRAINT cell_line_cvtermprop_type_id_f FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_line_cvtermprop ADD CONSTRAINT cell_line_cvtermprop_type_id_f FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_line_dbxref ADD CONSTRAINT cell_line_dbxref_cell_line_id_ FOREIGN KEY (cell_line_id) REFERENCES cell_line (cell_line_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_line_dbxref ADD CONSTRAINT cell_line_dbxref_cell_line_id_ FOREIGN KEY (cell_line_id) REFERENCES cell_line (cell_line_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_line_dbxref ADD CONSTRAINT cell_line_dbxref_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_line_dbxref ADD CONSTRAINT cell_line_dbxref_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_line_feature ADD CONSTRAINT cell_line_feature_cell_line_id FOREIGN KEY (cell_line_id) REFERENCES cell_line (cell_line_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_line_feature ADD CONSTRAINT cell_line_feature_cell_line_id FOREIGN KEY (cell_line_id) REFERENCES cell_line (cell_line_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_line_feature ADD CONSTRAINT cell_line_feature_feature_id_f FOREIGN KEY (feature_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_line_feature ADD CONSTRAINT cell_line_feature_feature_id_f FOREIGN KEY (feature_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_line_feature ADD CONSTRAINT cell_line_feature_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_line_feature ADD CONSTRAINT cell_line_feature_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_line_library ADD CONSTRAINT cell_line_library_cell_line_id FOREIGN KEY (cell_line_id) REFERENCES cell_line (cell_line_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_line_library ADD CONSTRAINT cell_line_library_cell_line_id FOREIGN KEY (cell_line_id) REFERENCES cell_line (cell_line_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_line_library ADD CONSTRAINT cell_line_library_library_id_f FOREIGN KEY (library_id) REFERENCES library (library_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_line_library ADD CONSTRAINT cell_line_library_library_id_f FOREIGN KEY (library_id) REFERENCES library (library_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_line_library ADD CONSTRAINT cell_line_library_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_line_library ADD CONSTRAINT cell_line_library_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_line_pub ADD CONSTRAINT cell_line_pub_cell_line_id_fk FOREIGN KEY (cell_line_id) REFERENCES cell_line (cell_line_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_line_pub ADD CONSTRAINT cell_line_pub_cell_line_id_fk FOREIGN KEY (cell_line_id) REFERENCES cell_line (cell_line_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_line_pub ADD CONSTRAINT cell_line_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_line_pub ADD CONSTRAINT cell_line_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_line_relationship ADD CONSTRAINT cell_line_relationship_object_ FOREIGN KEY (object_id) REFERENCES cell_line (cell_line_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_line_relationship ADD CONSTRAINT cell_line_relationship_object_ FOREIGN KEY (object_id) REFERENCES cell_line (cell_line_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_line_relationship ADD CONSTRAINT cell_line_relationship_subject FOREIGN KEY (subject_id) REFERENCES cell_line (cell_line_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_line_relationship ADD CONSTRAINT cell_line_relationship_subject FOREIGN KEY (subject_id) REFERENCES cell_line (cell_line_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_line_relationship ADD CONSTRAINT cell_line_relationship_type_id FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_line_relationship ADD CONSTRAINT cell_line_relationship_type_id FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_line_synonym ADD CONSTRAINT cell_line_synonym_cell_line_id FOREIGN KEY (cell_line_id) REFERENCES cell_line (cell_line_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_line_synonym ADD CONSTRAINT cell_line_synonym_cell_line_id FOREIGN KEY (cell_line_id) REFERENCES cell_line (cell_line_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_line_synonym ADD CONSTRAINT cell_line_synonym_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_line_synonym ADD CONSTRAINT cell_line_synonym_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_line_synonym ADD CONSTRAINT cell_line_synonym_synonym_id_f FOREIGN KEY (synonym_id) REFERENCES synonym_ (synonym_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_line_synonym ADD CONSTRAINT cell_line_synonym_synonym_id_f FOREIGN KEY (synonym_id) REFERENCES synonym_ (synonym_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_lineprop ADD CONSTRAINT cell_lineprop_cell_line_id_fk FOREIGN KEY (cell_line_id) REFERENCES cell_line (cell_line_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_lineprop ADD CONSTRAINT cell_lineprop_cell_line_id_fk FOREIGN KEY (cell_line_id) REFERENCES cell_line (cell_line_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_lineprop ADD CONSTRAINT cell_lineprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_lineprop ADD CONSTRAINT cell_lineprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_lineprop_pub ADD CONSTRAINT cell_lineprop_pub_cell_linepro FOREIGN KEY (cell_lineprop_id) REFERENCES cell_lineprop (cell_lineprop_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_lineprop_pub ADD CONSTRAINT cell_lineprop_pub_cell_linepro FOREIGN KEY (cell_lineprop_id) REFERENCES cell_lineprop (cell_lineprop_id)  ON DELETE CASCADE;
 
-ALTER TABLE cell_lineprop_pub ADD CONSTRAINT cell_lineprop_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cell_lineprop_pub ADD CONSTRAINT cell_lineprop_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE chadoprop ADD CONSTRAINT chadoprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE chadoprop ADD CONSTRAINT chadoprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE contact ADD CONSTRAINT contact_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE contact ADD CONSTRAINT contact_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE contact_relationship ADD CONSTRAINT contact_relationship_object_id FOREIGN KEY (object_id) REFERENCES contact (contact_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE contact_relationship ADD CONSTRAINT contact_relationship_object_id FOREIGN KEY (object_id) REFERENCES contact (contact_id)  ON DELETE CASCADE;
 
-ALTER TABLE contact_relationship ADD CONSTRAINT contact_relationship_subject_i FOREIGN KEY (subject_id) REFERENCES contact (contact_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE contact_relationship ADD CONSTRAINT contact_relationship_subject_i FOREIGN KEY (subject_id) REFERENCES contact (contact_id)  ON DELETE CASCADE;
 
-ALTER TABLE contact_relationship ADD CONSTRAINT contact_relationship_type_id_f FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE contact_relationship ADD CONSTRAINT contact_relationship_type_id_f FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE control ADD CONSTRAINT control_assay_id_fk FOREIGN KEY (assay_id) REFERENCES assay (assay_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE control ADD CONSTRAINT control_assay_id_fk FOREIGN KEY (assay_id) REFERENCES assay (assay_id)  ON DELETE CASCADE;
 
-ALTER TABLE control ADD CONSTRAINT control_tableinfo_id_fk FOREIGN KEY (tableinfo_id) REFERENCES tableinfo (tableinfo_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE control ADD CONSTRAINT control_tableinfo_id_fk FOREIGN KEY (tableinfo_id) REFERENCES tableinfo (tableinfo_id)  ON DELETE CASCADE;
 
-ALTER TABLE control ADD CONSTRAINT control_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE control ADD CONSTRAINT control_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE cvprop ADD CONSTRAINT cvprop_cv_id_fk FOREIGN KEY (cv_id) REFERENCES cv (cv_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cvprop ADD CONSTRAINT cvprop_cv_id_fk FOREIGN KEY (cv_id) REFERENCES cv (cv_id)  ON DELETE CASCADE;
 
-ALTER TABLE cvprop ADD CONSTRAINT cvprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cvprop ADD CONSTRAINT cvprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE cvterm ADD CONSTRAINT cvterm_cv_id_fk FOREIGN KEY (cv_id) REFERENCES cv (cv_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cvterm ADD CONSTRAINT cvterm_cv_id_fk FOREIGN KEY (cv_id) REFERENCES cv (cv_id)  ON DELETE CASCADE;
 
-ALTER TABLE cvterm ADD CONSTRAINT cvterm_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cvterm ADD CONSTRAINT cvterm_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE cvterm_dbxref ADD CONSTRAINT cvterm_dbxref_cvterm_id_fk FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cvterm_dbxref ADD CONSTRAINT cvterm_dbxref_cvterm_id_fk FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE cvterm_dbxref ADD CONSTRAINT cvterm_dbxref_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cvterm_dbxref ADD CONSTRAINT cvterm_dbxref_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE cvterm_relationship ADD CONSTRAINT cvterm_relationship_object_id_ FOREIGN KEY (object_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cvterm_relationship ADD CONSTRAINT cvterm_relationship_object_id_ FOREIGN KEY (object_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE cvterm_relationship ADD CONSTRAINT cvterm_relationship_subject_id FOREIGN KEY (subject_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cvterm_relationship ADD CONSTRAINT cvterm_relationship_subject_id FOREIGN KEY (subject_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE cvterm_relationship ADD CONSTRAINT cvterm_relationship_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cvterm_relationship ADD CONSTRAINT cvterm_relationship_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE cvtermpath ADD CONSTRAINT cvtermpath_cv_id_fk FOREIGN KEY (cv_id) REFERENCES cv (cv_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cvtermpath ADD CONSTRAINT cvtermpath_cv_id_fk FOREIGN KEY (cv_id) REFERENCES cv (cv_id)  ON DELETE CASCADE;
 
-ALTER TABLE cvtermpath ADD CONSTRAINT cvtermpath_object_id_fk FOREIGN KEY (object_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cvtermpath ADD CONSTRAINT cvtermpath_object_id_fk FOREIGN KEY (object_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE cvtermpath ADD CONSTRAINT cvtermpath_subject_id_fk FOREIGN KEY (subject_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cvtermpath ADD CONSTRAINT cvtermpath_subject_id_fk FOREIGN KEY (subject_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE cvtermpath ADD CONSTRAINT cvtermpath_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cvtermpath ADD CONSTRAINT cvtermpath_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE cvtermprop ADD CONSTRAINT cvtermprop_cvterm_id_fk FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cvtermprop ADD CONSTRAINT cvtermprop_cvterm_id_fk FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE cvtermprop ADD CONSTRAINT cvtermprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cvtermprop ADD CONSTRAINT cvtermprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE cvtermsynonym ADD CONSTRAINT cvtermsynonym_cvterm_id_fk FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cvtermsynonym ADD CONSTRAINT cvtermsynonym_cvterm_id_fk FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE cvtermsynonym ADD CONSTRAINT cvtermsynonym_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE cvtermsynonym ADD CONSTRAINT cvtermsynonym_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE dbxref ADD CONSTRAINT dbxref_db_id_fk FOREIGN KEY (db_id) REFERENCES db (db_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE dbxref ADD CONSTRAINT dbxref_db_id_fk FOREIGN KEY (db_id) REFERENCES db (db_id)  ON DELETE CASCADE;
 
-ALTER TABLE dbxrefprop ADD CONSTRAINT dbxrefprop_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE dbxrefprop ADD CONSTRAINT dbxrefprop_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE dbxrefprop ADD CONSTRAINT dbxrefprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE dbxrefprop ADD CONSTRAINT dbxrefprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE element ADD CONSTRAINT element_arraydesign_id_fk FOREIGN KEY (arraydesign_id) REFERENCES arraydesign (arraydesign_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE element ADD CONSTRAINT element_arraydesign_id_fk FOREIGN KEY (arraydesign_id) REFERENCES arraydesign (arraydesign_id)  ON DELETE CASCADE;
 
-ALTER TABLE element ADD CONSTRAINT element_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE element ADD CONSTRAINT element_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE element ADD CONSTRAINT element_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE element ADD CONSTRAINT element_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE element ADD CONSTRAINT element_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE element ADD CONSTRAINT element_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE element_relationship ADD CONSTRAINT element_relationship_object_id FOREIGN KEY (object_id) REFERENCES element (element_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE element_relationship ADD CONSTRAINT element_relationship_object_id FOREIGN KEY (object_id) REFERENCES element (element_id)  ON DELETE CASCADE;
 
-ALTER TABLE element_relationship ADD CONSTRAINT element_relationship_subject_i FOREIGN KEY (subject_id) REFERENCES element (element_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE element_relationship ADD CONSTRAINT element_relationship_subject_i FOREIGN KEY (subject_id) REFERENCES element (element_id)  ON DELETE CASCADE;
 
-ALTER TABLE element_relationship ADD CONSTRAINT element_relationship_type_id_f FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE element_relationship ADD CONSTRAINT element_relationship_type_id_f FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE elementresult ADD CONSTRAINT elementresult_element_id_fk FOREIGN KEY (element_id) REFERENCES element (element_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE elementresult ADD CONSTRAINT elementresult_element_id_fk FOREIGN KEY (element_id) REFERENCES element (element_id)  ON DELETE CASCADE;
 
-ALTER TABLE elementresult ADD CONSTRAINT elementresult_quantification_i FOREIGN KEY (quantification_id) REFERENCES quantification (quantification_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE elementresult ADD CONSTRAINT elementresult_quantification_i FOREIGN KEY (quantification_id) REFERENCES quantification (quantification_id)  ON DELETE CASCADE;
 
-ALTER TABLE elementresult_relationship ADD CONSTRAINT elementresult_relationship_obj FOREIGN KEY (object_id) REFERENCES elementresult (elementresult_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE elementresult_relationship ADD CONSTRAINT elementresult_relationship_obj FOREIGN KEY (object_id) REFERENCES elementresult (elementresult_id)  ON DELETE CASCADE;
 
-ALTER TABLE elementresult_relationship ADD CONSTRAINT elementresult_relationship_sub FOREIGN KEY (subject_id) REFERENCES elementresult (elementresult_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE elementresult_relationship ADD CONSTRAINT elementresult_relationship_sub FOREIGN KEY (subject_id) REFERENCES elementresult (elementresult_id)  ON DELETE CASCADE;
 
-ALTER TABLE elementresult_relationship ADD CONSTRAINT elementresult_relationship_typ FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE elementresult_relationship ADD CONSTRAINT elementresult_relationship_typ FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE environment_cvterm ADD CONSTRAINT environment_cvterm_cvterm_id_f FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE environment_cvterm ADD CONSTRAINT environment_cvterm_cvterm_id_f FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE environment_cvterm ADD CONSTRAINT environment_cvterm_environment FOREIGN KEY (environment_id) REFERENCES environment (environment_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE environment_cvterm ADD CONSTRAINT environment_cvterm_environment FOREIGN KEY (environment_id) REFERENCES environment (environment_id)  ON DELETE CASCADE;
 
-ALTER TABLE expression_cvterm ADD CONSTRAINT expression_cvterm_cvterm_id_fk FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE expression_cvterm ADD CONSTRAINT expression_cvterm_cvterm_id_fk FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE expression_cvterm ADD CONSTRAINT expression_cvterm_cvterm_type_ FOREIGN KEY (cvterm_type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE expression_cvterm ADD CONSTRAINT expression_cvterm_cvterm_type_ FOREIGN KEY (cvterm_type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE expression_cvterm ADD CONSTRAINT expression_cvterm_expression_i FOREIGN KEY (expression_id) REFERENCES expression (expression_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE expression_cvterm ADD CONSTRAINT expression_cvterm_expression_i FOREIGN KEY (expression_id) REFERENCES expression (expression_id)  ON DELETE CASCADE;
 
-ALTER TABLE expression_cvtermprop ADD CONSTRAINT expression_cvtermprop_expressi FOREIGN KEY (expression_cvterm_id) REFERENCES expression_cvterm (expression_cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE expression_cvtermprop ADD CONSTRAINT expression_cvtermprop_expressi FOREIGN KEY (expression_cvterm_id) REFERENCES expression_cvterm (expression_cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE expression_cvtermprop ADD CONSTRAINT expression_cvtermprop_type_id_ FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE expression_cvtermprop ADD CONSTRAINT expression_cvtermprop_type_id_ FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE expression_image ADD CONSTRAINT expression_image_eimage_id_fk FOREIGN KEY (eimage_id) REFERENCES eimage (eimage_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE expression_image ADD CONSTRAINT expression_image_eimage_id_fk FOREIGN KEY (eimage_id) REFERENCES eimage (eimage_id)  ON DELETE CASCADE;
 
-ALTER TABLE expression_image ADD CONSTRAINT expression_image_expression_id FOREIGN KEY (expression_id) REFERENCES expression (expression_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE expression_image ADD CONSTRAINT expression_image_expression_id FOREIGN KEY (expression_id) REFERENCES expression (expression_id)  ON DELETE CASCADE;
 
-ALTER TABLE expression_pub ADD CONSTRAINT expression_pub_expression_id_f FOREIGN KEY (expression_id) REFERENCES expression (expression_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE expression_pub ADD CONSTRAINT expression_pub_expression_id_f FOREIGN KEY (expression_id) REFERENCES expression (expression_id)  ON DELETE CASCADE;
 
-ALTER TABLE expression_pub ADD CONSTRAINT expression_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE expression_pub ADD CONSTRAINT expression_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE expressionprop ADD CONSTRAINT expressionprop_expression_id_f FOREIGN KEY (expression_id) REFERENCES expression (expression_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE expressionprop ADD CONSTRAINT expressionprop_expression_id_f FOREIGN KEY (expression_id) REFERENCES expression (expression_id)  ON DELETE CASCADE;
 
-ALTER TABLE expressionprop ADD CONSTRAINT expressionprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE expressionprop ADD CONSTRAINT expressionprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature ADD CONSTRAINT feature_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature ADD CONSTRAINT feature_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature ADD CONSTRAINT feature_organism_id_fk FOREIGN KEY (organism_id) REFERENCES organism (organism_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature ADD CONSTRAINT feature_organism_id_fk FOREIGN KEY (organism_id) REFERENCES organism (organism_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature ADD CONSTRAINT feature_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature ADD CONSTRAINT feature_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_cvterm ADD CONSTRAINT feature_cvterm_cvterm_id_fk FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_cvterm ADD CONSTRAINT feature_cvterm_cvterm_id_fk FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_cvterm ADD CONSTRAINT feature_cvterm_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_cvterm ADD CONSTRAINT feature_cvterm_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_cvterm ADD CONSTRAINT feature_cvterm_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_cvterm ADD CONSTRAINT feature_cvterm_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_cvterm_dbxref ADD CONSTRAINT feature_cvterm_dbxref_dbxref_i FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_cvterm_dbxref ADD CONSTRAINT feature_cvterm_dbxref_dbxref_i FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_cvterm_dbxref ADD CONSTRAINT feature_cvterm_dbxref_feature_ FOREIGN KEY (feature_cvterm_id) REFERENCES feature_cvterm (feature_cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_cvterm_dbxref ADD CONSTRAINT feature_cvterm_dbxref_feature_ FOREIGN KEY (feature_cvterm_id) REFERENCES feature_cvterm (feature_cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_cvterm_pub ADD CONSTRAINT feature_cvterm_pub_feature_cvt FOREIGN KEY (feature_cvterm_id) REFERENCES feature_cvterm (feature_cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_cvterm_pub ADD CONSTRAINT feature_cvterm_pub_feature_cvt FOREIGN KEY (feature_cvterm_id) REFERENCES feature_cvterm (feature_cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_cvterm_pub ADD CONSTRAINT feature_cvterm_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_cvterm_pub ADD CONSTRAINT feature_cvterm_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_cvtermprop ADD CONSTRAINT feature_cvtermprop_feature_cvt FOREIGN KEY (feature_cvterm_id) REFERENCES feature_cvterm (feature_cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_cvtermprop ADD CONSTRAINT feature_cvtermprop_feature_cvt FOREIGN KEY (feature_cvterm_id) REFERENCES feature_cvterm (feature_cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_cvtermprop ADD CONSTRAINT feature_cvtermprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_cvtermprop ADD CONSTRAINT feature_cvtermprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_dbxref ADD CONSTRAINT feature_dbxref_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_dbxref ADD CONSTRAINT feature_dbxref_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_dbxref ADD CONSTRAINT feature_dbxref_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_dbxref ADD CONSTRAINT feature_dbxref_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_expression ADD CONSTRAINT feature_expression_expression_ FOREIGN KEY (expression_id) REFERENCES expression (expression_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_expression ADD CONSTRAINT feature_expression_expression_ FOREIGN KEY (expression_id) REFERENCES expression (expression_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_expression ADD CONSTRAINT feature_expression_feature_id_ FOREIGN KEY (feature_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_expression ADD CONSTRAINT feature_expression_feature_id_ FOREIGN KEY (feature_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_expression ADD CONSTRAINT feature_expression_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_expression ADD CONSTRAINT feature_expression_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_expressionprop ADD CONSTRAINT feature_expressionprop_feature FOREIGN KEY (feature_expression_id) REFERENCES feature_expression (feature_expression_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_expressionprop ADD CONSTRAINT feature_expressionprop_feature FOREIGN KEY (feature_expression_id) REFERENCES feature_expression (feature_expression_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_expressionprop ADD CONSTRAINT feature_expressionprop_type_id FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_expressionprop ADD CONSTRAINT feature_expressionprop_type_id FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_genotype ADD CONSTRAINT feature_genotype_chromosome_id FOREIGN KEY (chromosome_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_genotype ADD CONSTRAINT feature_genotype_chromosome_id FOREIGN KEY (chromosome_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_genotype ADD CONSTRAINT feature_genotype_cvterm_id_fk FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_genotype ADD CONSTRAINT feature_genotype_cvterm_id_fk FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_genotype ADD CONSTRAINT feature_genotype_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_genotype ADD CONSTRAINT feature_genotype_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_genotype ADD CONSTRAINT feature_genotype_genotype_id_f FOREIGN KEY (genotype_id) REFERENCES genotype (genotype_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_genotype ADD CONSTRAINT feature_genotype_genotype_id_f FOREIGN KEY (genotype_id) REFERENCES genotype (genotype_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_phenotype ADD CONSTRAINT feature_phenotype_feature_id_f FOREIGN KEY (feature_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_phenotype ADD CONSTRAINT feature_phenotype_feature_id_f FOREIGN KEY (feature_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_phenotype ADD CONSTRAINT feature_phenotype_phenotype_id FOREIGN KEY (phenotype_id) REFERENCES phenotype (phenotype_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_phenotype ADD CONSTRAINT feature_phenotype_phenotype_id FOREIGN KEY (phenotype_id) REFERENCES phenotype (phenotype_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_pub ADD CONSTRAINT feature_pub_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_pub ADD CONSTRAINT feature_pub_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_pub ADD CONSTRAINT feature_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_pub ADD CONSTRAINT feature_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_pubprop ADD CONSTRAINT feature_pubprop_feature_pub_id FOREIGN KEY (feature_pub_id) REFERENCES feature_pub (feature_pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_pubprop ADD CONSTRAINT feature_pubprop_feature_pub_id FOREIGN KEY (feature_pub_id) REFERENCES feature_pub (feature_pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_pubprop ADD CONSTRAINT feature_pubprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_pubprop ADD CONSTRAINT feature_pubprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_relationship ADD CONSTRAINT feature_relationship_object_id FOREIGN KEY (object_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_relationship ADD CONSTRAINT feature_relationship_object_id FOREIGN KEY (object_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_relationship ADD CONSTRAINT feature_relationship_subject_i FOREIGN KEY (subject_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_relationship ADD CONSTRAINT feature_relationship_subject_i FOREIGN KEY (subject_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_relationship ADD CONSTRAINT feature_relationship_type_id_f FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_relationship ADD CONSTRAINT feature_relationship_type_id_f FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_relationship_pub ADD CONSTRAINT feature_relationship_pub_featu FOREIGN KEY (feature_relationship_id) REFERENCES feature_relationship (feature_relationship_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_relationship_pub ADD CONSTRAINT feature_relationship_pub_featu FOREIGN KEY (feature_relationship_id) REFERENCES feature_relationship (feature_relationship_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_relationship_pub ADD CONSTRAINT feature_relationship_pub_pub_i FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_relationship_pub ADD CONSTRAINT feature_relationship_pub_pub_i FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_relationshipprop ADD CONSTRAINT feature_relationshipprop_featu FOREIGN KEY (feature_relationship_id) REFERENCES feature_relationship (feature_relationship_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_relationshipprop ADD CONSTRAINT feature_relationshipprop_featu FOREIGN KEY (feature_relationship_id) REFERENCES feature_relationship (feature_relationship_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_relationshipprop ADD CONSTRAINT feature_relationshipprop_type_ FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_relationshipprop ADD CONSTRAINT feature_relationshipprop_type_ FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_relationshipprop_pub ADD CONSTRAINT feature_relationshipprop_pub_f FOREIGN KEY (feature_relationshipprop_id) REFERENCES feature_relationshipprop (feature_relationshipprop_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_relationshipprop_pub ADD CONSTRAINT feature_relationshipprop_pub_f FOREIGN KEY (feature_relationshipprop_id) REFERENCES feature_relationshipprop (feature_relationshipprop_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_relationshipprop_pub ADD CONSTRAINT feature_relationshipprop_pub_p FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_relationshipprop_pub ADD CONSTRAINT feature_relationshipprop_pub_p FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_synonym ADD CONSTRAINT feature_synonym_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_synonym ADD CONSTRAINT feature_synonym_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_synonym ADD CONSTRAINT feature_synonym_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_synonym ADD CONSTRAINT feature_synonym_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE feature_synonym ADD CONSTRAINT feature_synonym_synonym_id_fk FOREIGN KEY (synonym_id) REFERENCES synonym_ (synonym_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE feature_synonym ADD CONSTRAINT feature_synonym_synonym_id_fk FOREIGN KEY (synonym_id) REFERENCES synonym_ (synonym_id)  ON DELETE CASCADE;
 
-ALTER TABLE featureloc ADD CONSTRAINT featureloc_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE featureloc ADD CONSTRAINT featureloc_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE featureloc ADD CONSTRAINT featureloc_srcfeature_id_fk FOREIGN KEY (srcfeature_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE featureloc ADD CONSTRAINT featureloc_srcfeature_id_fk FOREIGN KEY (srcfeature_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE featureloc_pub ADD CONSTRAINT featureloc_pub_featureloc_id_f FOREIGN KEY (featureloc_id) REFERENCES featureloc (featureloc_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE featureloc_pub ADD CONSTRAINT featureloc_pub_featureloc_id_f FOREIGN KEY (featureloc_id) REFERENCES featureloc (featureloc_id)  ON DELETE CASCADE;
 
-ALTER TABLE featureloc_pub ADD CONSTRAINT featureloc_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE featureloc_pub ADD CONSTRAINT featureloc_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE featuremap ADD CONSTRAINT featuremap_unittype_id_fk FOREIGN KEY (unittype_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE featuremap ADD CONSTRAINT featuremap_unittype_id_fk FOREIGN KEY (unittype_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE featuremap_pub ADD CONSTRAINT featuremap_pub_featuremap_id_f FOREIGN KEY (featuremap_id) REFERENCES featuremap (featuremap_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE featuremap_pub ADD CONSTRAINT featuremap_pub_featuremap_id_f FOREIGN KEY (featuremap_id) REFERENCES featuremap (featuremap_id)  ON DELETE CASCADE;
 
-ALTER TABLE featuremap_pub ADD CONSTRAINT featuremap_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE featuremap_pub ADD CONSTRAINT featuremap_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE featurepos ADD CONSTRAINT featurepos_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE featurepos ADD CONSTRAINT featurepos_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE featurepos ADD CONSTRAINT featurepos_featuremap_id_fk FOREIGN KEY (featuremap_id) REFERENCES featuremap (featuremap_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE featurepos ADD CONSTRAINT featurepos_featuremap_id_fk FOREIGN KEY (featuremap_id) REFERENCES featuremap (featuremap_id)  ON DELETE CASCADE;
 
-ALTER TABLE featurepos ADD CONSTRAINT featurepos_map_feature_id_fk FOREIGN KEY (map_feature_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE featurepos ADD CONSTRAINT featurepos_map_feature_id_fk FOREIGN KEY (map_feature_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE featureprop_pub ADD CONSTRAINT featureprop_pub_featureprop_id FOREIGN KEY (featureprop_id) REFERENCES featureprop (featureprop_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE featureprop_pub ADD CONSTRAINT featureprop_pub_featureprop_id FOREIGN KEY (featureprop_id) REFERENCES featureprop (featureprop_id)  ON DELETE CASCADE;
 
-ALTER TABLE featureprop_pub ADD CONSTRAINT featureprop_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE featureprop_pub ADD CONSTRAINT featureprop_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE featurerange ADD CONSTRAINT featurerange_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE featurerange ADD CONSTRAINT featurerange_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE featurerange ADD CONSTRAINT featurerange_featuremap_id_fk FOREIGN KEY (featuremap_id) REFERENCES featuremap (featuremap_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE featurerange ADD CONSTRAINT featurerange_featuremap_id_fk FOREIGN KEY (featuremap_id) REFERENCES featuremap (featuremap_id)  ON DELETE CASCADE;
 
-ALTER TABLE featurerange ADD CONSTRAINT featurerange_leftendf_id_fk FOREIGN KEY (leftendf_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE featurerange ADD CONSTRAINT featurerange_leftendf_id_fk FOREIGN KEY (leftendf_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE featurerange ADD CONSTRAINT featurerange_leftstartf_id_fk FOREIGN KEY (leftstartf_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE featurerange ADD CONSTRAINT featurerange_leftstartf_id_fk FOREIGN KEY (leftstartf_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE featurerange ADD CONSTRAINT featurerange_rightendf_id_fk FOREIGN KEY (rightendf_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE featurerange ADD CONSTRAINT featurerange_rightendf_id_fk FOREIGN KEY (rightendf_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE featurerange ADD CONSTRAINT featurerange_rightstartf_id_fk FOREIGN KEY (rightstartf_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE featurerange ADD CONSTRAINT featurerange_rightstartf_id_fk FOREIGN KEY (rightstartf_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE genotype ADD CONSTRAINT genotype_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE genotype ADD CONSTRAINT genotype_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE genotypeprop ADD CONSTRAINT genotypeprop_genotype_id_fk FOREIGN KEY (genotype_id) REFERENCES genotype (genotype_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE genotypeprop ADD CONSTRAINT genotypeprop_genotype_id_fk FOREIGN KEY (genotype_id) REFERENCES genotype (genotype_id)  ON DELETE CASCADE;
 
-ALTER TABLE genotypeprop ADD CONSTRAINT genotypeprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE genotypeprop ADD CONSTRAINT genotypeprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE library ADD CONSTRAINT library_organism_id_fk FOREIGN KEY (organism_id) REFERENCES organism (organism_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE library ADD CONSTRAINT library_organism_id_fk FOREIGN KEY (organism_id) REFERENCES organism (organism_id)  ON DELETE CASCADE;
 
-ALTER TABLE library ADD CONSTRAINT library_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE library ADD CONSTRAINT library_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE library_cvterm ADD CONSTRAINT library_cvterm_cvterm_id_fk FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE library_cvterm ADD CONSTRAINT library_cvterm_cvterm_id_fk FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE library_cvterm ADD CONSTRAINT library_cvterm_library_id_fk FOREIGN KEY (library_id) REFERENCES library (library_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE library_cvterm ADD CONSTRAINT library_cvterm_library_id_fk FOREIGN KEY (library_id) REFERENCES library (library_id)  ON DELETE CASCADE;
 
-ALTER TABLE library_cvterm ADD CONSTRAINT library_cvterm_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE library_cvterm ADD CONSTRAINT library_cvterm_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE library_dbxref ADD CONSTRAINT library_dbxref_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE library_dbxref ADD CONSTRAINT library_dbxref_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE library_dbxref ADD CONSTRAINT library_dbxref_library_id_fk FOREIGN KEY (library_id) REFERENCES library (library_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE library_dbxref ADD CONSTRAINT library_dbxref_library_id_fk FOREIGN KEY (library_id) REFERENCES library (library_id)  ON DELETE CASCADE;
 
-ALTER TABLE library_feature ADD CONSTRAINT library_feature_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE library_feature ADD CONSTRAINT library_feature_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE library_feature ADD CONSTRAINT library_feature_library_id_fk FOREIGN KEY (library_id) REFERENCES library (library_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE library_feature ADD CONSTRAINT library_feature_library_id_fk FOREIGN KEY (library_id) REFERENCES library (library_id)  ON DELETE CASCADE;
 
-ALTER TABLE library_pub ADD CONSTRAINT library_pub_library_id_fk FOREIGN KEY (library_id) REFERENCES library (library_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE library_pub ADD CONSTRAINT library_pub_library_id_fk FOREIGN KEY (library_id) REFERENCES library (library_id)  ON DELETE CASCADE;
 
-ALTER TABLE library_pub ADD CONSTRAINT library_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE library_pub ADD CONSTRAINT library_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE library_synonym ADD CONSTRAINT library_synonym_library_id_fk FOREIGN KEY (library_id) REFERENCES library (library_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE library_synonym ADD CONSTRAINT library_synonym_library_id_fk FOREIGN KEY (library_id) REFERENCES library (library_id)  ON DELETE CASCADE;
 
-ALTER TABLE library_synonym ADD CONSTRAINT library_synonym_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE library_synonym ADD CONSTRAINT library_synonym_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE library_synonym ADD CONSTRAINT library_synonym_synonym_id_fk FOREIGN KEY (synonym_id) REFERENCES synonym_ (synonym_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE library_synonym ADD CONSTRAINT library_synonym_synonym_id_fk FOREIGN KEY (synonym_id) REFERENCES synonym_ (synonym_id)  ON DELETE CASCADE;
 
-ALTER TABLE libraryprop ADD CONSTRAINT libraryprop_library_id_fk FOREIGN KEY (library_id) REFERENCES library (library_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE libraryprop ADD CONSTRAINT libraryprop_library_id_fk FOREIGN KEY (library_id) REFERENCES library (library_id)  ON DELETE CASCADE;
 
-ALTER TABLE libraryprop ADD CONSTRAINT libraryprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE libraryprop ADD CONSTRAINT libraryprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE libraryprop_pub ADD CONSTRAINT libraryprop_pub_libraryprop_id FOREIGN KEY (libraryprop_id) REFERENCES libraryprop (libraryprop_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE libraryprop_pub ADD CONSTRAINT libraryprop_pub_libraryprop_id FOREIGN KEY (libraryprop_id) REFERENCES libraryprop (libraryprop_id)  ON DELETE CASCADE;
 
-ALTER TABLE libraryprop_pub ADD CONSTRAINT libraryprop_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE libraryprop_pub ADD CONSTRAINT libraryprop_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE magedocumentation ADD CONSTRAINT magedocumentation_mageml_id_fk FOREIGN KEY (mageml_id) REFERENCES mageml (mageml_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE magedocumentation ADD CONSTRAINT magedocumentation_mageml_id_fk FOREIGN KEY (mageml_id) REFERENCES mageml (mageml_id)  ON DELETE CASCADE;
 
-ALTER TABLE magedocumentation ADD CONSTRAINT magedocumentation_tableinfo_id FOREIGN KEY (tableinfo_id) REFERENCES tableinfo (tableinfo_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE magedocumentation ADD CONSTRAINT magedocumentation_tableinfo_id FOREIGN KEY (tableinfo_id) REFERENCES tableinfo (tableinfo_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment ADD CONSTRAINT nd_experiment_nd_geolocation_i FOREIGN KEY (nd_geolocation_id) REFERENCES nd_geolocation (nd_geolocation_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment ADD CONSTRAINT nd_experiment_nd_geolocation_i FOREIGN KEY (nd_geolocation_id) REFERENCES nd_geolocation (nd_geolocation_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment ADD CONSTRAINT nd_experiment_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment ADD CONSTRAINT nd_experiment_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment_contact ADD CONSTRAINT nd_experiment_contact_contact_ FOREIGN KEY (contact_id) REFERENCES contact (contact_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment_contact ADD CONSTRAINT nd_experiment_contact_contact_ FOREIGN KEY (contact_id) REFERENCES contact (contact_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment_contact ADD CONSTRAINT nd_experiment_contact_nd_exper FOREIGN KEY (nd_experiment_id) REFERENCES nd_experiment (nd_experiment_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment_contact ADD CONSTRAINT nd_experiment_contact_nd_exper FOREIGN KEY (nd_experiment_id) REFERENCES nd_experiment (nd_experiment_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment_dbxref ADD CONSTRAINT nd_experiment_dbxref_dbxref_id FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment_dbxref ADD CONSTRAINT nd_experiment_dbxref_dbxref_id FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment_dbxref ADD CONSTRAINT nd_experiment_dbxref_nd_experi FOREIGN KEY (nd_experiment_id) REFERENCES nd_experiment (nd_experiment_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment_dbxref ADD CONSTRAINT nd_experiment_dbxref_nd_experi FOREIGN KEY (nd_experiment_id) REFERENCES nd_experiment (nd_experiment_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment_genotype ADD CONSTRAINT nd_experiment_genotype_genotyp FOREIGN KEY (genotype_id) REFERENCES genotype (genotype_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment_genotype ADD CONSTRAINT nd_experiment_genotype_genotyp FOREIGN KEY (genotype_id) REFERENCES genotype (genotype_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment_genotype ADD CONSTRAINT nd_experiment_genotype_nd_expe FOREIGN KEY (nd_experiment_id) REFERENCES nd_experiment (nd_experiment_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment_genotype ADD CONSTRAINT nd_experiment_genotype_nd_expe FOREIGN KEY (nd_experiment_id) REFERENCES nd_experiment (nd_experiment_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment_phenotype ADD CONSTRAINT nd_experiment_phenotype_nd_exp FOREIGN KEY (nd_experiment_id) REFERENCES nd_experiment (nd_experiment_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment_phenotype ADD CONSTRAINT nd_experiment_phenotype_nd_exp FOREIGN KEY (nd_experiment_id) REFERENCES nd_experiment (nd_experiment_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment_phenotype ADD CONSTRAINT nd_experiment_phenotype_phenot FOREIGN KEY (phenotype_id) REFERENCES phenotype (phenotype_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment_phenotype ADD CONSTRAINT nd_experiment_phenotype_phenot FOREIGN KEY (phenotype_id) REFERENCES phenotype (phenotype_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment_project ADD CONSTRAINT nd_experiment_project_nd_exper FOREIGN KEY (nd_experiment_id) REFERENCES nd_experiment (nd_experiment_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment_project ADD CONSTRAINT nd_experiment_project_nd_exper FOREIGN KEY (nd_experiment_id) REFERENCES nd_experiment (nd_experiment_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment_project ADD CONSTRAINT nd_experiment_project_project_ FOREIGN KEY (project_id) REFERENCES project (project_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment_project ADD CONSTRAINT nd_experiment_project_project_ FOREIGN KEY (project_id) REFERENCES project (project_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment_protocol ADD CONSTRAINT nd_experiment_protocol_nd_expe FOREIGN KEY (nd_experiment_id) REFERENCES nd_experiment (nd_experiment_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment_protocol ADD CONSTRAINT nd_experiment_protocol_nd_expe FOREIGN KEY (nd_experiment_id) REFERENCES nd_experiment (nd_experiment_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment_protocol ADD CONSTRAINT nd_experiment_protocol_nd_prot FOREIGN KEY (nd_protocol_id) REFERENCES nd_protocol (nd_protocol_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment_protocol ADD CONSTRAINT nd_experiment_protocol_nd_prot FOREIGN KEY (nd_protocol_id) REFERENCES nd_protocol (nd_protocol_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment_pub ADD CONSTRAINT nd_experiment_pub_nd_experimen FOREIGN KEY (nd_experiment_id) REFERENCES nd_experiment (nd_experiment_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment_pub ADD CONSTRAINT nd_experiment_pub_nd_experimen FOREIGN KEY (nd_experiment_id) REFERENCES nd_experiment (nd_experiment_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment_pub ADD CONSTRAINT nd_experiment_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment_pub ADD CONSTRAINT nd_experiment_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment_stock ADD CONSTRAINT nd_experiment_stock_nd_experim FOREIGN KEY (nd_experiment_id) REFERENCES nd_experiment (nd_experiment_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment_stock ADD CONSTRAINT nd_experiment_stock_nd_experim FOREIGN KEY (nd_experiment_id) REFERENCES nd_experiment (nd_experiment_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment_stock ADD CONSTRAINT nd_experiment_stock_stock_id_f FOREIGN KEY (stock_id) REFERENCES stock (stock_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment_stock ADD CONSTRAINT nd_experiment_stock_stock_id_f FOREIGN KEY (stock_id) REFERENCES stock (stock_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment_stock ADD CONSTRAINT nd_experiment_stock_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment_stock ADD CONSTRAINT nd_experiment_stock_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment_stock_dbxref ADD CONSTRAINT nd_experiment_stock_dbxref_dbx FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment_stock_dbxref ADD CONSTRAINT nd_experiment_stock_dbxref_dbx FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment_stock_dbxref ADD CONSTRAINT nd_experiment_stock_dbxref_nd_ FOREIGN KEY (nd_experiment_stock_id) REFERENCES nd_experiment_stock (nd_experiment_stock_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment_stock_dbxref ADD CONSTRAINT nd_experiment_stock_dbxref_nd_ FOREIGN KEY (nd_experiment_stock_id) REFERENCES nd_experiment_stock (nd_experiment_stock_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment_stockprop ADD CONSTRAINT nd_experiment_stockprop_nd_exp FOREIGN KEY (nd_experiment_stock_id) REFERENCES nd_experiment_stock (nd_experiment_stock_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment_stockprop ADD CONSTRAINT nd_experiment_stockprop_nd_exp FOREIGN KEY (nd_experiment_stock_id) REFERENCES nd_experiment_stock (nd_experiment_stock_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experiment_stockprop ADD CONSTRAINT nd_experiment_stockprop_type_i FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experiment_stockprop ADD CONSTRAINT nd_experiment_stockprop_type_i FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experimentprop ADD CONSTRAINT nd_experimentprop_nd_experimen FOREIGN KEY (nd_experiment_id) REFERENCES nd_experiment (nd_experiment_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experimentprop ADD CONSTRAINT nd_experimentprop_nd_experimen FOREIGN KEY (nd_experiment_id) REFERENCES nd_experiment (nd_experiment_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_experimentprop ADD CONSTRAINT nd_experimentprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_experimentprop ADD CONSTRAINT nd_experimentprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_geolocationprop ADD CONSTRAINT nd_geolocationprop_nd_geolocat FOREIGN KEY (nd_geolocation_id) REFERENCES nd_geolocation (nd_geolocation_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_geolocationprop ADD CONSTRAINT nd_geolocationprop_nd_geolocat FOREIGN KEY (nd_geolocation_id) REFERENCES nd_geolocation (nd_geolocation_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_geolocationprop ADD CONSTRAINT nd_geolocationprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_geolocationprop ADD CONSTRAINT nd_geolocationprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_protocol ADD CONSTRAINT nd_protocol_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_protocol ADD CONSTRAINT nd_protocol_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_protocol_reagent ADD CONSTRAINT nd_protocol_reagent_nd_protoco FOREIGN KEY (nd_protocol_id) REFERENCES nd_protocol (nd_protocol_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_protocol_reagent ADD CONSTRAINT nd_protocol_reagent_nd_protoco FOREIGN KEY (nd_protocol_id) REFERENCES nd_protocol (nd_protocol_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_protocol_reagent ADD CONSTRAINT nd_protocol_reagent_reagent_id FOREIGN KEY (reagent_id) REFERENCES nd_reagent (nd_reagent_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_protocol_reagent ADD CONSTRAINT nd_protocol_reagent_reagent_id FOREIGN KEY (reagent_id) REFERENCES nd_reagent (nd_reagent_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_protocol_reagent ADD CONSTRAINT nd_protocol_reagent_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_protocol_reagent ADD CONSTRAINT nd_protocol_reagent_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_protocolprop ADD CONSTRAINT nd_protocolprop_nd_protocol_id FOREIGN KEY (nd_protocol_id) REFERENCES nd_protocol (nd_protocol_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_protocolprop ADD CONSTRAINT nd_protocolprop_nd_protocol_id FOREIGN KEY (nd_protocol_id) REFERENCES nd_protocol (nd_protocol_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_protocolprop ADD CONSTRAINT nd_protocolprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_protocolprop ADD CONSTRAINT nd_protocolprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_reagent ADD CONSTRAINT nd_reagent_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_reagent ADD CONSTRAINT nd_reagent_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_reagent_relationship ADD CONSTRAINT nd_reagent_relationship_object FOREIGN KEY (object_reagent_id) REFERENCES nd_reagent (nd_reagent_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_reagent_relationship ADD CONSTRAINT nd_reagent_relationship_object FOREIGN KEY (object_reagent_id) REFERENCES nd_reagent (nd_reagent_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_reagent_relationship ADD CONSTRAINT nd_reagent_relationship_subjec FOREIGN KEY (subject_reagent_id) REFERENCES nd_reagent (nd_reagent_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_reagent_relationship ADD CONSTRAINT nd_reagent_relationship_subjec FOREIGN KEY (subject_reagent_id) REFERENCES nd_reagent (nd_reagent_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_reagent_relationship ADD CONSTRAINT nd_reagent_relationship_type_i FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_reagent_relationship ADD CONSTRAINT nd_reagent_relationship_type_i FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_reagentprop ADD CONSTRAINT nd_reagentprop_nd_reagent_id_f FOREIGN KEY (nd_reagent_id) REFERENCES nd_reagent (nd_reagent_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_reagentprop ADD CONSTRAINT nd_reagentprop_nd_reagent_id_f FOREIGN KEY (nd_reagent_id) REFERENCES nd_reagent (nd_reagent_id)  ON DELETE CASCADE;
 
-ALTER TABLE nd_reagentprop ADD CONSTRAINT nd_reagentprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE nd_reagentprop ADD CONSTRAINT nd_reagentprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE organism_dbxref ADD CONSTRAINT organism_dbxref_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE organism_dbxref ADD CONSTRAINT organism_dbxref_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE organism_dbxref ADD CONSTRAINT organism_dbxref_organism_id_fk FOREIGN KEY (organism_id) REFERENCES organism (organism_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE organism_dbxref ADD CONSTRAINT organism_dbxref_organism_id_fk FOREIGN KEY (organism_id) REFERENCES organism (organism_id)  ON DELETE CASCADE;
 
-ALTER TABLE organismprop ADD CONSTRAINT organismprop_organism_id_fk FOREIGN KEY (organism_id) REFERENCES organism (organism_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE organismprop ADD CONSTRAINT organismprop_organism_id_fk FOREIGN KEY (organism_id) REFERENCES organism (organism_id)  ON DELETE CASCADE;
 
-ALTER TABLE organismprop ADD CONSTRAINT organismprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE organismprop ADD CONSTRAINT organismprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE phendesc ADD CONSTRAINT phendesc_environment_id_fk FOREIGN KEY (environment_id) REFERENCES environment (environment_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phendesc ADD CONSTRAINT phendesc_environment_id_fk FOREIGN KEY (environment_id) REFERENCES environment (environment_id)  ON DELETE CASCADE;
 
-ALTER TABLE phendesc ADD CONSTRAINT phendesc_genotype_id_fk FOREIGN KEY (genotype_id) REFERENCES genotype (genotype_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phendesc ADD CONSTRAINT phendesc_genotype_id_fk FOREIGN KEY (genotype_id) REFERENCES genotype (genotype_id)  ON DELETE CASCADE;
 
-ALTER TABLE phendesc ADD CONSTRAINT phendesc_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phendesc ADD CONSTRAINT phendesc_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE phendesc ADD CONSTRAINT phendesc_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phendesc ADD CONSTRAINT phendesc_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenotype ADD CONSTRAINT phenotype_assay_id_fk FOREIGN KEY (assay_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenotype ADD CONSTRAINT phenotype_assay_id_fk FOREIGN KEY (assay_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenotype ADD CONSTRAINT phenotype_attr_id_fk FOREIGN KEY (attr_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenotype ADD CONSTRAINT phenotype_attr_id_fk FOREIGN KEY (attr_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenotype ADD CONSTRAINT phenotype_cvalue_id_fk FOREIGN KEY (cvalue_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenotype ADD CONSTRAINT phenotype_cvalue_id_fk FOREIGN KEY (cvalue_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenotype ADD CONSTRAINT phenotype_observable_id_fk FOREIGN KEY (observable_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenotype ADD CONSTRAINT phenotype_observable_id_fk FOREIGN KEY (observable_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenotype_comparison ADD CONSTRAINT phenotype_comparison_environme FOREIGN KEY (environment1_id) REFERENCES environment (environment_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenotype_comparison ADD CONSTRAINT phenotype_comparison_environme FOREIGN KEY (environment1_id) REFERENCES environment (environment_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenotype_comparison ADD CONSTRAINT phenotype_comparison_environ01 FOREIGN KEY (environment2_id) REFERENCES environment (environment_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenotype_comparison ADD CONSTRAINT phenotype_comparison_environ01 FOREIGN KEY (environment2_id) REFERENCES environment (environment_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenotype_comparison ADD CONSTRAINT phenotype_comparison_genotype1 FOREIGN KEY (genotype1_id) REFERENCES genotype (genotype_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenotype_comparison ADD CONSTRAINT phenotype_comparison_genotype1 FOREIGN KEY (genotype1_id) REFERENCES genotype (genotype_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenotype_comparison ADD CONSTRAINT phenotype_comparison_genotype2 FOREIGN KEY (genotype2_id) REFERENCES genotype (genotype_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenotype_comparison ADD CONSTRAINT phenotype_comparison_genotype2 FOREIGN KEY (genotype2_id) REFERENCES genotype (genotype_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenotype_comparison ADD CONSTRAINT phenotype_comparison_organism_ FOREIGN KEY (organism_id) REFERENCES organism (organism_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenotype_comparison ADD CONSTRAINT phenotype_comparison_organism_ FOREIGN KEY (organism_id) REFERENCES organism (organism_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenotype_comparison ADD CONSTRAINT phenotype_comparison_phenotype FOREIGN KEY (phenotype1_id) REFERENCES phenotype (phenotype_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenotype_comparison ADD CONSTRAINT phenotype_comparison_phenotype FOREIGN KEY (phenotype1_id) REFERENCES phenotype (phenotype_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenotype_comparison ADD CONSTRAINT phenotype_comparison_phenoty01 FOREIGN KEY (phenotype2_id) REFERENCES phenotype (phenotype_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenotype_comparison ADD CONSTRAINT phenotype_comparison_phenoty01 FOREIGN KEY (phenotype2_id) REFERENCES phenotype (phenotype_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenotype_comparison ADD CONSTRAINT phenotype_comparison_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenotype_comparison ADD CONSTRAINT phenotype_comparison_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenotype_comparison_cvterm ADD CONSTRAINT phenotype_comparison_cvterm_cv FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenotype_comparison_cvterm ADD CONSTRAINT phenotype_comparison_cvterm_cv FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenotype_comparison_cvterm ADD CONSTRAINT phenotype_comparison_cvterm_ph FOREIGN KEY (phenotype_comparison_id) REFERENCES phenotype_comparison (phenotype_comparison_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenotype_comparison_cvterm ADD CONSTRAINT phenotype_comparison_cvterm_ph FOREIGN KEY (phenotype_comparison_id) REFERENCES phenotype_comparison (phenotype_comparison_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenotype_comparison_cvterm ADD CONSTRAINT phenotype_comparison_cvterm_pu FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenotype_comparison_cvterm ADD CONSTRAINT phenotype_comparison_cvterm_pu FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenotype_cvterm ADD CONSTRAINT phenotype_cvterm_cvterm_id_fk FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenotype_cvterm ADD CONSTRAINT phenotype_cvterm_cvterm_id_fk FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenotype_cvterm ADD CONSTRAINT phenotype_cvterm_phenotype_id_ FOREIGN KEY (phenotype_id) REFERENCES phenotype (phenotype_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenotype_cvterm ADD CONSTRAINT phenotype_cvterm_phenotype_id_ FOREIGN KEY (phenotype_id) REFERENCES phenotype (phenotype_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenotypeprop ADD CONSTRAINT phenotypeprop_phenotype_id_fk FOREIGN KEY (phenotype_id) REFERENCES phenotype (phenotype_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenotypeprop ADD CONSTRAINT phenotypeprop_phenotype_id_fk FOREIGN KEY (phenotype_id) REFERENCES phenotype (phenotype_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenotypeprop ADD CONSTRAINT phenotypeprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenotypeprop ADD CONSTRAINT phenotypeprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenstatement ADD CONSTRAINT phenstatement_environment_id_f FOREIGN KEY (environment_id) REFERENCES environment (environment_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenstatement ADD CONSTRAINT phenstatement_environment_id_f FOREIGN KEY (environment_id) REFERENCES environment (environment_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenstatement ADD CONSTRAINT phenstatement_genotype_id_fk FOREIGN KEY (genotype_id) REFERENCES genotype (genotype_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenstatement ADD CONSTRAINT phenstatement_genotype_id_fk FOREIGN KEY (genotype_id) REFERENCES genotype (genotype_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenstatement ADD CONSTRAINT phenstatement_phenotype_id_fk FOREIGN KEY (phenotype_id) REFERENCES phenotype (phenotype_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenstatement ADD CONSTRAINT phenstatement_phenotype_id_fk FOREIGN KEY (phenotype_id) REFERENCES phenotype (phenotype_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenstatement ADD CONSTRAINT phenstatement_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenstatement ADD CONSTRAINT phenstatement_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE phenstatement ADD CONSTRAINT phenstatement_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phenstatement ADD CONSTRAINT phenstatement_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE phylonode ADD CONSTRAINT phylonode_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phylonode ADD CONSTRAINT phylonode_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE phylonode ADD CONSTRAINT phylonode_phylotree_id_fk FOREIGN KEY (phylotree_id) REFERENCES phylonode (phylotree_id) ON DELETE CASCADE;
+ALTER TABLE phylonode ADD CONSTRAINT phylonode_phylotree_id_fk FOREIGN KEY (phylotree_id) REFERENCES phylonode (phylotree_id) ;
 
-ALTER TABLE phylonode ADD CONSTRAINT phylonode_parent_phylonode_id_ FOREIGN KEY (parent_phylonode_id) REFERENCES phylonode (phylonode_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phylonode ADD CONSTRAINT phylonode_parent_phylonode_id_ FOREIGN KEY (parent_phylonode_id) REFERENCES phylonode (phylonode_id)  ON DELETE CASCADE;
 
-ALTER TABLE phylonode ADD CONSTRAINT phylonode_phylotree_id_fk01 FOREIGN KEY (phylotree_id) REFERENCES phylotree (phylotree_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phylonode ADD CONSTRAINT phylonode_phylotree_id_fk01 FOREIGN KEY (phylotree_id) REFERENCES phylotree (phylotree_id)  ON DELETE CASCADE;
 
-ALTER TABLE phylonode ADD CONSTRAINT phylonode_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phylonode ADD CONSTRAINT phylonode_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE phylonode_dbxref ADD CONSTRAINT phylonode_dbxref_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phylonode_dbxref ADD CONSTRAINT phylonode_dbxref_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE phylonode_dbxref ADD CONSTRAINT phylonode_dbxref_phylonode_id_ FOREIGN KEY (phylonode_id) REFERENCES phylonode (phylonode_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phylonode_dbxref ADD CONSTRAINT phylonode_dbxref_phylonode_id_ FOREIGN KEY (phylonode_id) REFERENCES phylonode (phylonode_id)  ON DELETE CASCADE;
 
-ALTER TABLE phylonode_organism ADD CONSTRAINT phylonode_organism_organism_id FOREIGN KEY (organism_id) REFERENCES organism (organism_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phylonode_organism ADD CONSTRAINT phylonode_organism_organism_id FOREIGN KEY (organism_id) REFERENCES organism (organism_id)  ON DELETE CASCADE;
 
-ALTER TABLE phylonode_organism ADD CONSTRAINT phylonode_organism_phylonode_i FOREIGN KEY (phylonode_id) REFERENCES phylonode (phylonode_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phylonode_organism ADD CONSTRAINT phylonode_organism_phylonode_i FOREIGN KEY (phylonode_id) REFERENCES phylonode (phylonode_id)  ON DELETE CASCADE;
 
-ALTER TABLE phylonode_pub ADD CONSTRAINT phylonode_pub_phylonode_id_fk FOREIGN KEY (phylonode_id) REFERENCES phylonode (phylonode_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phylonode_pub ADD CONSTRAINT phylonode_pub_phylonode_id_fk FOREIGN KEY (phylonode_id) REFERENCES phylonode (phylonode_id)  ON DELETE CASCADE;
 
-ALTER TABLE phylonode_pub ADD CONSTRAINT phylonode_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phylonode_pub ADD CONSTRAINT phylonode_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE phylonode_relationship ADD CONSTRAINT phylonode_relationship_object_ FOREIGN KEY (object_id) REFERENCES phylonode (phylonode_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phylonode_relationship ADD CONSTRAINT phylonode_relationship_object_ FOREIGN KEY (object_id) REFERENCES phylonode (phylonode_id)  ON DELETE CASCADE;
 
-ALTER TABLE phylonode_relationship ADD CONSTRAINT phylonode_relationship_phylotr FOREIGN KEY (phylotree_id) REFERENCES phylotree (phylotree_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phylonode_relationship ADD CONSTRAINT phylonode_relationship_phylotr FOREIGN KEY (phylotree_id) REFERENCES phylotree (phylotree_id)  ON DELETE CASCADE;
 
-ALTER TABLE phylonode_relationship ADD CONSTRAINT phylonode_relationship_subject FOREIGN KEY (subject_id) REFERENCES phylonode (phylonode_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phylonode_relationship ADD CONSTRAINT phylonode_relationship_subject FOREIGN KEY (subject_id) REFERENCES phylonode (phylonode_id)  ON DELETE CASCADE;
 
-ALTER TABLE phylonode_relationship ADD CONSTRAINT phylonode_relationship_type_id FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phylonode_relationship ADD CONSTRAINT phylonode_relationship_type_id FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE phylonodeprop ADD CONSTRAINT phylonodeprop_phylonode_id_fk FOREIGN KEY (phylonode_id) REFERENCES phylonode (phylonode_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phylonodeprop ADD CONSTRAINT phylonodeprop_phylonode_id_fk FOREIGN KEY (phylonode_id) REFERENCES phylonode (phylonode_id)  ON DELETE CASCADE;
 
-ALTER TABLE phylonodeprop ADD CONSTRAINT phylonodeprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phylonodeprop ADD CONSTRAINT phylonodeprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE phylotree ADD CONSTRAINT phylotree_analysis_id_fk FOREIGN KEY (analysis_id) REFERENCES analysis (analysis_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phylotree ADD CONSTRAINT phylotree_analysis_id_fk FOREIGN KEY (analysis_id) REFERENCES analysis (analysis_id)  ON DELETE CASCADE;
 
-ALTER TABLE phylotree ADD CONSTRAINT phylotree_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phylotree ADD CONSTRAINT phylotree_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE phylotree ADD CONSTRAINT phylotree_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phylotree ADD CONSTRAINT phylotree_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE phylotree_pub ADD CONSTRAINT phylotree_pub_phylotree_id_fk FOREIGN KEY (phylotree_id) REFERENCES phylotree (phylotree_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phylotree_pub ADD CONSTRAINT phylotree_pub_phylotree_id_fk FOREIGN KEY (phylotree_id) REFERENCES phylotree (phylotree_id)  ON DELETE CASCADE;
 
-ALTER TABLE phylotree_pub ADD CONSTRAINT phylotree_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE phylotree_pub ADD CONSTRAINT phylotree_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE project_contact ADD CONSTRAINT project_contact_contact_id_fk FOREIGN KEY (contact_id) REFERENCES contact (contact_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE project_contact ADD CONSTRAINT project_contact_contact_id_fk FOREIGN KEY (contact_id) REFERENCES contact (contact_id)  ON DELETE CASCADE;
 
-ALTER TABLE project_contact ADD CONSTRAINT project_contact_project_id_fk FOREIGN KEY (project_id) REFERENCES project (project_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE project_contact ADD CONSTRAINT project_contact_project_id_fk FOREIGN KEY (project_id) REFERENCES project (project_id)  ON DELETE CASCADE;
 
-ALTER TABLE project_pub ADD CONSTRAINT project_pub_project_id_fk FOREIGN KEY (project_id) REFERENCES project (project_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE project_pub ADD CONSTRAINT project_pub_project_id_fk FOREIGN KEY (project_id) REFERENCES project (project_id)  ON DELETE CASCADE;
 
-ALTER TABLE project_pub ADD CONSTRAINT project_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE project_pub ADD CONSTRAINT project_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE project_relationship ADD CONSTRAINT project_relationship_object_pr FOREIGN KEY (object_project_id) REFERENCES project (project_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE project_relationship ADD CONSTRAINT project_relationship_object_pr FOREIGN KEY (object_project_id) REFERENCES project (project_id)  ON DELETE CASCADE;
 
-ALTER TABLE project_relationship ADD CONSTRAINT project_relationship_subject_p FOREIGN KEY (subject_project_id) REFERENCES project (project_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE project_relationship ADD CONSTRAINT project_relationship_subject_p FOREIGN KEY (subject_project_id) REFERENCES project (project_id)  ON DELETE CASCADE;
 
-ALTER TABLE project_relationship ADD CONSTRAINT project_relationship_type_id_f FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE project_relationship ADD CONSTRAINT project_relationship_type_id_f FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE projectprop ADD CONSTRAINT projectprop_project_id_fk FOREIGN KEY (project_id) REFERENCES project (project_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE projectprop ADD CONSTRAINT projectprop_project_id_fk FOREIGN KEY (project_id) REFERENCES project (project_id)  ON DELETE CASCADE;
 
-ALTER TABLE projectprop ADD CONSTRAINT projectprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE projectprop ADD CONSTRAINT projectprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE protocol ADD CONSTRAINT protocol_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE protocol ADD CONSTRAINT protocol_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE protocol ADD CONSTRAINT protocol_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE protocol ADD CONSTRAINT protocol_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE protocol ADD CONSTRAINT protocol_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE protocol ADD CONSTRAINT protocol_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE protocolparam ADD CONSTRAINT protocolparam_datatype_id_fk FOREIGN KEY (datatype_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE protocolparam ADD CONSTRAINT protocolparam_datatype_id_fk FOREIGN KEY (datatype_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE protocolparam ADD CONSTRAINT protocolparam_protocol_id_fk FOREIGN KEY (protocol_id) REFERENCES protocol (protocol_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE protocolparam ADD CONSTRAINT protocolparam_protocol_id_fk FOREIGN KEY (protocol_id) REFERENCES protocol (protocol_id)  ON DELETE CASCADE;
 
-ALTER TABLE protocolparam ADD CONSTRAINT protocolparam_unittype_id_fk FOREIGN KEY (unittype_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE protocolparam ADD CONSTRAINT protocolparam_unittype_id_fk FOREIGN KEY (unittype_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE pub ADD CONSTRAINT pub_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE pub ADD CONSTRAINT pub_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE pub_dbxref ADD CONSTRAINT pub_dbxref_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE pub_dbxref ADD CONSTRAINT pub_dbxref_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE pub_dbxref ADD CONSTRAINT pub_dbxref_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE pub_dbxref ADD CONSTRAINT pub_dbxref_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE pub_relationship ADD CONSTRAINT pub_relationship_object_id_fk FOREIGN KEY (object_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE pub_relationship ADD CONSTRAINT pub_relationship_object_id_fk FOREIGN KEY (object_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE pub_relationship ADD CONSTRAINT pub_relationship_subject_id_fk FOREIGN KEY (subject_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE pub_relationship ADD CONSTRAINT pub_relationship_subject_id_fk FOREIGN KEY (subject_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE pub_relationship ADD CONSTRAINT pub_relationship_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE pub_relationship ADD CONSTRAINT pub_relationship_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE pubauthor ADD CONSTRAINT pubauthor_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE pubauthor ADD CONSTRAINT pubauthor_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE pubprop ADD CONSTRAINT pubprop_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE pubprop ADD CONSTRAINT pubprop_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE pubprop ADD CONSTRAINT pubprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE pubprop ADD CONSTRAINT pubprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE quantification ADD CONSTRAINT quantification_acquisition_id_ FOREIGN KEY (acquisition_id) REFERENCES acquisition (acquisition_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE quantification ADD CONSTRAINT quantification_acquisition_id_ FOREIGN KEY (acquisition_id) REFERENCES acquisition (acquisition_id)  ON DELETE CASCADE;
 
-ALTER TABLE quantification ADD CONSTRAINT quantification_analysis_id_fk FOREIGN KEY (analysis_id) REFERENCES analysis (analysis_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE quantification ADD CONSTRAINT quantification_analysis_id_fk FOREIGN KEY (analysis_id) REFERENCES analysis (analysis_id)  ON DELETE CASCADE;
 
-ALTER TABLE quantification ADD CONSTRAINT quantification_operator_id_fk FOREIGN KEY (operator_id) REFERENCES contact (contact_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE quantification ADD CONSTRAINT quantification_operator_id_fk FOREIGN KEY (operator_id) REFERENCES contact (contact_id)  ON DELETE CASCADE;
 
-ALTER TABLE quantification ADD CONSTRAINT quantification_protocol_id_fk FOREIGN KEY (protocol_id) REFERENCES protocol (protocol_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE quantification ADD CONSTRAINT quantification_protocol_id_fk FOREIGN KEY (protocol_id) REFERENCES protocol (protocol_id)  ON DELETE CASCADE;
 
-ALTER TABLE quantification_relationship ADD CONSTRAINT quantification_relationship_ob FOREIGN KEY (object_id) REFERENCES quantification (quantification_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE quantification_relationship ADD CONSTRAINT quantification_relationship_ob FOREIGN KEY (object_id) REFERENCES quantification (quantification_id)  ON DELETE CASCADE;
 
-ALTER TABLE quantification_relationship ADD CONSTRAINT quantification_relationship_su FOREIGN KEY (subject_id) REFERENCES quantification (quantification_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE quantification_relationship ADD CONSTRAINT quantification_relationship_su FOREIGN KEY (subject_id) REFERENCES quantification (quantification_id)  ON DELETE CASCADE;
 
-ALTER TABLE quantification_relationship ADD CONSTRAINT quantification_relationship_ty FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE quantification_relationship ADD CONSTRAINT quantification_relationship_ty FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE quantificationprop ADD CONSTRAINT quantificationprop_quantificat FOREIGN KEY (quantification_id) REFERENCES quantification (quantification_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE quantificationprop ADD CONSTRAINT quantificationprop_quantificat FOREIGN KEY (quantification_id) REFERENCES quantification (quantification_id)  ON DELETE CASCADE;
 
-ALTER TABLE quantificationprop ADD CONSTRAINT quantificationprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE quantificationprop ADD CONSTRAINT quantificationprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock ADD CONSTRAINT stock_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock ADD CONSTRAINT stock_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock ADD CONSTRAINT stock_organism_id_fk FOREIGN KEY (organism_id) REFERENCES organism (organism_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock ADD CONSTRAINT stock_organism_id_fk FOREIGN KEY (organism_id) REFERENCES organism (organism_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock ADD CONSTRAINT stock_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock ADD CONSTRAINT stock_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock_cvterm ADD CONSTRAINT stock_cvterm_cvterm_id_fk FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock_cvterm ADD CONSTRAINT stock_cvterm_cvterm_id_fk FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock_cvterm ADD CONSTRAINT stock_cvterm_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock_cvterm ADD CONSTRAINT stock_cvterm_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock_cvterm ADD CONSTRAINT stock_cvterm_stock_id_fk FOREIGN KEY (stock_id) REFERENCES stock (stock_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock_cvterm ADD CONSTRAINT stock_cvterm_stock_id_fk FOREIGN KEY (stock_id) REFERENCES stock (stock_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock_cvtermprop ADD CONSTRAINT stock_cvtermprop_stock_cvterm_ FOREIGN KEY (stock_cvterm_id) REFERENCES stock_cvterm (stock_cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock_cvtermprop ADD CONSTRAINT stock_cvtermprop_stock_cvterm_ FOREIGN KEY (stock_cvterm_id) REFERENCES stock_cvterm (stock_cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock_cvtermprop ADD CONSTRAINT stock_cvtermprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock_cvtermprop ADD CONSTRAINT stock_cvtermprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock_dbxref ADD CONSTRAINT stock_dbxref_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock_dbxref ADD CONSTRAINT stock_dbxref_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock_dbxref ADD CONSTRAINT stock_dbxref_stock_id_fk FOREIGN KEY (stock_id) REFERENCES stock (stock_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock_dbxref ADD CONSTRAINT stock_dbxref_stock_id_fk FOREIGN KEY (stock_id) REFERENCES stock (stock_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock_dbxrefprop ADD CONSTRAINT stock_dbxrefprop_stock_dbxref_ FOREIGN KEY (stock_dbxref_id) REFERENCES stock_dbxref (stock_dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock_dbxrefprop ADD CONSTRAINT stock_dbxrefprop_stock_dbxref_ FOREIGN KEY (stock_dbxref_id) REFERENCES stock_dbxref (stock_dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock_dbxrefprop ADD CONSTRAINT stock_dbxrefprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock_dbxrefprop ADD CONSTRAINT stock_dbxrefprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock_genotype ADD CONSTRAINT stock_genotype_genotype_id_fk FOREIGN KEY (genotype_id) REFERENCES genotype (genotype_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock_genotype ADD CONSTRAINT stock_genotype_genotype_id_fk FOREIGN KEY (genotype_id) REFERENCES genotype (genotype_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock_genotype ADD CONSTRAINT stock_genotype_stock_id_fk FOREIGN KEY (stock_id) REFERENCES stock (stock_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock_genotype ADD CONSTRAINT stock_genotype_stock_id_fk FOREIGN KEY (stock_id) REFERENCES stock (stock_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock_pub ADD CONSTRAINT stock_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock_pub ADD CONSTRAINT stock_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock_pub ADD CONSTRAINT stock_pub_stock_id_fk FOREIGN KEY (stock_id) REFERENCES stock (stock_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock_pub ADD CONSTRAINT stock_pub_stock_id_fk FOREIGN KEY (stock_id) REFERENCES stock (stock_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock_relationship ADD CONSTRAINT stock_relationship_object_id_f FOREIGN KEY (object_id) REFERENCES stock (stock_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock_relationship ADD CONSTRAINT stock_relationship_object_id_f FOREIGN KEY (object_id) REFERENCES stock (stock_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock_relationship ADD CONSTRAINT stock_relationship_subject_id_ FOREIGN KEY (subject_id) REFERENCES stock (stock_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock_relationship ADD CONSTRAINT stock_relationship_subject_id_ FOREIGN KEY (subject_id) REFERENCES stock (stock_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock_relationship ADD CONSTRAINT stock_relationship_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock_relationship ADD CONSTRAINT stock_relationship_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock_relationship_cvterm ADD CONSTRAINT stock_relationship_cvterm_cvte FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock_relationship_cvterm ADD CONSTRAINT stock_relationship_cvterm_cvte FOREIGN KEY (cvterm_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock_relationship_cvterm ADD CONSTRAINT stock_relationship_cvterm_pub_ FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock_relationship_cvterm ADD CONSTRAINT stock_relationship_cvterm_pub_ FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock_relationship_cvterm ADD CONSTRAINT stock_relationship_cvterm_stoc FOREIGN KEY (stock_relationship_id) REFERENCES stock_relationship (stock_relationship_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock_relationship_cvterm ADD CONSTRAINT stock_relationship_cvterm_stoc FOREIGN KEY (stock_relationship_id) REFERENCES stock_relationship (stock_relationship_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock_relationship_pub ADD CONSTRAINT stock_relationship_pub_pub_id_ FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock_relationship_pub ADD CONSTRAINT stock_relationship_pub_pub_id_ FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE stock_relationship_pub ADD CONSTRAINT stock_relationship_pub_stock_r FOREIGN KEY (stock_relationship_id) REFERENCES stock_relationship (stock_relationship_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stock_relationship_pub ADD CONSTRAINT stock_relationship_pub_stock_r FOREIGN KEY (stock_relationship_id) REFERENCES stock_relationship (stock_relationship_id)  ON DELETE CASCADE;
 
-ALTER TABLE stockcollection ADD CONSTRAINT stockcollection_contact_id_fk FOREIGN KEY (contact_id) REFERENCES contact (contact_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stockcollection ADD CONSTRAINT stockcollection_contact_id_fk FOREIGN KEY (contact_id) REFERENCES contact (contact_id)  ON DELETE CASCADE;
 
-ALTER TABLE stockcollection ADD CONSTRAINT stockcollection_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stockcollection ADD CONSTRAINT stockcollection_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE stockcollection_stock ADD CONSTRAINT stockcollection_stock_stock_id FOREIGN KEY (stock_id) REFERENCES stock (stock_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stockcollection_stock ADD CONSTRAINT stockcollection_stock_stock_id FOREIGN KEY (stock_id) REFERENCES stock (stock_id)  ON DELETE CASCADE;
 
-ALTER TABLE stockcollection_stock ADD CONSTRAINT stockcollection_stock_stockcol FOREIGN KEY (stockcollection_id) REFERENCES stockcollection (stockcollection_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stockcollection_stock ADD CONSTRAINT stockcollection_stock_stockcol FOREIGN KEY (stockcollection_id) REFERENCES stockcollection (stockcollection_id)  ON DELETE CASCADE;
 
-ALTER TABLE stockcollectionprop ADD CONSTRAINT stockcollectionprop_stockcolle FOREIGN KEY (stockcollection_id) REFERENCES stockcollection (stockcollection_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stockcollectionprop ADD CONSTRAINT stockcollectionprop_stockcolle FOREIGN KEY (stockcollection_id) REFERENCES stockcollection (stockcollection_id)  ON DELETE CASCADE;
 
-ALTER TABLE stockcollectionprop ADD CONSTRAINT stockcollectionprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stockcollectionprop ADD CONSTRAINT stockcollectionprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE stockprop ADD CONSTRAINT stockprop_stock_id_fk FOREIGN KEY (stock_id) REFERENCES stock (stock_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stockprop ADD CONSTRAINT stockprop_stock_id_fk FOREIGN KEY (stock_id) REFERENCES stock (stock_id)  ON DELETE CASCADE;
 
-ALTER TABLE stockprop ADD CONSTRAINT stockprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stockprop ADD CONSTRAINT stockprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE stockprop_pub ADD CONSTRAINT stockprop_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stockprop_pub ADD CONSTRAINT stockprop_pub_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE stockprop_pub ADD CONSTRAINT stockprop_pub_stockprop_id_fk FOREIGN KEY (stockprop_id) REFERENCES stockprop (stockprop_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE stockprop_pub ADD CONSTRAINT stockprop_pub_stockprop_id_fk FOREIGN KEY (stockprop_id) REFERENCES stockprop (stockprop_id)  ON DELETE CASCADE;
 
-ALTER TABLE study ADD CONSTRAINT study_contact_id_fk FOREIGN KEY (contact_id) REFERENCES contact (contact_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE study ADD CONSTRAINT study_contact_id_fk FOREIGN KEY (contact_id) REFERENCES contact (contact_id)  ON DELETE CASCADE;
 
-ALTER TABLE study ADD CONSTRAINT study_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE study ADD CONSTRAINT study_dbxref_id_fk FOREIGN KEY (dbxref_id) REFERENCES dbxref (dbxref_id)  ON DELETE CASCADE;
 
-ALTER TABLE study ADD CONSTRAINT study_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE study ADD CONSTRAINT study_pub_id_fk FOREIGN KEY (pub_id) REFERENCES pub (pub_id)  ON DELETE CASCADE;
 
-ALTER TABLE study_assay ADD CONSTRAINT study_assay_assay_id_fk FOREIGN KEY (assay_id) REFERENCES assay (assay_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE study_assay ADD CONSTRAINT study_assay_assay_id_fk FOREIGN KEY (assay_id) REFERENCES assay (assay_id)  ON DELETE CASCADE;
 
-ALTER TABLE study_assay ADD CONSTRAINT study_assay_study_id_fk FOREIGN KEY (study_id) REFERENCES study (study_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE study_assay ADD CONSTRAINT study_assay_study_id_fk FOREIGN KEY (study_id) REFERENCES study (study_id)  ON DELETE CASCADE;
 
-ALTER TABLE studydesign ADD CONSTRAINT studydesign_study_id_fk FOREIGN KEY (study_id) REFERENCES study (study_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE studydesign ADD CONSTRAINT studydesign_study_id_fk FOREIGN KEY (study_id) REFERENCES study (study_id)  ON DELETE CASCADE;
 
-ALTER TABLE studydesignprop ADD CONSTRAINT studydesignprop_studydesign_id FOREIGN KEY (studydesign_id) REFERENCES studydesign (studydesign_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE studydesignprop ADD CONSTRAINT studydesignprop_studydesign_id FOREIGN KEY (studydesign_id) REFERENCES studydesign (studydesign_id)  ON DELETE CASCADE;
 
-ALTER TABLE studydesignprop ADD CONSTRAINT studydesignprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE studydesignprop ADD CONSTRAINT studydesignprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE studyfactor ADD CONSTRAINT studyfactor_studydesign_id_fk FOREIGN KEY (studydesign_id) REFERENCES studydesign (studydesign_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE studyfactor ADD CONSTRAINT studyfactor_studydesign_id_fk FOREIGN KEY (studydesign_id) REFERENCES studydesign (studydesign_id)  ON DELETE CASCADE;
 
-ALTER TABLE studyfactor ADD CONSTRAINT studyfactor_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE studyfactor ADD CONSTRAINT studyfactor_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE studyfactorvalue ADD CONSTRAINT studyfactorvalue_assay_id_fk FOREIGN KEY (assay_id) REFERENCES assay (assay_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE studyfactorvalue ADD CONSTRAINT studyfactorvalue_assay_id_fk FOREIGN KEY (assay_id) REFERENCES assay (assay_id)  ON DELETE CASCADE;
 
-ALTER TABLE studyfactorvalue ADD CONSTRAINT studyfactorvalue_studyfactor_i FOREIGN KEY (studyfactor_id) REFERENCES studyfactor (studyfactor_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE studyfactorvalue ADD CONSTRAINT studyfactorvalue_studyfactor_i FOREIGN KEY (studyfactor_id) REFERENCES studyfactor (studyfactor_id)  ON DELETE CASCADE;
 
-ALTER TABLE studyprop ADD CONSTRAINT studyprop_study_id_fk FOREIGN KEY (study_id) REFERENCES study (study_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE studyprop ADD CONSTRAINT studyprop_study_id_fk FOREIGN KEY (study_id) REFERENCES study (study_id)  ON DELETE CASCADE;
 
-ALTER TABLE studyprop ADD CONSTRAINT studyprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE studyprop ADD CONSTRAINT studyprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE studyprop_feature ADD CONSTRAINT studyprop_feature_feature_id_f FOREIGN KEY (feature_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE studyprop_feature ADD CONSTRAINT studyprop_feature_feature_id_f FOREIGN KEY (feature_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
-ALTER TABLE studyprop_feature ADD CONSTRAINT studyprop_feature_studyprop_id FOREIGN KEY (studyprop_id) REFERENCES studyprop (studyprop_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE studyprop_feature ADD CONSTRAINT studyprop_feature_studyprop_id FOREIGN KEY (studyprop_id) REFERENCES studyprop (studyprop_id)  ON DELETE CASCADE;
 
-ALTER TABLE studyprop_feature ADD CONSTRAINT studyprop_feature_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE studyprop_feature ADD CONSTRAINT studyprop_feature_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE synonym_ ADD CONSTRAINT synonym_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE synonym_ ADD CONSTRAINT synonym_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE treatment ADD CONSTRAINT treatment_biomaterial_id_fk FOREIGN KEY (biomaterial_id) REFERENCES biomaterial (biomaterial_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE treatment ADD CONSTRAINT treatment_biomaterial_id_fk FOREIGN KEY (biomaterial_id) REFERENCES biomaterial (biomaterial_id)  ON DELETE CASCADE;
 
-ALTER TABLE treatment ADD CONSTRAINT treatment_protocol_id_fk FOREIGN KEY (protocol_id) REFERENCES protocol (protocol_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE treatment ADD CONSTRAINT treatment_protocol_id_fk FOREIGN KEY (protocol_id) REFERENCES protocol (protocol_id)  ON DELETE CASCADE;
 
-ALTER TABLE treatment ADD CONSTRAINT treatment_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE treatment ADD CONSTRAINT treatment_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id)  ON DELETE CASCADE;
 
-ALTER TABLE featureprop ADD CONSTRAINT featureprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ON DELETE CASCADE;
+ALTER TABLE featureprop ADD CONSTRAINT featureprop_type_id_fk FOREIGN KEY (type_id) REFERENCES cvterm (cvterm_id) ;
 
-ALTER TABLE featureprop ADD CONSTRAINT featureprop_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id) ON DELETE CASCADE ON DELETE CASCADE;
+ALTER TABLE featureprop ADD CONSTRAINT featureprop_feature_id_fk FOREIGN KEY (feature_id) REFERENCES feature (feature_id)  ON DELETE CASCADE;
 
 CREATE INDEX acquisition_idx_assay_id on acquisition (assay_id);
 
@@ -3693,8 +3693,6 @@ CREATE INDEX cvprop_idx_cv_id on cvprop (cv_id);
 CREATE INDEX cvprop_idx_type_id on cvprop (type_id);
 
 CREATE INDEX cvterm_idx_cv_id on cvterm (cv_id);
-
-CREATE INDEX cvterm_idx_dbxref_id on cvterm (dbxref_id);
 
 CREATE INDEX cvterm_dbxref_idx_cvterm_id on cvterm_dbxref (cvterm_id);
 
