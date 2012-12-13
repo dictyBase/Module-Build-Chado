@@ -715,7 +715,7 @@ CREATE TABLE dbxref (
   dbxref_id number NOT NULL,
   db_id number NOT NULL,
   accession varchar2(255) NOT NULL,
-  version varchar2(255) DEFAULT '' NOT NULL,
+  version varchar2(255) DEFAULT ' ' NOT NULL,
   description clob,
   PRIMARY KEY (dbxref_id),
   CONSTRAINT dbxref_c1 UNIQUE (db_id, accession, version)
