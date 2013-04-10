@@ -1,0 +1,63 @@
+{
+   "abstract" : "Build,configure and test chado database backed modules and applications",
+   "author" : [
+      "Siddhartha Basu <biosidd@gmail.com>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Dist::Zilla version 4.300033, CPAN::Meta::Converter version 2.120921",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Module-Build-Chado",
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "Module::Build" : "0.3601"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "Module::Build" : "0.3601"
+         }
+      },
+      "develop" : {
+         "requires" : {
+            "Test::CPAN::Meta" : "0"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Bio::Chado::Schema" : "0.05800",
+            "DBD::SQLite" : "1.29",
+            "File::Path" : "2.08",
+            "File::ShareDir" : "1.02",
+            "Graph" : "0.94",
+            "IPC::Cmd" : "0.58",
+            "Moose" : "1.14",
+            "MooseX::Params::Validate" : "0.14",
+            "Path::Class" : "0.18",
+            "Test::DBIx::Class" : "0.34",
+            "Try::Tiny" : "0.03",
+            "XML::Twig" : "3.35",
+            "XML::XPath" : "1.13",
+            "YAML" : "0.70",
+            "namespace::autoclean" : "0.11",
+            "perl" : "5.010"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "Test::Exception" : "0.31",
+            "Test::More" : "0.94"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {},
+   "version" : "1.0.0"
+}
+
