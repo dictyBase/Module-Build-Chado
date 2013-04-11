@@ -2,3 +2,4 @@ Module-Build-Chado-*
 .build/
 local/
 .carton/
+.perl-version
