@@ -101,23 +101,17 @@ sub deploy_by_client {
 
 sub deploy_by_dbi {
     my ($self) = @_;
-    my $dbh    = $self->dbh;
     my $fh     = Path::Class::File->new( $self->ddl )->openr;
     my $data = do { local ($/); <$fh> };
     $fh->close();
+
+    my $dbh    = $self->dbh_withcommit;
 LINE:
     foreach my $line ( split( /\n{2,}/, $data ) ) {
         next LINE if $line =~ /^\-\-/;
         $line =~ s{;$}{};
         $line =~ s{/}{};
-        try {
             $dbh->do($line);
-            $dbh->commit;
-        }
-        catch {
-            $dbh->rollback;
-            confess $_, "\n";
-        };
     }
 }
 
