@@ -31,7 +31,7 @@ has 'dbh' => (
         $self->add_dbi_attribute( 'AutoCommit', 0 );
         my $dbh = DBI->connect( $self->connection_info )
             or confess $DBI::errstr;
-        $dbh->do("PRAGMA foreign_keys = ON");
+        #$dbh->do("PRAGMA foreign_keys = ON");
         $dbh;
     }
 );
@@ -46,7 +46,7 @@ has 'dbh_withcommit' => (
         $self->add_dbi_attribute( 'RaiseError', 1 );
         my $dbh = DBI->connect( $self->connection_info )
             or confess $DBI::errstr;
-        $dbh->do("PRAGMA foreign_keys = ON");
+        #$dbh->do("PRAGMA foreign_keys = ON");
         return $dbh;
     }
 );
