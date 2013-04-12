@@ -146,7 +146,7 @@ sub unload_organism {
         sub {
             $schema->resultset('Organism::Organism')
                 ->search( {},
-                { columns => [ 'organism_id', 'common_name' ] } )->delete_all;
+                { columns => [ 'organism_id', 'common_name' ] } )->delete;
         }
     );
 }
@@ -386,9 +386,9 @@ sub unload_ontology {
     $schema->txn_do(
         sub {
             $schema->resultset('General::Db')->search( { name => $name } )
-                ->delete_all;
+                ->delete;
             $schema->resultset('Cv::Cv')->search( { name => $name } )
-                ->delete_all;
+                ->delete;
         }
     );
 }
