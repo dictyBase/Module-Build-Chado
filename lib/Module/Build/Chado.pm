@@ -1,5 +1,6 @@
 package Module::Build::Chado;
 use strict;
+use feature qw/say/;
 use File::ShareDir qw/module_dir/;
 use File::Spec::Functions;
 use File::Temp;
@@ -95,7 +96,7 @@ recommended.
 sub ACTION_setup {
     my $self = shift;
     $self->depends_on('build');
-    print "running setup\n" if $self->test_debug;
+    say "running setup" if $self->test_debug;
 
     return if $self->config('setup_done');
 
@@ -119,7 +120,7 @@ sub ACTION_setup {
     $self->schema( $chado->schema );
     $self->config( 'setup_done', 1 );
 
-    print "done with setup\n" if $self->test_debug;
+    say "done with setup" if $self->test_debug;
 }
 
 =head3 create
@@ -142,7 +143,7 @@ sub ACTION_create {
     if ( !$self->feature('is_db_created') ) {
         $self->_handler->create_db;
         $self->feature( 'is_db_created' => 1 );
-        print "created database\n" if $self->test_debug;
+        say "created database" if $self->test_debug;
     }
 }
 
@@ -164,7 +165,7 @@ sub ACTION_deploy {
     if ( !$self->feature('is_schema_loaded') ) {
         $self->_handler->deploy_schema;
         $self->feature( 'is_schema_loaded' => 1 );
-        print "loaded schema\n" if $self->test_debug;
+        say "loaded schema" if $self->test_debug;
     }
 }
 
@@ -189,7 +190,7 @@ sub ACTION_deploy_schema {
     if ( !$self->feature('is_schema_loaded') ) {
         $self->_handler->deploy_schema;
         $self->feature( 'is_schema_loaded' => 1 );
-        print "loaded schema\n" if $self->test_debug;
+        say "loaded schema" if $self->test_debug;
     }
 }
 
@@ -405,9 +406,9 @@ schema.
 sub ACTION_test {
     my ($self) = @_;
 
-    #cleanup all the setup values if any
+    ##cleanup all the setup values if any
     for my $name ( @{ $self->_config_keys } ) {
-        print "cleaning $name\n" if $self->test_debug;
+        say "cleaning $name" if $self->test_debug;
         $self->feature( $name => 0 );
     }
     $self->depends_on('drop_schema');
@@ -440,11 +441,11 @@ sub ACTION_drop {
 
     #cleanup all the setup values if any
     for my $name ( @{ $self->_config_keys } ) {
-        print "cleaning $name\n" if $self->test_debug;
+        say "cleaning $name\n" if $self->test_debug;
         $self->feature( $name => 0 );
     }
 
-    print "dropped the database\n" if $self->test_debug;
+    say "dropped the database\n" if $self->test_debug;
 }
 
 =head3 drop_schema
@@ -465,7 +466,7 @@ sub ACTION_drop_schema {
     $self->_handler->drop_schema;
     $self->feature( 'is_fixture_loaded' => 0 );
     $self->feature( 'is_schema_loaded'  => 0 );
-    print "dropped the schema\n" if $self->test_debug;
+    say "dropped the schema\n" if $self->test_debug;
 }
 
 sub ACTION_create_config {
@@ -494,7 +495,7 @@ sub ACTION_create_config {
     };
     my $output = IO::File->new( $config_file, 'w' )
         or die "cannot open file:$!";
-    $output->print( Dumper $config_hash);
+    $output->say( Dumper $config_hash);
     $output->close;
 }
 
