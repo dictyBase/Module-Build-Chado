@@ -6,8 +6,8 @@ use File::ShareDir qw/module_dir/;
 use File::Spec::Functions;
 
 
-requires 'user', 'password', 'dsn', 'dbh', 'driver';
-requires 'deploy_schema','drop_schema';
+requires 'dbh', 'driver', 'database';
+requires 'deploy_schema','drop_schema', 'reset_schema';
 
 has 'ddl' => (
     is => 'rw',
@@ -18,6 +18,9 @@ has 'ddl' => (
         return catfile(module_dir('Test::Chado'),'chado.'. lc $self->driver);
     }
 );
+
+has [qw/user password/] => ( is => 'rw', isa => 'Maybe[Str]');
+has 'dsn' => (is => 'rw', isa => 'Str');
 
 1;
 
