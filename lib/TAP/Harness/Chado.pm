@@ -1,25 +1,32 @@
 package TAP::Harness::Chado;
 
 # Other modules:
+use Moo;
+use MooX::InsideOut;
 use Data::Dumper;
 use feature qw/say/;
-use base qw/TAP::Harness/;
+extends 'TAP::Harness';
 
 # Module implementation
 #
 
-sub new {
-    my ($class, @arg) = @_;
-    my $self = $class->SUPER::new(@arg);
+sub BUILD {
+    my ($self) = @_;
     $self->callback( before_runtests => sub { $self->before_all_tests(@_) } );
-    #$self->callback( after_runtests => sub { $self->before_all_tests(@_) } );
-    $self->callback( after_test => sub { $self->before_all_tests(@_) } );
-    return $self;
+#    $self->callback( after_test => sub { $self->after_single_test(@_) } );
 }
 
 sub before_all_tests {
+    my  $self  = shift;
+    warn "before test hook\n";
+    warn Dumper @_;
+
+}
+
+
+sub after_single_test {
     my ( $self, %other ) = @_;
-    warn "test hook\n";
+    warn "single test\n";
 }
 
 1;    # Magic true value required at end of module
