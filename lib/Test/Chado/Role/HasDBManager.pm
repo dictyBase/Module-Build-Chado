@@ -2,15 +2,47 @@ package Test::Chado::Role::HasDBManager;
 
 use namespace::autoclean;
 use Moo::Role;
+use MooX::late;
 use File::ShareDir qw/module_dir/;
 use File::Spec::Functions;
 use IO::File;
 use autodie qw/:file/;
 
 
-requires 'dbh', 'driver', 'database';
-requires 'connection_info','drop_schema', 'reset_schema';
+requires '_build_dbh', '_build_driver', '_build_database';
+requires 'drop_schema', 'reset_schema';
 requires 'has_client_to_deploy', 'get_client_to_deploy','deploy_by_client';
+
+has 'dbh' => (
+    is => 'rw',
+    isa => 'DBI::db',
+    lazy => 1,
+    builder => '_build_dbh'
+);
+
+has 'dbi_attributes' => (
+    is => 'rw',
+    isa => 'HashRef',
+    lazy => 1,
+    default => sub {
+        my ($self) = @_;
+        return { AutoCommit => 1, RaiseError => 1};
+    }
+);
+
+has 'database' => (
+    is => 'rw',
+    isa => 'Str',
+    lazy => 1,
+    builder => '_build_database'
+);
+
+has 'driver' => (
+    is => 'rw',
+    isa => 'Str',
+    lazy => 1,
+    builder => '_build_driver'
+);
 
 has 'ddl' => (
     is => 'rw',
@@ -22,7 +54,7 @@ has 'ddl' => (
     }
 );
 
-has [qw/user password/] => ( is => 'rw', isa => 'Maybe[Str]');
+has [qw/user password/] => ( is => 'rw', isa => 'Str');
 has 'dsn' => (is => 'rw', isa => 'Str');
 
 sub deploy_schema {
@@ -62,27 +94,29 @@ LINE:
 
 =attr dsn
 
-=attr dbi_attributes
-
-Additional attributes for database connection, by default AutoCommit are RaiseError are set.
-
 =attr database
 
-Database name. Should be B<implemented> by consuming class.
+Database name. The method B<_build_database> should be B<implemented> by consuming class.
 
 =attr dbh
 
-Database handler, a L<DBI> object. Should be B<implemented> by consuming class.
+Database handler, a L<DBI> object. The method <_build_dbh> should be B<implemented> by consuming class.
 
 =attr driver
+
+Name of the database backend. The method <_build_driver> should be B<implemented> by consuming class.
 
 =attr ddl
 
 Location of the database specific ddl file. Should be B<implemented> by consuming class.
 
+=attr dbi_attributes
+
+Extra parameters for database connection, by default RaiseError and AutoCommit are set.
+
 =method deploy_schema
 
-Load the database schema from the ddl file. 
+Load the database schema from the ddl file. Should be B<implemented> by consuming class.
 
 =method has_client_to_deploy
 
