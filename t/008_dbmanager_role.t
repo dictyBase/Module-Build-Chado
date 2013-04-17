@@ -1,39 +1,43 @@
 package TestBackend;
 use Moo;
 use DBI;
-with 'Test::Chado::DBManager::Sqlite';
 
-has 'dbh' => (
-    is      => 'rw',
-    isa     => 'DBI::db',
-    lazy    => 1,
-    default => sub {
-        my ($self) = @_;
-        return DBI->connect( $self->dsn, '', '', $self->dbi_attributes );
-    }
-);
+sub _build_dbh {
+}
 
-has '+dsn' => ( default => sub { return 'dbi:SQLite:dbname=:memory:' },  lazy => 1 );
+sub _build_driver { }
 
-has 'driver' => ( is => 'rw', isa => 'Str', lazy => 1, default => 'SQLite' );
-
-sub database { return 1 }
+sub _build_database { }
 
 sub drop_schema {
 }
 
 sub reset_schema {
-	return 1;
 }
 
 sub has_client_to_deploy {
-	return 0;
 }
 
 sub get_client_to_deploy {
-	return 0;
 }
 
 sub deploy_by_client {
-	return 0;
 }
+
+
+with 'Test::Chado::Role::HasDBManager';
+
+1;
+
+package main;
+use Test::More qw/no_plan/;
+
+my $backend = new_ok('TestBackend');
+
+my @required_by_role = qw(_build_database _build_dbh _build_driver 
+                          drop_schema reset_schema has_client_to_deploy get_client_to_deploy deploy_by_client);
+my @consumed_from_role = qw(dbh dbi_attributes database driver ddl user password dsn deploy_schema deploy_by_dbi);
+can_ok($backend,@required_by_role);
+can_ok($backend,@consumed_from_role);
+
+
