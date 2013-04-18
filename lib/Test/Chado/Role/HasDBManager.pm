@@ -10,7 +10,7 @@ use autodie qw/:file/;
 use DBI;
 
 requires '_build_dbh', '_build_database';
-requires 'drop_schema', 'reset_schema';
+requires 'drop_schema', 'reset_schema',  'create_database',  'drop_database';
 requires 'has_client_to_deploy', 'get_client_to_deploy', 'deploy_by_client';
 
 has 'dbh' => (
@@ -153,3 +153,10 @@ Drop the loaded schema. Should be B<implemented> by consuming class.
 
 First drops the schema, the reloads it. Should be B<implemented> by consuming class.
 
+=method create_database
+
+Create database. Should be B<implemented> by consuming class.
+
+=method drop_database
+
+Drop database. Should be B<implemented> by consuming class.
