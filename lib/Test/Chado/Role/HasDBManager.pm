@@ -11,7 +11,7 @@ use DBI;
 
 requires '_build_dbh', '_build_database';
 requires 'drop_schema', 'create_database',  'drop_database';
-requires 'has_client_to_deploy', 'get_client_to_deploy', 'deploy_by_client';
+requires 'get_client_to_deploy', 'deploy_by_client';
 
 has 'dbh' => (
     is      => 'rw',
@@ -69,8 +69,8 @@ has 'dsn' => (
 
 sub deploy_schema {
     my ($self) = @_;
-    if ( $self->has_client_to_deploy ) {
-        $self->deploy_by_client( $self->get_client_to_deploy );
+    if (my $client = $self->get_client_to_deploy ) {
+        $self->deploy_by_client( $client );
     }
     else {
         $self->deploy_by_dbi;
@@ -136,13 +136,9 @@ Extra parameters for database connection, by default RaiseError and AutoCommit a
 
 Load the database schema from the ddl file. Should be B<implemented> by consuming class.
 
-=method has_client_to_deploy
-
-Check to see if the backend can provide command line client for deploying schema. Should be B<implemented> by consuming class.
-
 =method get_client_to_deploy
 
-Full path for the command line client. Should be B<implemented> by consuming class.
+Full path for the command line client. Return undef in case not available. Should be B<implemented> by consuming class.
 
 =method deploy_by_client
 
