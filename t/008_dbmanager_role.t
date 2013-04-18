@@ -36,10 +36,10 @@ use Test::More qw/no_plan/;
 my $backend = new_ok('TestBackend');
 
 my @required_by_role = qw(_build_database _build_dbh
-    drop_schema reset_schema has_client_to_deploy get_client_to_deploy deploy_by_client
+    drop_schema has_client_to_deploy get_client_to_deploy deploy_by_client
     create_database drop_database);
 my @consumed_from_role
-    = qw(driver_dsn dbh dbi_attributes database driver ddl user password dsn deploy_schema deploy_by_dbi);
+    = qw(reset_schema driver_dsn dbh dbi_attributes database driver ddl user password dsn deploy_schema deploy_by_dbi);
 can_ok( $backend, @required_by_role );
 can_ok( $backend, @consumed_from_role );
 

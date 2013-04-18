@@ -10,7 +10,7 @@ use autodie qw/:file/;
 use DBI;
 
 requires '_build_dbh', '_build_database';
-requires 'drop_schema', 'reset_schema',  'create_database',  'drop_database';
+requires 'drop_schema', 'create_database',  'drop_database';
 requires 'has_client_to_deploy', 'get_client_to_deploy', 'deploy_by_client';
 
 has 'dbh' => (
@@ -93,6 +93,13 @@ LINE:
     }
 }
 
+
+sub reset_schema {
+	my ($self) = @_;
+	$self->drop_schema;
+	$self->deploy_schema;
+}
+
 1;
 
 # ABSTRACT: Moose role based interface to be consumed by backend specific classes for managing database
@@ -151,7 +158,7 @@ Drop the loaded schema. Should be B<implemented> by consuming class.
 
 =method reset_schema
 
-First drops the schema, the reloads it. Should be B<implemented> by consuming class.
+First drops the schema, the reloads it. 
 
 =method create_database
 
