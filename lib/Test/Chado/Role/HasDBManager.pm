@@ -7,84 +7,93 @@ use File::ShareDir qw/module_dir/;
 use File::Spec::Functions;
 use IO::File;
 use autodie qw/:file/;
+use DBI;
 
-
-requires '_build_dbh', '_build_driver', '_build_database';
+requires '_build_dbh', '_build_database';
 requires 'drop_schema', 'reset_schema';
-requires 'has_client_to_deploy', 'get_client_to_deploy','deploy_by_client';
+requires 'has_client_to_deploy', 'get_client_to_deploy', 'deploy_by_client';
 
 has 'dbh' => (
-    is => 'rw',
-    isa => 'DBI::db',
-    lazy => 1,
+    is      => 'rw',
+    isa     => 'DBI::db',
+    lazy    => 1,
     builder => '_build_dbh'
 );
 
 has 'dbi_attributes' => (
-    is => 'rw',
-    isa => 'HashRef',
-    lazy => 1,
+    is      => 'rw',
+    isa     => 'HashRef',
+    lazy    => 1,
     default => sub {
         my ($self) = @_;
-        return { AutoCommit => 1, RaiseError => 1};
+        return { AutoCommit => 1, RaiseError => 1 };
     }
 );
 
 has 'database' => (
-    is => 'rw',
-    isa => 'Str',
-    lazy => 1,
+    is      => 'rw',
+    isa     => 'Str',
+    lazy    => 1,
     builder => '_build_database'
 );
 
 has 'driver' => (
-    is => 'rw',
-    isa => 'Str',
-    lazy => 1,
-    builder => '_build_driver'
+    is      => 'rw',
+    isa     => 'Str',
 );
 
 has 'ddl' => (
-    is => 'rw',
-    isa => 'Str',
-    lazy => 1,
+    is      => 'rw',
+    isa     => 'Str',
+    lazy    => 1,
     default => sub {
         my ($self) = @_;
-        return catfile(module_dir('Test::Chado'),'chado.'. lc $self->driver);
+        return catfile( module_dir('Test::Chado'),
+            'chado.' . lc $self->driver );
     }
 );
 
-has [qw/user password/] => ( is => 'rw', isa => 'Str');
-has 'dsn' => (is => 'rw', isa => 'Str');
+has [qw/user password/] => ( is => 'rw', isa => 'Str' );
+has 'driver_dsn' => (is => 'rw',  isa => 'Str');
+has 'dsn' => (
+    is      => 'rw',
+    isa     => 'Str',
+    trigger => sub {
+        my ( $self, $value ) = @_;
+        my ( $scheme, $driver, $attr_str, $attr_hash, $driver_dsn )
+            = DBI->parse_dsn($value);
+        $self->driver($driver);
+        $self->driver_dsn($driver_dsn);
+    }
+);
 
 sub deploy_schema {
     my ($self) = @_;
-    if ($self->has_client_to_deploy ) { 
-        $self->deploy_by_client($self->get_client_to_deploy);
-    } 
-    else { 
+    if ( $self->has_client_to_deploy ) {
+        $self->deploy_by_client( $self->get_client_to_deploy );
+    }
+    else {
         $self->deploy_by_dbi;
     }
 }
 
 sub deploy_by_dbi {
     my ($self) = @_;
-    my $fh     = IO::File->new( $self->ddl, 'w' );
+    my $fh = IO::File->new( $self->ddl, 'w' );
     my $data = do { local ($/); <$fh> };
     $fh->close();
 
-    my $dbh    = $self->dbh;
+    my $dbh = $self->dbh;
 LINE:
     foreach my $line ( split( /\n{2,}/, $data ) ) {
         next LINE if $line =~ /^\-\-/;
         $line =~ s{;$}{};
         $line =~ s{/}{};
-            $dbh->do($line);
+        $dbh->do($line);
     }
 }
 
 1;
-
 
 # ABSTRACT: Moose role based interface to be consumed by backend specific classes for managing database
 
@@ -104,7 +113,9 @@ Database handler, a L<DBI> object. The method <_build_dbh> should be B<implement
 
 =attr driver
 
-Name of the database backend. The method <_build_driver> should be B<implemented> by consuming class.
+Name of the database backend. It is being set from dsn value.
+
+=attr driver_dsn
 
 =attr ddl
 
