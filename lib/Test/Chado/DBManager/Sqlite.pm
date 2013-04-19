@@ -10,16 +10,16 @@ use IPC::Cmd qw/can_run run/;
 with 'Test::Chado::Role::DBManager';
 
 has '+dsn' => (
-	lazy => 1, 
-	default => sub {
-		my $file = tmpnam();
-		return "dbi:SQLite:dbname=$file";
-	}
+    lazy    => 1,
+    default => sub {
+        my $file = tmpnam();
+        return "dbi:SQLite:dbname=$file";
+    }
 );
 
 sub _build_dbh {
     my ($self) = @_;
-    return DBI->connect($self->dsn, '', '', $self->dbi_attributes );
+    return DBI->connect( $self->dsn, '', '', $self->dbi_attributes );
 }
 
 sub _build_database {
@@ -30,12 +30,12 @@ sub _build_database {
 }
 
 sub create_database {
-	return 1;
+    return 1;
 }
 
 sub drop_database {
-	my ($self) = @_;
-	return $self->dbh->disconnect;
+    my ($self) = @_;
+    return $self->dbh->disconnect;
 }
 
 sub drop_schema {
@@ -51,23 +51,22 @@ sub drop_schema {
 }
 
 sub get_client_to_deploy {
-	my ($self) = @_;
-	my $cmd;
-	if ($cmd = can_run 'sqlite3') {
-		return $cmd;
-	}
-	elsif ($cmd = can_run 'sqlite') {
-		return $cmd;
-	}
-	else {
-		return $cmd;
-	}
+    my ($self) = @_;
+    my $cmd;
+    if ( $cmd = can_run 'sqlite3' ) {
+        return $cmd;
+    }
+    elsif ( $cmd = can_run 'sqlite' ) {
+        return $cmd;
+    }
+    else {
+        return $cmd;
+    }
 }
 
 sub deploy_by_client {
-	my ($self, $client) = @_;
-    my $cmd
-        = [ $client, '-noheader', $self->database, '<', $self->ddl ];
+    my ( $self, $client ) = @_;
+    my $cmd = [ $client, '-noheader', $self->database, '<', $self->ddl ];
     my ( $success, $error_code, $full_buf,, $stdout_buf, $stderr_buf )
         = run( command => $cmd, verbose => 1 );
     return $success if $success;

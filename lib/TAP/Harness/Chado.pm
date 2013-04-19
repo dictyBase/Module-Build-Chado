@@ -18,9 +18,7 @@ sub BUILD {
 
 sub before_all_tests {
     my  $self  = shift;
-    warn "before test hook\n";
-    warn Dumper @_;
-
+    $self->test_args([qw/hola mola/]);
 }
 
 

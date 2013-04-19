@@ -9,8 +9,8 @@ use IO::File;
 use autodie qw/:file/;
 use DBI;
 
-requires '_build_dbh', '_build_database';
-requires 'drop_schema', 'create_database',  'drop_database';
+requires '_build_dbh',           '_build_database';
+requires 'drop_schema',          'create_database', 'drop_database';
 requires 'get_client_to_deploy', 'deploy_by_client';
 
 has 'dbh' => (
@@ -38,8 +38,8 @@ has 'database' => (
 );
 
 has 'driver' => (
-    is      => 'rw',
-    isa     => 'Str',
+    is  => 'rw',
+    isa => 'Str',
 );
 
 has 'ddl' => (
@@ -54,7 +54,7 @@ has 'ddl' => (
 );
 
 has [qw/user password/] => ( is => 'rw', isa => 'Str' );
-has 'driver_dsn' => (is => 'rw',  isa => 'Str');
+has 'driver_dsn' => ( is => 'rw', isa => 'Str' );
 has 'dsn' => (
     is      => 'rw',
     isa     => 'Str',
@@ -69,9 +69,10 @@ has 'dsn' => (
 
 sub deploy_schema {
     my ($self) = @_;
-    if (my $client = $self->get_client_to_deploy ) {
-        $self->deploy_by_client( $client );
+    if ( my $client = $self->get_client_to_deploy ) {
+        $self->deploy_by_client($client);
     }
+
     else {
         $self->deploy_by_dbi;
     }
@@ -94,9 +95,9 @@ LINE:
 }
 
 sub reset_schema {
-	my ($self) = @_;
-	$self->drop_schema;
-	$self->deploy_schema;
+    my ($self) = @_;
+    $self->drop_schema;
+    $self->deploy_schema;
 }
 
 1;
