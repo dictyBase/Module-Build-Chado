@@ -93,7 +93,6 @@ LINE:
     }
 }
 
-
 sub reset_schema {
 	my ($self) = @_;
 	$self->drop_schema;
