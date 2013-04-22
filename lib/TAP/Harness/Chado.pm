@@ -14,13 +14,16 @@ sub BUILD {
     my ($self) = @_;
     $self->callback( before_runtests => sub { $self->before_all_tests(@_) } );
 #    $self->callback( after_test => sub { $self->after_single_test(@_) } );
+    #$self->callback(made_parser => sub { warn "just made parser\n" });
+    $self->callback(parser_args => sub { warn "parser args\n" });
+    $self->test_args(['mola']);
 }
 
 sub before_all_tests {
     my  $self  = shift;
-    $self->test_args([qw/hola mola/]);
-}
+    warn "before test hook\n";
 
+}
 
 sub after_single_test {
     my ( $self, %other ) = @_;

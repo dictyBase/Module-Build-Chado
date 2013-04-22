@@ -7,7 +7,7 @@ use DBI;
 use File::Temp qw/:POSIX/;
 use IPC::Cmd qw/can_run run/;
 
-with 'Test::Chado::Role::DBManager';
+with 'Test::Chado::Role::HasDBManager';
 
 has '+dsn' => (
     lazy    => 1,
@@ -24,7 +24,16 @@ sub _build_dbh {
 
 sub _build_database {
     my ($self) = @_;
-    if ( $self->driver_dsn =~ /(dbname|(.+)?)=(\S+)/ ) {
+    my $driver_dsn;
+    if ( $self->driver_dsn ) {
+        $driver_dsn = $self->driver_dsn;
+    }
+    else {
+        my @parsed_dsn = DBI->parse_dsn($self->dsn);
+        $driver_dsn = $parsed_dsn[-1];
+    }
+
+    if ( $driver_dsn =~ /(dbname|(.+)?)=(\S+)/ ) {
         return $3;
     }
 }
